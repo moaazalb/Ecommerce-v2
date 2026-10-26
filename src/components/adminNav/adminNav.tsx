@@ -50,11 +50,13 @@ const AdminNav = () => {
                 <span>
                   <i className="ri-settings-2-line"></i>
                 </span>
-               <img
-                src={currentUser?.photoURL ?? "/images/default-avatar.png"}
-                alt="User Profile"
-                className="user-profile"
-              />
+               {currentUser?.photoURL && (
+                <img
+                  src={currentUser.photoURL}
+                  alt="User Profile"
+                  className="user-profile"
+                />
+              )}
               </div>
             </div>
           </Container>

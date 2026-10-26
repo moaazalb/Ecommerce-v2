@@ -1,6 +1,6 @@
 import React, { JSX } from "react";
 import Link from "next/link";
-import "./footer.css";
+import "@/styles/footer.css";
 
 interface FooterLink {
   path: string;

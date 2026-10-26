@@ -37,9 +37,7 @@ export default function Home(): JSX.Element {
                 <p className="hero__subtitle">Trending Product in {year}</p>
                 <h2>Make Your Interior More Minimalistic &amp; Modern</h2>
                 <p>
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vel accusamus
-                  doloremque culpa fuga itaque! Voluptate eligendi quibusdam consequuntur odit
-                  blanditiis?
+                  Discover curated home essentials designed to bring effortless elegance, clean lines, and functional comfort into your living space. Transform your environment into a calm, contemporary sanctuary.
                 </p>
                 <motion.div whileTap={{ scale: 1.1 }} className="buy__btn d-inline-block">
                   <Link href="/shop">SHOP NOW</Link>

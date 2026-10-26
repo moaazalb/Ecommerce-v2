@@ -3,7 +3,7 @@ import AdminNav from "./page";
 import useAuth from "@/custom-hooks/useAuth";
 
 // Mock the custom auth hook using the correct relative/alias path matching the implementation
-jest.mock("@/hooks/useAuth");
+jest.mock("@/custom-hooks/useAuth");
 
 /**
  * AdminNav component tests.

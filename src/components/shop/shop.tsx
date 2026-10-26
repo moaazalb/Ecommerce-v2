@@ -1,4 +1,6 @@
 "use client";
+
+import "@/styles/shop.css"
 import { useState } from "react";
 import { Container, Row, Col } from "reactstrap";
 import ProductsList from "@/components/UI/productList";

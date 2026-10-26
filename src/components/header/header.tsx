@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useEffect, JSX } from "react";
+import { useState, useEffect, JSX, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { signOut } from "firebase/auth";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
@@ -13,7 +13,7 @@ import useAuth from "@/custom-hooks/useAuth";
 import logo from "@/assets/images/eco-logo.png";
 import userIcon from "@/assets/images/user-icon.png";
 import type { RootState } from "@/redux/store";
-import "./header.css";
+import "@/styles/header.css";
 
 interface NavLinkItem {
   path: string;
@@ -21,7 +21,7 @@ interface NavLinkItem {
 }
 
 const NAV_LINKS: NavLinkItem[] = [
-  { path: "/home", display: "Home" },
+  { path: "/", display: "Home" },
   { path: "/shop", display: "Shop" },
   { path: "/cart", display: "Cart" },
 ];
@@ -30,16 +30,28 @@ export default function Header(): JSX.Element {
   const pathname = usePathname();
   const router = useRouter();
   const totalQuantity = useSelector((state: RootState) => state.cart.totalQuantity);
-  const { currentUser } = useAuth() as { currentUser: { photoURL?: string } | null };
+  const { currentUser } = useAuth() as { currentUser: { photoURL?: string; email?: string } | null };
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
+  const profileRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const handleScroll = (): void => setIsSticky(window.scrollY > 80);
+    const handleScroll = (): void => setIsSticky(window.scrollY > 40);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Close profile dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (profileRef.current && !profileRef.current.contains(event.target as Node)) {
+        setIsProfileOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   const toggleMenu = (): void => setIsMenuOpen((prev) => !prev);
@@ -50,81 +62,104 @@ export default function Header(): JSX.Element {
     try {
       await signOut(auth);
       toast.success("Logged out successfully!");
-      router.push("/home");
+      setIsProfileOpen(false);
+      router.push("/");
     } catch (error: unknown) {
       toast.error(error instanceof Error ? error.message : "Failed to log out.");
     }
   };
 
   return (
-    <header className={isSticky ? "sticky__header" : "header"}>
+    <header className={`header ${isSticky ? "sticky__header" : ""}`}>
       <div className="container">
-        <div className="row">
-          <div className="nav__wrapper">
-            <div className="logo">
-              <Image src={logo} alt="logo" />
-              <div>
-                <h1>Ecommerce</h1>
-              </div>
-            </div>
+        <div className="nav__wrapper">
+          {/* Logo */}
+          <Link href="/" className="logo">
+            <Image src={logo} alt="logo" priority />
+            <h1>Ecommerce</h1>
+          </Link>
 
-            <div
-              className={`navigation ${isMenuOpen ? "active__menu" : ""}`}
-              onClick={toggleMenu}
-            >
-              <ul className="menu">
-                {NAV_LINKS.map((item) => (
-                  <li className="nav__item" key={item.path}>
-                    <Link
-                      href={item.path}
-                      className={pathname === item.path ? "nav__active" : ""}
-                    >
-                      {item.display}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
+          {/* Navigation Links (Desktop & Mobile Drawer) */}
+          <div className={`navigation ${isMenuOpen ? "active__menu" : ""}`}>
+            {isMenuOpen && <div className="menu__overlay" onClick={toggleMenu} />}
+            <ul className="menu" onClick={() => setIsMenuOpen(false)}>
+              {NAV_LINKS.map((item) => (
+                <li className="nav__item" key={item.path}>
+                  <Link
+                    href={item.path}
+                    className={pathname === item.path ? "nav__active" : ""}
+                  >
+                    {item.display}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
 
-            <div className="nav__icons">
-              <span className="fav__icon">
-                <i className="ri-heart-line"></i>
-                <span className="badge">2</span>
-              </span>
+          {/* Action Icons & Profile */}
+          <div className="nav__icons">
+            <span className="fav__icon" title="Wishlist">
+              <i className="ri-heart-line"></i>
+              <span className="badge">2</span>
+            </span>
 
-              <span className="cart__icon" onClick={navigateToCart}>
-                <i className="ri-shopping-bag-line"></i>
-                <span className="badge">{totalQuantity}</span>
-              </span>
+            <span className="cart__icon" onClick={navigateToCart} title="Cart">
+              <i className="ri-shopping-bag-line"></i>
+              {totalQuantity > 0 && <span className="badge">{totalQuantity}</span>}
+            </span>
 
-              <div className="profile">
-                <motion.img
-                  whileTap={{ scale: 1.2 }}
-                  src={currentUser?.photoURL || userIcon.src}
+            {/* Profile Dropdown */}
+            <div className="profile" ref={profileRef}>
+              <motion.div whileTap={{ scale: 0.95 }} className="profile__img-wrapper">
+                <Image
+                  src={currentUser?.photoURL || userIcon}
                   alt="profile"
+                  width={36}
+                  height={36}
                   onClick={toggleProfileActions}
                 />
+              </motion.div>
 
+              <AnimatePresence>
                 {isProfileOpen && (
-                  <div className="profile__actions" onClick={toggleProfileActions}>
+                  <motion.div
+                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                    transition={{ duration: 0.15, ease: "easeOut" }}
+                    className="profile__actions"
+                  >
                     {currentUser ? (
-                      <span onClick={handleLogout}>Logout</span>
+                      <div className="profile__menu-list">
+                        <span className="user__email">{currentUser.email || "Account"}</span>
+                        <Link href="/dashboard" onClick={() => setIsProfileOpen(false)}>
+                          Dashboard
+                        </Link>
+                        <button className="logout__btn" onClick={handleLogout}>
+                          Logout
+                        </button>
+                      </div>
                     ) : (
-                      <div className="d-flex align-items-center justify-content-center flex-column">
-                        <Link href="/signup">Signup</Link>
-                        <Link href="/login">Login</Link>
-                        <Link href="/dashboard">Dashboard</Link>
+                      <div className="profile__menu-list">
+                        <Link href="/login" onClick={() => setIsProfileOpen(false)}>
+                          Login
+                        </Link>
+                        <Link href="/signup" onClick={() => setIsProfileOpen(false)}>
+                          Sign Up
+                        </Link>
+                        <Link href="/dashboard" onClick={() => setIsProfileOpen(false)}>
+                          Dashboard
+                        </Link>
                       </div>
                     )}
-                  </div>
+                  </motion.div>
                 )}
-              </div>
+              </AnimatePresence>
+            </div>
 
-              <div className="mobile__menu">
-                <span onClick={toggleMenu}>
-                  <i className="ri-menu-line"></i>
-                </span>
-              </div>
+            {/* Mobile Menu Toggle */}
+            <div className="mobile__menu" onClick={toggleMenu}>
+              <i className={isMenuOpen ? "ri-close-line" : "ri-menu-line"}></i>
             </div>
           </div>
         </div>

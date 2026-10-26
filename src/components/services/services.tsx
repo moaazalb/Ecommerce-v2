@@ -1,7 +1,7 @@
 "use client";
 
 import { JSX } from "react";
-import "./services.css";
+import "@/styles/services.css";
 import { motion } from "framer-motion";
 import serviceData from "@/assets/data/serviceData";
 
