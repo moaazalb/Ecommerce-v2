@@ -132,7 +132,7 @@ export default function Header(): JSX.Element {
                     {currentUser ? (
                       <div className="profile__menu-list">
                         <span className="user__email">{currentUser.email || "Account"}</span>
-                        <Link href="/dashboard" onClick={() => setIsProfileOpen(false)}>
+                        <Link href="/admin/Dashboard" onClick={() => setIsProfileOpen(false)}>
                           Dashboard
                         </Link>
                         <button className="logout__btn" onClick={handleLogout}>
@@ -147,7 +147,7 @@ export default function Header(): JSX.Element {
                         <Link href="/signup" onClick={() => setIsProfileOpen(false)}>
                           Sign Up
                         </Link>
-                        <Link href="/dashboard" onClick={() => setIsProfileOpen(false)}>
+                        <Link href="/admin/Dashboard" onClick={() => setIsProfileOpen(false)}>
                           Dashboard
                         </Link>
                       </div>

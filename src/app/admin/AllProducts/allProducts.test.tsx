@@ -1,6 +1,6 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import AllProducts from "./allProducts";
+import AllProducts from "../../../components/allProducts/allProducts";
 import useGetData from "@/custom-hooks/useGetData";
 import { deleteDoc } from "firebase/firestore";
 import { toast } from "react-toastify";

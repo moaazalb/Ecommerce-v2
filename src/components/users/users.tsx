@@ -1,13 +1,14 @@
 "use client";
-
 import { useState } from "react";
 import Helmet from "../Layout/Helmet";
 import Image from "next/image";
+import { Container, Row, Col, Table, Button, Spinner } from "reactstrap";
 import { db } from "@/firebase.config";
 import { doc, deleteDoc } from "firebase/firestore";
 import useGetData from "@/custom-hooks/useGetData";
 import { toast } from "react-toastify";
 import type { User } from "@/models/user";
+import "@/styles/users.css";
 
 /**
  * Users component for displaying and managing registered users in the admin dashboard.
@@ -21,7 +22,7 @@ export default function Users() {
   /**
    * Deletes a user from Firestore by ID after confirmation.
    * 
-   * @param {string} id - The user ID (uid).
+   * @param {string} id The user ID (uid).
    * @returns {Promise<void>}
    */
   const handleDeleteUser = async (id: string): Promise<void> => {
@@ -42,68 +43,90 @@ export default function Users() {
 
   return (
     <Helmet title="Users">
-    <section className="py-6">
-      <div className="container mx-auto px-4">
-        <div className="flex flex-col">
-          <h1 className="text-2xl font-bold mb-6">Users</h1>
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200" aria-label="Users Table">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Image</th>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Username</th>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {loading ? (
-                  <tr>
-                    <td colSpan={4} className="py-5 text-center font-bold">
-                      Loading .....
-                    </td>
-                  </tr>
-                ) : usersData?.length === 0 ? (
-                  <tr>
-                    <td colSpan={4} className="py-5 text-center text-gray-500">
-                      No users found.
-                    </td>
-                  </tr>
-                ) : (
-                  usersData?.map((user) => (
-                    <tr key={user.uid || user.id}>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="relative w-12 h-12 rounded-full overflow-hidden bg-gray-100">
-                          <Image
-                            src={user.photoURL || "/default-avatar.png"}
-                            alt={user.displayName || "User profile image"}
-                            fill
-                            className="object-cover"
-                            sizes="48px"
-                          />
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{user.displayName}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{user.email}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <button
-                          onClick={() => handleDeleteUser(user.uid || user.id)}
-                          disabled={deletingId === (user.uid || user.id)}
-                          aria-label={`Delete user ${user.displayName}`}
-                          className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 disabled:opacity-50 transition-colors"
-                        >
-                          {deletingId === (user.uid || user.id) ? "Deleting..." : "Delete"}
-                        </button>
-                      </td>
+      <section className="users__section py-5">
+        <Container>
+          {/* Header */}
+          <Row className="mb-4 align-items-center">
+            <Col lg="6" md="6">
+              <h2 className="users__title">Users Management</h2>
+              <p className="users__subtitle text-muted">View and manage registered store accounts.</p>
+            </Col>
+            <Col lg="6" md="6" className="text-md-end mt-3 mt-md-0">
+              <div className="users__count-badge d-inline-block">
+                Total Users: <strong>{usersData?.length || 0}</strong>
+              </div>
+            </Col>
+          </Row>
+
+          {/* Table Card Container */}
+          <Row>
+            <Col lg="12">
+              <div className="table__wrapper">
+                <Table hover responsive className="align-middle mb-0">
+                  <thead>
+                    <tr>
+                      <th>Avatar</th>
+                      <th>Username</th>
+                      <th>Email</th>
+                      <th className="text-end">Action</th>
                     </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </section>
+                  </thead>
+                  <tbody>
+                    {loading ? (
+                      <tr>
+                        <td colSpan={4} className="text-center py-5">
+                          <Spinner color="primary" size="sm" />
+                          <span className="ms-2 text-muted fw-medium">Loading users...</span>
+                        </td>
+                      </tr>
+                    ) : usersData?.length === 0 ? (
+                      <tr>
+                        <td colSpan={4} className="text-center py-5 text-muted">
+                          <i className="ri-user-unfollow-line fs-2 d-block mb-2"></i>
+                          <span>No users found.</span>
+                        </td>
+                      </tr>
+                    ) : (
+                      usersData?.map((user) => {
+                        const userId = user.uid || user.id;
+                        return (
+                          <tr key={userId}>
+                            <td>
+                              <div className="user__avatar-box">
+                                <Image
+                                  src={user.photoURL || "/default-avatar.png"}
+                                  alt={user.displayName || "User profile image"}
+                                  fill
+                                  className="object-fit-cover"
+                                  sizes="45px"
+                                />
+                              </div>
+                            </td>
+                            <td className="fw-semibold text-dark">{user.displayName || "N/A"}</td>
+                            <td className="text-muted">{user.email}</td>
+                            <td className="text-end">
+                              <Button
+                                color="danger"
+                                size="sm"
+                                className="delete__btn"
+                                onClick={() => handleDeleteUser(userId)}
+                                disabled={deletingId === userId}
+                              >
+                                <i className="ri-delete-bin-line me-1"></i>
+                                {deletingId === userId ? "Deleting..." : "Delete"}
+                              </Button>
+                            </td>
+                          </tr>
+                        );
+                      })
+                    )}
+                  </tbody>
+                </Table>
+              </div>
+            </Col>
+          </Row>
+        </Container>
+      </section>
     </Helmet>
   );
 }

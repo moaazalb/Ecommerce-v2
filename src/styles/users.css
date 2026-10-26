@@ -1,0 +1,83 @@
+.users__section {
+  background-color: #f8fafc;
+  min-height: calc(100vh - 150px);
+}
+
+.users__title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary-color, #0a1b2a);
+  margin-bottom: 2px;
+}
+
+.users__subtitle {
+  font-size: 0.875rem;
+  margin-bottom: 0;
+}
+
+.users__count-badge {
+  background: #ffffff;
+  padding: 8px 16px;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  font-size: 0.875rem;
+  color: #475569;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+.table__wrapper {
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
+  overflow: hidden;
+}
+
+.table__wrapper th {
+  background-color: #f8fafc !important;
+  color: #64748b !important;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+  padding: 16px 20px !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+}
+
+.table__wrapper td {
+  padding: 16px 20px !important;
+  vertical-align: middle !important;
+  color: #334155;
+  font-size: 0.9rem;
+  border-bottom: 1px solid #f1f5f9 !important;
+}
+
+.user__avatar-box {
+  position: relative;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+}
+
+.delete__btn {
+  background-color: #fff1f2 !important;
+  color: #e11d48 !important;
+  border: 1px solid #fecdd3 !important;
+  font-weight: 500;
+  font-size: 0.8rem;
+  padding: 6px 12px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.delete__btn:hover:not(:disabled) {
+  background-color: #e11d48 !important;
+  color: #ffffff !important;
+}
+
+.delete__btn:disabled {
+  opacity: 0.6;
+}
