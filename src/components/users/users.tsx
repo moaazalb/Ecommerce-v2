@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Helmet from "../Layout/Helmet";
 import Image from "next/image";
 import { db } from "@/firebase.config";
 import { doc, deleteDoc } from "firebase/firestore";
@@ -40,6 +41,7 @@ export default function Users() {
   };
 
   return (
+    <Helmet title="Users">
     <section className="py-6">
       <div className="container mx-auto px-4">
         <div className="flex flex-col">
@@ -102,5 +104,6 @@ export default function Users() {
         </div>
       </div>
     </section>
+    </Helmet>
   );
 }

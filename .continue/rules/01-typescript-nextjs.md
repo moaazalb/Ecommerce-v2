@@ -27,6 +27,9 @@ Do not change business logic or UI. If you find a bug, fix it and mention it.
 - Use the `@/` import alias.
 - Server-only secrets must not use `NEXT_PUBLIC_`.
 
+# Css 
+- do not change any thing in css keep each class with out any change 
+
 # Clean code
 - One component per file, under ~150 lines. Extract hooks (`hooks/`) and helpers (`lib/utils/`).
 - Names: components PascalCase, functions camelCase, constants UPPER_SNAKE_CASE, booleans start with is/has/can.

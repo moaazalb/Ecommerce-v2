@@ -1,4 +1,5 @@
 "use client";
+import Helmet from "../Layout/Helmet";
 import { JSX, useState } from "react";
 import Image from "next/image";
 import { db } from "@/firebase.config";
@@ -39,6 +40,7 @@ export default function AllProducts(): JSX.Element {
   };
 
   return (
+    <Helmet title="All Products">
     <section className="py-6">
       <div className="container mx-auto px-4">
         <div className="overflow-x-auto">
@@ -100,5 +102,6 @@ export default function AllProducts(): JSX.Element {
         </div>
       </div>
     </section>
+    </Helmet>
   );
 }

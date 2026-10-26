@@ -1,7 +1,9 @@
-// app/admin/AdminNav/page.tsx
+"use client"
+
 import "@/styles/admin-nav.css"
 import { Container, Row } from "reactstrap";
 import useAuth from "@/custom-hooks/useAuth";
+import Helmet from "../Layout/Helmet";
 import Link from "next/link";
 
 const admin__nav = [
@@ -27,7 +29,7 @@ const AdminNav = () => {
   const { currentUser } = useAuth();
 
   return (
-    <>
+    <Helmet title="Admin Nav">
       <header className="admin__header">
         <div className="admin__nav-top">
           <Container>
@@ -76,7 +78,7 @@ const AdminNav = () => {
           </Row>
         </Container>
       </section>
-    </>
+    </Helmet>
   );
 };
 

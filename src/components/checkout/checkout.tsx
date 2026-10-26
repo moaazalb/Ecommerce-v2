@@ -1,6 +1,7 @@
 "use client";
 
 import "@/styles/checkout.css";
+import Helmet from "../Layout/Helmet";
 import { JSX, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm, type Path } from "react-hook-form";
@@ -64,7 +65,7 @@ export default function Checkout(): JSX.Element {
   };
 
   return (
-    <>
+    <Helmet title="Checkout">
       <div className="bg-light py-4">
         <div className="container">
           <h1 className="fs-2 fw-semibold m-0">Checkout</h1>
@@ -139,6 +140,6 @@ export default function Checkout(): JSX.Element {
           </form>
         </div>
       </section>
-    </>
+    </Helmet>
   );
 }

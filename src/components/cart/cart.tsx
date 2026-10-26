@@ -1,5 +1,6 @@
 "use client";
 
+import Helmet from "../Layout/Helmet";
 import type { JSX } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -60,7 +61,7 @@ export default function Cart(): JSX.Element {
   const totalAmount = useSelector((state: RootState) => state.cart.totalAmount);
 
   return (
-    <>
+    <Helmet title="Cart">
       <div className="bg-light py-4">
         <div className="container">
           <h1 className="fs-2 fw-semibold m-0">Shopping Cart</h1>
@@ -111,6 +112,6 @@ export default function Cart(): JSX.Element {
           </div>
         </div>
       </section>
-    </>
+    </Helmet>
   );
 }

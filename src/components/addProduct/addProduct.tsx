@@ -1,5 +1,5 @@
 "use client";
-
+import Helmet from "../Layout/Helmet";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import type { JSX } from "react";
@@ -79,6 +79,7 @@ export default function AddProductPage(): JSX.Element {
   };
 
   return (
+    <Helmet title='Add Product'>
     <section>
       <Container>
         <Row>
@@ -186,5 +187,6 @@ export default function AddProductPage(): JSX.Element {
         </Row>
       </Container>
     </section>
+    </Helmet>
   );
 }

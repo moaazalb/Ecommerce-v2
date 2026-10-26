@@ -1,5 +1,6 @@
 "use client";
 
+import Helmet from "../Layout/Helmet";
 import { useState, type JSX } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -53,6 +54,7 @@ export default function Login(): JSX.Element {
   };
 
   return (
+    <Helmet title="Login">
     <section>
       <div className="container">
         <div className="row">
@@ -100,5 +102,6 @@ export default function Login(): JSX.Element {
         </div>
       </div>
     </section>
+    </Helmet>
   );
 }
