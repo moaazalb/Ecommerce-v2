@@ -1,66 +1,130 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+"use client";
 
-export default function Home() {
+import "@/styles/home.css";
+import { useMemo, JSX } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { motion } from "framer-motion";
+import Services from "@/components/services/services";
+import ProductsList from "@/components/UI/productList";
+import Clock from "@/components/UI/clock";
+import productsData from "@/assets/data/products";
+import heroImg from "@/assets/images/hero-img.png";
+import counterImg from "@/assets/images/counter-timer-img.png";
+
+/**
+ * Home page component showcasing trending products, best sales, limited offers, and categories.
+ *
+ * @returns {JSX.Element} The rendered Home page.
+ */
+export default function Home(): JSX.Element {
+  const year = new Date().getFullYear();
+
+  const trendingProducts = useMemo(() => productsData.filter((p) => p.category === "chair"), []);
+  const bestSalesProducts = useMemo(() => productsData.filter((p) => p.category === "sofa"), []);
+  const mobileProducts = useMemo(() => productsData.filter((p) => p.category === "mobile"), []);
+  const wirelessProducts = useMemo(() => productsData.filter((p) => p.category === "wireless"), []);
+  const popularProducts = useMemo(() => productsData.filter((p) => p.category === "watch"), []);
+
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className={styles.intro}>
-          <h1>To get started, edit the page.tsx file.</h1>
-          <p>
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <>
+      <section className="hero__section">
+        <div className="container">
+          <div className="row align-items-center">
+            <div className="col-lg-6 col-md-6">
+              <div className="hero__content">
+                <p className="hero__subtitle">Trending Product in {year}</p>
+                <h2>Make Your Interior More Minimalistic &amp; Modern</h2>
+                <p>
+                  Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vel accusamus
+                  doloremque culpa fuga itaque! Voluptate eligendi quibusdam consequuntur odit
+                  blanditiis?
+                </p>
+                <motion.div whileTap={{ scale: 1.1 }} className="buy__btn d-inline-block">
+                  <Link href="/shop">SHOP NOW</Link>
+                </motion.div>
+              </div>
+            </div>
+
+            <div className="col-lg-6 col-md-6">
+              <div className="hero__img">
+                <Image src={heroImg} alt="Hero interior furniture" priority style={{ height: "auto" }} />
+              </div>
+            </div>
+          </div>
         </div>
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className={styles.secondary}
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      </section>
+
+      <Services />
+
+      <section>
+        <div className="container">
+          <div className="row">
+            <div className="col-lg-12 text-center mb-5">
+              <h2 className="section__title">Trending Products</h2>
+            </div>
+            <ProductsList data={trendingProducts} />
+          </div>
         </div>
-      </main>
-    </div>
+      </section>
+
+      <section>
+        <div className="container">
+          <div className="row">
+            <div className="col-lg-12 text-center mb-5">
+              <h2 className="section__title">Best Sales</h2>
+            </div>
+            <ProductsList data={bestSalesProducts} />
+          </div>
+        </div>
+      </section>
+
+      <section className="timer__count">
+        <div className="container">
+          <div className="row align-items-center">
+            <div className="col-lg-6 col-md-12 counter__down-col">
+              <div className="clock__top-content">
+                <h4 className="text-white fs-6 mb-2">Limited Offers</h4>
+                <h3 className="text-white fs-5 mb-3">Quality Armchair</h3>
+              </div>
+              <Clock />
+              <motion.div
+                whileTap={{ scale: 1.1 }}
+                className="buy__btn store__btn d-inline-block"
+              >
+                <Link href="/shop">Visit Store</Link>
+              </motion.div>
+            </div>
+
+            <div className="col-lg-6 col-md-12 text-end counter__img">
+              <Image src={counterImg} alt="Limited offer armchair" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div className="container">
+          <div className="row">
+            <div className="col-lg-12 text-center mb-5">
+              <h2 className="section__title">New Arrivals</h2>
+            </div>
+            <ProductsList data={mobileProducts} />
+            <ProductsList data={wirelessProducts} />
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div className="container">
+          <div className="row">
+            <div className="col-lg-12 text-center mb-5">
+              <h2 className="section__title">Popular in Category</h2>
+            </div>
+            <ProductsList data={popularProducts} />
+          </div>
+        </div>
+      </section>
+    </>
   );
 }
