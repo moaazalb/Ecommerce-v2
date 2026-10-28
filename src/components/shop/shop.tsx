@@ -3,10 +3,10 @@
 import "@/styles/shop.css"
 import { useState } from "react";
 import { Container, Row, Col } from "reactstrap";
-import ProductsList from "@/components/UI/productList";
-import CommmonSection from "@/components/UI/commonSection";
+import ProductsList from "@/components/ui/ProductList";
+import CommmonSection from "@/components/ui/CommonSection";
 import products from "@/assets/data/products";
-import Helmet from "../Layout/Helmet";
+import Helmet from "../layout/Helmet";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {

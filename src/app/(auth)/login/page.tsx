@@ -1,6 +1,6 @@
-import Login from "@/components/auth/login";
+import Login from "@/components/auth/Login";
 
- const loginPage = () => {
+ const LoginPage = () => {
 return (
     <>
     <Login/>
@@ -8,4 +8,4 @@ return (
 )
 }
 
-export default loginPage
+export default LoginPage

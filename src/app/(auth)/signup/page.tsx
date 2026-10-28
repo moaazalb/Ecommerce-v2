@@ -1,6 +1,6 @@
-import Signup from "@/components/auth/signup";
+import Signup from "@/components/auth/SignUp";
 
- const signupPage = () => {
+ const SignupPage = () => {
 return (
     <>
     <Signup/>
@@ -8,4 +8,4 @@ return (
 )
 }
 
-export default signupPage
+export default SignupPage

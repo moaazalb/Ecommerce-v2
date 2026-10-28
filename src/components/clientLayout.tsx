@@ -2,8 +2,8 @@
 
 import React, { JSX } from "react";
 import { usePathname } from "next/navigation";
-import Header from "@/components/header/header";
-import Footer from "@/components/footer/footer";
+import Header from "@/components/header/Header";
+import Footer from "@/components/footer/Footer";
 import AdminNav from "@/app/admin/AdminNav/page";
 
 interface ClientLayoutProps {

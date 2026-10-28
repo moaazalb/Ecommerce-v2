@@ -1,11 +1,11 @@
 "use client";
 import { useState } from "react";
-import Helmet from "../Layout/Helmet";
+import Helmet from "../layout/Helmet";
 import Image from "next/image";
 import { Container, Row, Col, Table, Button, Spinner } from "reactstrap";
 import { db } from "@/firebase.config";
 import { doc, deleteDoc } from "firebase/firestore";
-import useGetData from "@/custom-hooks/useGetData";
+import useGetData from "@/custom-hooks/useGetData/useGetData";
 import { toast } from "react-toastify";
 import type { User } from "@/models/user";
 import "@/styles/users.css";

@@ -1,5 +1,5 @@
 "use client";
-import Helmet from "../Layout/Helmet";
+import Helmet from "../layout/Helmet";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import type { JSX } from "react";

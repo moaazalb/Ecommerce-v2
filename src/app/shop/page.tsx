@@ -1,6 +1,6 @@
-import Shop from "@/components/shop/shop"
+import Shop from "@/components/shop/Shop"
 
- const shopPage = () => {
+ const ShopPage = () => {
 return (
     <>
     <Shop/>
@@ -8,4 +8,4 @@ return (
 )
 }
 
-export default shopPage
+export default ShopPage

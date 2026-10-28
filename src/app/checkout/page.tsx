@@ -1,6 +1,6 @@
-import Checkout from "@/components/checkout/checkout"
+import Checkout from "@/components/checkout/CheckOut"
 
- const checkoutPage = () => {
+ const CheckoutPage = () => {
 return (
     <>
     <Checkout/>
@@ -8,4 +8,4 @@ return (
 )
 }
 
-export default checkoutPage
+export default CheckoutPage

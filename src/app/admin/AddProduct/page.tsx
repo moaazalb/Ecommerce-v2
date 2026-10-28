@@ -1,6 +1,6 @@
-import AddProductPage from "@/components/addProduct/addProduct"
+import AddProductPage from "@/components/addProduct/AddProduct"
 
- const addProductpage = () => {
+ const AddProductpage = () => {
 return (
     <>
     <AddProductPage/>
@@ -8,4 +8,4 @@ return (
 )
 }
 
-export default addProductpage
+export default AddProductpage

@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import AdminNav from "./page";
-import useAuth from "@/custom-hooks/useAuth";
+import useAuth from "@/custom-hooks/useAuth/useAuth";
 
 // Mock the custom auth hook using the correct relative/alias path matching the implementation
 jest.mock("@/custom-hooks/useAuth");

@@ -9,7 +9,7 @@ import { signOut } from "firebase/auth";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { auth } from "@/firebase.config";
-import useAuth from "@/custom-hooks/useAuth";
+import useAuth from "@/custom-hooks/useAuth/useAuth";
 import logo from "@/assets/images/eco-logo.png";
 import userIcon from "@/assets/images/user-icon.png";
 import type { RootState } from "@/redux/store";

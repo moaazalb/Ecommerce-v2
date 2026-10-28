@@ -1,6 +1,6 @@
-import AllProducts from "@/components/allProducts/allProducts"
+import AllProducts from "@/components/allProducts/AllProducts"
 
- const allProductPage = () => {
+ const AllProductPage = () => {
 return (
     <>
     <AllProducts/>
@@ -8,4 +8,4 @@ return (
 )
 }
 
-export default allProductPage
+export default AllProductPage

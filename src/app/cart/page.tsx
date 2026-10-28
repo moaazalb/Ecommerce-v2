@@ -1,6 +1,6 @@
-import Cart from "@/components/cart/cart"
+import Cart from "@/components/cart/Cart"
 
- const cartPage = () => {
+ const CartPage = () => {
 return (
     <>
     <Cart/>
@@ -8,4 +8,4 @@ return (
 )
 }
 
-export default cartPage
+export default CartPage

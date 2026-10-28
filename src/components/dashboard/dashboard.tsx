@@ -1,5 +1,5 @@
 "use client"
-import useGetData  from "@/custom-hooks/useGetData"
+import useGetData  from "@/custom-hooks/useGetData/useGetData"
 import "@/styles/dashboard.css"
 const Dashboard = () => {
   const { data: products } = useGetData('products');

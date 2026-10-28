@@ -1,6 +1,6 @@
-import Users from "@/components/users/users"
+import Users from "@/components/users/Users"
 
- const usersPage = () => {
+ const UsersPage = () => {
 return (
     <>
     <Users/>
@@ -8,4 +8,4 @@ return (
 )
 }
 
-export default usersPage
+export default UsersPage

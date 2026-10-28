@@ -1,6 +1,6 @@
-import AdminNav from "@/components/adminNav/adminNav"
+import AdminNav from "@/components/adminNav/AdminNav"
 
- const adminNavPage = () => {
+ const AdminNavPage = () => {
 return (
     <>
     <AdminNav/>
@@ -8,4 +8,4 @@ return (
 )
 }
 
-export default adminNavPage
+export default AdminNavPage

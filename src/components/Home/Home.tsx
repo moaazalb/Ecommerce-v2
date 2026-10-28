@@ -1,14 +1,14 @@
 "use client";
 
 import "@/styles/home.css";
-import Helmet from "../Layout/Helmet";
+import Helmet from "../layout/Helmet";
 import { useMemo, JSX } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import Services from "@/components/services/services";
-import ProductsList from "@/components/UI/productList";
-import Clock from "@/components/UI/clock";
+import Services from "@/components/services/Services";
+import ProductsList from "@/components/ui/ProductList";
+import Clock from "@/components/ui/Clock";
 import productsData from "@/assets/data/products";
 import heroImg from "@/assets/images/hero-img.png";
 import counterImg from "@/assets/images/counter-timer-img.png";

@@ -1,7 +1,7 @@
 "use client";
 
 import "@/styles/checkout.css";
-import Helmet from "../Layout/Helmet";
+import Helmet from "../layout/Helmet";
 import { JSX, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm, type Path } from "react-hook-form";

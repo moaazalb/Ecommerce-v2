@@ -1,11 +1,11 @@
 "use client";
-import Helmet from "../Layout/Helmet";
+import Helmet from "../layout/Helmet";
 import { JSX, useState } from "react";
 import Image from "next/image";
 import { Container, Row, Col, Table, Button, Spinner } from "reactstrap";
 import { db } from "@/firebase.config";
 import { doc, deleteDoc } from "firebase/firestore";
-import useGetData from "@/custom-hooks/useGetData";
+import useGetData from "@/custom-hooks/useGetData/useGetData";
 import { toast } from "react-toastify";
 import type { Product } from "@/models/product";
 import "@/styles/all-products.css";

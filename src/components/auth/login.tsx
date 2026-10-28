@@ -1,6 +1,6 @@
 "use client";
 
-import Helmet from "../Layout/Helmet";
+import Helmet from "../layout/Helmet";
 import { useState, type JSX } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
