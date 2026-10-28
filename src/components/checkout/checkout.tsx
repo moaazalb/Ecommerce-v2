@@ -9,7 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { checkoutSchema, type CheckoutFormValues } from "@/lib/validations/checkout.schema";
-import type { RootState } from "@/redux/store";
+import type { RootState } from "@/store/store";
 
 interface FieldConfig {
   name: Path<CheckoutFormValues>;

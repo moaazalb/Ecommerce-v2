@@ -6,7 +6,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
-import { cartActions } from "@/redux/slices/cartSlice";
+import { cartActions } from "@/store/slices/cartSlice";
 import type { Product } from "@/models/product";
 import "@/styles/product-card.css";
 

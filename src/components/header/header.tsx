@@ -12,7 +12,7 @@ import { auth } from "@/firebase.config";
 import useAuth from "@/custom-hooks/useAuth/useAuth";
 import logo from "@/assets/images/eco-logo.png";
 import userIcon from "@/assets/images/user-icon.png";
-import type { RootState } from "@/redux/store";
+import type { RootState } from "@/store/store";
 import "@/styles/header.css";
 
 interface NavLinkItem {

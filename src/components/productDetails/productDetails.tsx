@@ -5,7 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { useDispatch } from "react-redux";
-import { cartActions } from "@/redux/slices/cartSlice";
+import { cartActions } from "@/store/slices/cartSlice";
 import { toast } from "react-toastify";
 import products from "@/assets/data/products";
 import "@/styles/productId.css";

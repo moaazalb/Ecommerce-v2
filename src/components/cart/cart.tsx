@@ -6,8 +6,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { useSelector, useDispatch } from "react-redux";
-import { cartActions } from "@/redux/slices/cartSlice";
-import type { RootState } from "@/redux/store";
+import { cartActions } from "@/store/slices/cartSlice";
+import type { RootState } from "@/store/store";
 import type { CartItem } from "@/models/cart";
 import "@/styles/cart.css";
 
