@@ -1,4 +1,6 @@
+
 "use client";
+
 import Helmet from "../layout/Helmet";
 import { JSX, useState } from "react";
 import Image from "next/image";
@@ -7,127 +9,285 @@ import { db } from "@/firebase.config";
 import { doc, deleteDoc } from "firebase/firestore";
 import useGetData from "@/custom-hooks/useGetData/useGetData";
 import { toast } from "react-toastify";
-import type { Product } from "@/models/product";
+import type { Product } from "@/types/product";
 import "@/styles/all-products.css";
 
 /**
- * AllProducts component for displaying and managing products in the admin dashboard.
- * 
+ * AllProducts component for displaying and managing products
+ * in the admin dashboard.
+ *
+ * Provides product inventory information, loading and empty states,
+ * and the ability to delete products from Firestore.
+ *
  * @returns {JSX.Element} The rendered AllProducts component.
  */
 export default function AllProducts(): JSX.Element {
-  const { data: productsData, loading } = useGetData("products") as { data: Product[]; loading: boolean };
+  const { data, loading } = useGetData("products") as {
+    data: Product[] | undefined;
+    loading: boolean;
+  };
+
+  const productsData = data ?? [];
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
-  /**
-   * Deletes a product by its ID after confirmation.
-   * 
-   * @param {string} id The ID of the product to delete.
-   * @returns {Promise<void>}
-   */
-  const handleDeleteProduct = async (id: string): Promise<void> => {
-    const isConfirmed = window.confirm("Are you sure you want to delete this product?");
-    if (!isConfirmed) return;
 
-    try {
-      setDeletingId(id);
-      await deleteDoc(doc(db, "products", id));
-      toast.success("Deleted successfully!");
-    } catch (error: unknown) {
-      const errorMessage = error instanceof Error ? error.message : "Failed to delete product.";
-      toast.error(errorMessage);
-    } finally {
-      setDeletingId(null);
+/**
+ * Deletes a product by its ID.
+ *
+ * @param {string} id The ID of the product to delete.
+ * @returns {Promise<void>}
+ */
+const handleDeleteProduct = async (id: string): Promise<void> => {
+  try {
+    setDeletingId(id);
+
+    await deleteDoc(doc(db, "products", id));
+
+    toast.success("Product deleted successfully!");
+  } catch (error: unknown) {
+    console.error("Failed to delete product:", error);
+
+    const errorMessage =
+      error instanceof Error
+        ? error.message
+        : "Failed to delete product. Please try again.";
+
+    toast.error(errorMessage);
+  } finally {
+    setDeletingId(null);
+  }
+};
+
+/**
+ * Displays a confirmation toast before deleting a product.
+ *
+ * @param {Product} product The product selected for deletion.
+ */
+const confirmDeleteProduct = (product: Product): void => {
+  toast(
+    ({ closeToast }) => (
+      <div className="delete-confirm-toast">
+        <div className="delete-confirm-toast__content">
+          <i className="ri-error-warning-line" />
+
+          <div>
+            <h4>Delete Product?</h4>
+            <p>
+              Are you sure you want to delete{" "}
+              <strong>{product.productName}</strong>?
+            </p>
+          </div>
+        </div>
+
+        <div className="delete-confirm-toast__actions">
+          <button
+            type="button"
+            className="delete-confirm-toast__cancel"
+            onClick={closeToast}
+          >
+            Cancel
+          </button>
+
+          <button
+            type="button"
+            className="delete-confirm-toast__confirm"
+            onClick={() => {
+              closeToast();
+              void handleDeleteProduct(product.id);
+            }}
+          >
+            Delete
+          </button>
+        </div>
+      </div>
+    ),
+    {
+      autoClose: false,
+      closeOnClick: false,
+      closeButton: false,
+      draggable: false,
+      position: "top-center",
+      className: "delete-confirm-toast-wrapper",
     }
-  };
+  );
+};
+
 
   return (
     <Helmet title="All Products">
-      <section className="all__products-section py-5">
-        <Container>
-          {/* Header */}
-          <Row className="mb-4 align-items-center">
-            <Col lg="6" md="6">
-              <h2 className="products__title">Products Inventory</h2>
-              <p className="products__subtitle text-muted">Manage and monitor all store products in real-time.</p>
-            </Col>
-            <Col lg="6" md="6" className="text-md-end mt-3 mt-md-0">
-              <div className="products__count-badge d-inline-block">
-                Total Products: <strong>{productsData.length}</strong>
-              </div>
-            </Col>
-          </Row>
+      <section className="all__products-section">
+        <Container fluid="xl">
+          {/* Page header */}
+          <div className="all-products__header">
+            <div className="all-products__heading">
+              <span className="all-products__eyebrow">
+                INVENTORY MANAGEMENT
+              </span>
 
-          {/* Table Card Container */}
-          <Row>
-            <Col lg="12">
-              <div className="table__wrapper">
-                <Table hover responsive className="align-middle mb-0">
-                  <thead>
+              <h1 className="products__title">All Products</h1>
+
+              <p className="products__subtitle">
+                Manage your inventory, review product details, and keep your
+                store up to date.
+              </p>
+            </div>
+
+            <div className="products__count-badge">
+              <span className="products__count-icon">
+                <i className="ri-shopping-bag-3-line" aria-hidden="true" />
+              </span>
+
+              <div>
+                <span className="products__count-label">
+                  Total Products
+                </span>
+                <strong>{loading ? "—" : productsData.length}</strong>
+              </div>
+            </div>
+          </div>
+
+          {/* Inventory table */}
+          <div className="all-products__card">
+            <div className="all-products__card-header">
+              <div>
+                <h2>Product Inventory</h2>
+                <p>All products currently available in your store.</p>
+              </div>
+
+              <span className="all-products__live-status">
+                <span aria-hidden="true" />
+                Inventory
+              </span>
+            </div>
+
+            <div className="table__wrapper">
+              <Table hover responsive className="all-products__table mb-0">
+                <thead>
+                  <tr>
+                    <th scope="col">Product</th>
+                    <th scope="col">Category</th>
+                    <th scope="col">Price</th>
+                    <th scope="col" className="text-end">
+                      Actions
+                    </th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  {loading ? (
                     <tr>
-                      <th>Image</th>
-                      <th>Title</th>
-                      <th>Category</th>
-                      <th>Price</th>
-                      <th className="text-end">Action</th>
+                      <td colSpan={4}>
+                        <div className="all-products__state">
+                          <Spinner color="primary" />
+                          <h3>Loading products</h3>
+                          <p>Please wait while we retrieve your inventory.</p>
+                        </div>
+                      </td>
                     </tr>
-                  </thead>
-                  <tbody>
-                    {loading ? (
-                      <tr>
-                        <td colSpan={5} className="text-center py-5">
-                          <Spinner color="primary" size="sm" />
-                          <span className="ms-2 text-muted fw-medium">Loading products...</span>
-                        </td>
-                      </tr>
-                    ) : productsData.length === 0 ? (
-                      <tr>
-                        <td colSpan={5} className="text-center py-5 text-muted">
-                          <i className="ri-folder-open-line fs-2 d-block mb-2"></i>
-                          <span>No products found.</span>
-                        </td>
-                      </tr>
-                    ) : (
-                      productsData.map((item) => (
-                        <tr key={item.id}>
-                          <td>
+                  ) : productsData.length === 0 ? (
+                    <tr>
+                      <td colSpan={4}>
+                        <div className="all-products__state">
+                          <div className="all-products__empty-icon">
+                            <i
+                              className="ri-inbox-archive-line"
+                              aria-hidden="true"
+                            />
+                          </div>
+
+                          <h3>No products yet</h3>
+                          <p>
+                            Your inventory is empty. Add a product to see it
+                            listed here.
+                          </p>
+                        </div>
+                      </td>
+                    </tr>
+                  ) : (
+                    productsData.map((item) => (
+                      <tr key={item.id}>
+                        <td>
+                          <div className="all-products__product">
                             <div className="product__img-box">
                               <Image
                                 src={item.imgUrl || "/placeholder.png"}
                                 alt={item.productName || "Product image"}
                                 fill
-                                className="object-fit-cover"
-                                sizes="45px"
+                                className="product__image"
+                                sizes="64px"
                               />
                             </div>
-                          </td>
-                          <td className="fw-semibold text-dark">{item.productName}</td>
-                          <td>
-                            <span className="badge category__badge text-capitalize">
-                              {item.category}
-                            </span>
-                          </td>
-                          <td className="fw-bold text-dark">${item.price}</td>
-                          <td className="text-end">
-                            <Button
-                              color="danger"
-                              size="sm"
-                              className="delete__btn"
-                              onClick={() => handleDeleteProduct(item.id)}
-                              disabled={deletingId === item.id}
-                            >
-                              <i className="ri-delete-bin-line me-1"></i>
-                              {deletingId === item.id ? "Deleting..." : "Delete"}
-                            </Button>
-                          </td>
-                        </tr>
-                      ))
-                    )}
-                  </tbody>
-                </Table>
+
+                            <div className="all-products__product-info">
+                              <span className="all-products__product-name">
+                                {item.productName || "Untitled product"}
+                              </span>
+
+                              <span className="all-products__product-id">
+                                ID: {item.id}
+                              </span>
+                            </div>
+                          </div>
+                        </td>
+
+                        <td>
+                          <span className="category__badge">
+                            {item.category || "Uncategorized"}
+                          </span>
+                        </td>
+
+                        <td>
+                          <span className="all-products__price">
+                            ${Number(item.price).toFixed(2)}
+                          </span>
+                        </td>
+
+                        <td className="text-end">
+                          <Button
+                            type="button"
+                            className="delete__btn"
+                            onClick={() => confirmDeleteProduct(item)}
+                            disabled={deletingId !== null}
+                            aria-label={`Delete ${item.productName || "product"}`}
+                          >
+                            {deletingId === item.id ? (
+                              <>
+                                <Spinner size="sm" />
+                                <span>Deleting</span>
+                              </>
+                            ) : (
+                              <>
+                                <i
+                                  className="ri-delete-bin-6-line"
+                                  aria-hidden="true"
+                                />
+                                <span>Delete</span>
+                              </>
+                            )}
+                          </Button>
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </Table>
+            </div>
+
+            {!loading && productsData.length > 0 && (
+              <div className="all-products__card-footer">
+                <span>
+                  Showing{" "}
+                  <strong>{productsData.length}</strong>{" "}
+                  {productsData.length === 1 ? "product" : "products"}
+                </span>
+
+                <span className="all-products__footer-note">
+                  <i className="ri-shield-check-line" aria-hidden="true" />
+                  Inventory management
+                </span>
               </div>
-            </Col>
-          </Row>
+            )}
+          </div>
         </Container>
       </section>
     </Helmet>

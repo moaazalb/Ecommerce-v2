@@ -1,11 +1,20 @@
 "use client";
+
 import Helmet from "../layout/Helmet";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import type { JSX } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { Container, Row, Col, Form, FormGroup, Button, Spinner } from "reactstrap";
+import {
+  Container,
+  Row,
+  Col,
+  Form,
+  FormGroup,
+  Button,
+  Spinner,
+} from "reactstrap";
 import { addProduct } from "@/lib/api/products";
 import {
   ACCEPTED_IMAGE_TYPES,
@@ -28,8 +37,9 @@ interface FieldErrorProps {
  */
 function FieldError({ id, message }: FieldErrorProps): JSX.Element | null {
   if (!message) return null;
+
   return (
-    <p id={id} role="alert" className="text-danger small mt-1 mb-0">
+    <p id={id} role="alert" className="add-product__field-error">
       {message}
     </p>
   );
@@ -43,15 +53,27 @@ function FieldError({ id, message }: FieldErrorProps): JSX.Element | null {
  */
 export default function AddProductPage(): JSX.Element {
   const router = useRouter();
+
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<ProductFormValues>({
     resolver: zodResolver(productSchema),
-    defaultValues: { title: "", shortDesc: "", description: "", price: "", category: "" },
+    defaultValues: {
+      title: "",
+      shortDesc: "",
+      description: "",
+      price: "",
+      category: "",
+    },
   });
 
+  /**
+   * Validates the submitted product and saves it through the product API.
+   *
+   * @param {ProductFormValues} values Validated product form values.
+   */
   const onSubmit = async (values: ProductFormValues): Promise<void> => {
     try {
       await addProduct(
@@ -64,149 +86,263 @@ export default function AddProductPage(): JSX.Element {
         },
         values.image[0]
       );
+
       toast.success("Product successfully added!");
       router.push("/admin/AllProducts");
-    } catch {
-      toast.error("Product not added!");
+    } catch (error) {
+      console.error("Failed to add product:", error);
+      toast.error("Product not added. Please try again.");
     }
   };
 
   return (
     <Helmet title="Add Product">
-      <section className="add__product-section py-5">
+      <section className="add__product-section">
         <Container>
           <Row className="justify-content-center">
             <Col lg="8" xl="7">
-              <div className="add__product-card p-4 p-md-5">
-                <div className="mb-4">
-                  <h2 className="products__title mb-1">Add New Product</h2>
-                  <p className="products__subtitle text-muted">
-                    Fill in the details below to list a new item in your inventory.
-                  </p>
+              <div className="add__product-card">
+                <div className="add__product-header">
+                  <div className="add__product-icon">
+                    <i className="ri-shopping-bag-3-line" aria-hidden="true" />
+                  </div>
+
+                  <div>
+                    <span className="add__product-eyebrow">
+                      PRODUCT MANAGEMENT
+                    </span>
+                    <h1 className="products__title">Add New Product</h1>
+                    <p className="products__subtitle">
+                      Enter the product details below to add a new item to
+                      your inventory.
+                    </p>
+                  </div>
                 </div>
 
+                <div className="add__product-divider" />
+
                 {isSubmitting ? (
-                  <div className="text-center py-5">
+                  <div className="add__product-loading" role="status">
                     <Spinner color="primary" />
-                    <p className="mt-3 text-muted fw-medium">Adding product to inventory...</p>
+                    <p>Uploading image and adding product...</p>
+                    <span>Please wait while we save your product.</span>
                   </div>
                 ) : (
-                  <Form onSubmit={handleSubmit(onSubmit)} noValidate>
-                    <FormGroup className="mb-3">
-                      <label htmlFor="title" className="form-label fw-semibold text-dark">
-                        Product Title
+                  <Form
+                    onSubmit={handleSubmit(onSubmit)}
+                    noValidate
+                    className="add__product-form"
+                  >
+                    <FormGroup className="add__product-field">
+                      <label htmlFor="title">
+                        Product Title <span>*</span>
                       </label>
                       <input
                         id="title"
                         type="text"
-                        className="form-control"
+                        className={`form-control ${
+                          errors.title ? "is-invalid" : ""
+                        }`}
                         placeholder="e.g. Modern Minimalist Sofa"
                         aria-invalid={!!errors.title}
-                        aria-describedby={errors.title ? "title-error" : undefined}
+                        aria-describedby={
+                          errors.title ? "title-error" : undefined
+                        }
                         {...register("title")}
                       />
-                      <FieldError id="title-error" message={errors.title?.message} />
+                      <FieldError
+                        id="title-error"
+                        message={errors.title?.message}
+                      />
                     </FormGroup>
 
-                    <FormGroup className="mb-3">
-                      <label htmlFor="shortDesc" className="form-label fw-semibold text-dark">
-                        Short Description
+                    <FormGroup className="add__product-field">
+                      <label htmlFor="shortDesc">
+                        Short Description <span>*</span>
                       </label>
                       <input
                         id="shortDesc"
                         type="text"
-                        className="form-control"
+                        className={`form-control ${
+                          errors.shortDesc ? "is-invalid" : ""
+                        }`}
                         placeholder="A brief summary of the product"
                         aria-invalid={!!errors.shortDesc}
-                        aria-describedby={errors.shortDesc ? "shortDesc-error" : undefined}
+                        aria-describedby={
+                          errors.shortDesc
+                            ? "shortDesc-error"
+                            : undefined
+                        }
                         {...register("shortDesc")}
                       />
-                      <FieldError id="shortDesc-error" message={errors.shortDesc?.message} />
+                      <FieldError
+                        id="shortDesc-error"
+                        message={errors.shortDesc?.message}
+                      />
                     </FormGroup>
 
-                    <FormGroup className="mb-3">
-                      <label htmlFor="description" className="form-label fw-semibold text-dark">
-                        Full Description
+                    <FormGroup className="add__product-field">
+                      <label htmlFor="description">
+                        Full Description <span>*</span>
                       </label>
                       <textarea
                         id="description"
-                        rows={4}
-                        className="form-control"
-                        placeholder="Detailed product description and features..."
+                        rows={5}
+                        className={`form-control ${
+                          errors.description ? "is-invalid" : ""
+                        }`}
+                        placeholder="Describe the product, its features, and details..."
                         aria-invalid={!!errors.description}
-                        aria-describedby={errors.description ? "description-error" : undefined}
+                        aria-describedby={
+                          errors.description
+                            ? "description-error"
+                            : undefined
+                        }
                         {...register("description")}
                       />
-                      <FieldError id="description-error" message={errors.description?.message} />
+                      <FieldError
+                        id="description-error"
+                        message={errors.description?.message}
+                      />
                     </FormGroup>
 
                     <Row>
                       <Col md="6">
-                        <FormGroup className="mb-3">
-                          <label htmlFor="price" className="form-label fw-semibold text-dark">
-                            Price ($)
+                        <FormGroup className="add__product-field">
+                          <label htmlFor="price">
+                            Price (USD) <span>*</span>
                           </label>
-                          <input
-                            id="price"
-                            type="text"
-                            inputMode="decimal"
-                            className="form-control"
-                            placeholder="199.00"
-                            aria-invalid={!!errors.price}
-                            aria-describedby={errors.price ? "price-error" : undefined}
-                            {...register("price")}
+                          <div className="add__product-price-input">
+                            <span aria-hidden="true">$</span>
+                            <input
+                              id="price"
+                              type="text"
+                              inputMode="decimal"
+                              className={`form-control ${
+                                errors.price ? "is-invalid" : ""
+                              }`}
+                              placeholder="199.00"
+                              aria-invalid={!!errors.price}
+                              aria-describedby={
+                                errors.price ? "price-error" : undefined
+                              }
+                              {...register("price")}
+                            />
+                          </div>
+                          <FieldError
+                            id="price-error"
+                            message={errors.price?.message}
                           />
-                          <FieldError id="price-error" message={errors.price?.message} />
                         </FormGroup>
                       </Col>
 
                       <Col md="6">
-                        <FormGroup className="mb-3">
-                          <label htmlFor="category" className="form-label fw-semibold text-dark">
-                            Category
+                        <FormGroup className="add__product-field">
+                          <label htmlFor="category">
+                            Category <span>*</span>
                           </label>
                           <select
                             id="category"
-                            className="form-select"
+                            className={`form-select ${
+                              errors.category ? "is-invalid" : ""
+                            }`}
                             aria-invalid={!!errors.category}
-                            aria-describedby={errors.category ? "category-error" : undefined}
+                            aria-describedby={
+                              errors.category
+                                ? "category-error"
+                                : undefined
+                            }
                             {...register("category")}
                           >
                             <option value="">Select category</option>
                             {PRODUCT_CATEGORIES.map((category) => (
                               <option key={category} value={category}>
-                                {category.charAt(0).toUpperCase() + category.slice(1)}
+                                {category.charAt(0).toUpperCase() +
+                                  category.slice(1)}
                               </option>
                             ))}
                           </select>
-                          <FieldError id="category-error" message={errors.category?.message} />
+                          <FieldError
+                            id="category-error"
+                            message={errors.category?.message}
+                          />
                         </FormGroup>
                       </Col>
                     </Row>
 
-                    <FormGroup className="mb-4">
-                      <label htmlFor="image" className="form-label fw-semibold text-dark">
-                        Product Image
+                    <FormGroup className="add__product-field">
+                      <label htmlFor="image">
+                        Product Image <span>*</span>
                       </label>
-                      <input
-                        id="image"
-                        type="file"
-                        className="form-control"
-                        accept={ACCEPTED_IMAGE_TYPES.join(",")}
-                        aria-invalid={!!errors.image}
-                        aria-describedby={errors.image ? "image-error" : undefined}
-                        {...register("image")}
+                      <div
+                        className={`add__product-upload ${
+                          errors.image ? "has-error" : ""
+                        }`}
+                      >
+                        <i
+                          className="ri-image-add-line"
+                          aria-hidden="true"
+                        />
+                        <div className="add__product-upload-content">
+                          <strong>Choose a product image</strong>
+                          <span>
+                            Select an image from your device. Supported formats
+                            are listed below.
+                          </span>
+                          <small>
+                            {ACCEPTED_IMAGE_TYPES.map((type) =>
+                              type.replace("image/", "").toUpperCase()
+                            ).join(", ")}
+                          </small>
+                        </div>
+                        <input
+                          id="image"
+                          type="file"
+                          className="form-control"
+                          accept={ACCEPTED_IMAGE_TYPES.join(",")}
+                          aria-invalid={!!errors.image}
+                          aria-describedby={
+                            errors.image ? "image-error" : undefined
+                          }
+                          {...register("image")}
+                        />
+                      </div>
+                      <FieldError
+                        id="image-error"
+                        message={errors.image?.message as
+                          | string
+                          | undefined}
                       />
-                      <FieldError id="image-error" message={errors.image?.message as string | undefined} />
                     </FormGroup>
 
-                    <div className="d-grid">
-                      <Button  type="submit" disabled={isSubmitting} className="py-2 fw-semibold submit__btn bg-[#0a1b2a]">
+                    <div className="add__product-actions">
+                      <Button
+                        type="button"
+                        className="add__product-cancel"
+                        onClick={() => router.push("/admin/AllProducts")}
+                      >
+                        Cancel
+                      </Button>
+
+                      <Button
+                        type="submit"
+                        disabled={isSubmitting}
+                        className="submit__btn"
+                      >
+                        <i
+                          className="ri-add-line"
+                          aria-hidden="true"
+                        />
                         Add Product
                       </Button>
                     </div>
                   </Form>
                 )}
+              </div>
+
+              <div className="add__product-security">
+                <i className="ri-shield-check-line" aria-hidden="true" />
+                Your product details will be saved securely.
               </div>
             </Col>
           </Row>

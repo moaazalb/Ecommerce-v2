@@ -1,5 +1,5 @@
 import cartReducer, { cartActions } from "./cartSlice";
-import type { CartItem } from "@/models/cart";
+import type { CartItem } from "@/types/cart";
 
 describe("cartSlice reducer", () => {
   const initialState = {

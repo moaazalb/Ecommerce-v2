@@ -1,11 +1,108 @@
-@media only screen and (max-width: 992px){
-   .clock_wrapper{
-    justify-content: center;   
- }
-   .clock__data h1{
-      font-size: 1.1rem !important;
-   }
-   .clock__data h5{
-    font-size: 0.9rem !important;
- }
+/* Countdown Clock */
+.clock_wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.clock_wrapper > div {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.clock__data {
+  min-width: 78px;
+  padding: 14px 12px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  backdrop-filter: blur(8px);
+}
+
+.clock__data h1 {
+  font-size: 1.8rem !important;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 6px !important;
+  font-variant-numeric: tabular-nums;
+}
+
+.clock__data h5 {
+  font-size: 0.75rem !important;
+  font-weight: 500;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 0;
+  opacity: 0.8;
+}
+
+.clock_wrapper > div > span {
+  font-size: 1.7rem !important;
+  font-weight: 600;
+  opacity: 0.7;
+  margin-top: -12px;
+}
+
+/* Tablets */
+@media (max-width: 992px) {
+  .clock_wrapper {
+    gap: 10px;
+  }
+
+  .clock_wrapper > div {
+    gap: 10px;
+  }
+
+  .clock__data {
+    min-width: 68px;
+    padding: 12px 10px;
+  }
+
+  .clock__data h1 {
+    font-size: 1.4rem !important;
+  }
+
+  .clock__data h5 {
+    font-size: 0.65rem !important;
+  }
+
+  .clock_wrapper > div > span {
+    font-size: 1.3rem !important;
+  }
+}
+
+/* Mobile */
+@media (max-width: 576px) {
+  .clock_wrapper {
+    gap: 6px;
+  }
+
+  .clock_wrapper > div {
+    gap: 6px;
+  }
+
+  .clock__data {
+    min-width: 58px;
+    padding: 10px 7px;
+    border-radius: 8px;
+  }
+
+  .clock__data h1 {
+    font-size: 1.15rem !important;
+    margin-bottom: 4px !important;
+  }
+
+  .clock__data h5 {
+    font-size: 0.55rem !important;
+    letter-spacing: 0.5px;
+  }
+
+  .clock_wrapper > div > span {
+    font-size: 1rem !important;
+    margin-top: -8px;
+  }
 }

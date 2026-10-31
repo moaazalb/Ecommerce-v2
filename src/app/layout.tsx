@@ -1,17 +1,45 @@
+
 import "bootstrap/dist/css/bootstrap.min.css";
 import "remixicon/fonts/remixicon.css";
 import "react-toastify/dist/ReactToastify.css";
-import "@/globals.css";
+import "./globals.css";
 
+import type { Metadata } from "next";
 import type { ReactNode } from "react";
+import { Montserrat, Playfair_Display } from "next/font/google";
+
 import { ToastContainer } from "react-toastify";
 import Providers from "@/components/providers/Providers";
-import ClientLayout from "@/components/ClientLayout"; // wherever your ClientLayout file is
+import ClientLayout from "@/components/ClientLayout";
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+const montserrat = Montserrat({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-body",
+});
+
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-heading",
+});
+
+export const metadata: Metadata = {
+  title: {
+    default: "Your Store",
+    template: "%s | Your Store",
+  },
+  description: "Discover timeless fashion and contemporary collections.",
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: ReactNode;
+}>) {
   return (
     <html lang="en">
-      <body>
+      <body className={`${montserrat.variable} ${playfair.variable}`}>
         <Providers>
           <ToastContainer
             theme="dark"
@@ -20,6 +48,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             closeOnClick
             pauseOnHover={false}
           />
+
           <ClientLayout>{children}</ClientLayout>
         </Providers>
       </body>

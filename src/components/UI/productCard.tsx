@@ -1,13 +1,14 @@
+
 "use client";
 
-import React, { JSX } from "react";
+import { JSX } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { cartActions } from "@/store/slices/cartSlice";
-import type { Product } from "@/models/product";
+import type { Product } from "@/types/product";
 import "@/styles/product-card.css";
 
 interface ProductCardProps {
@@ -28,15 +29,24 @@ export default function ProductCard({ item }: ProductCardProps): JSX.Element {
    */
   const handleAddToCart = (): void => {
     dispatch(
-      cartActions.addItem({
-        id: item.id,
-        productName: item.productName,
-        price: item.price,
-        imgUrl: item.imgUrl.src,
-      })
-    );
+    cartActions.addItem({
+      id: item.id,
+      productName: item.productName,
+      price: Number(item.price),
+      imgUrl: productImage,
+    })
+  );
+
     toast.success("Product added successfully!");
   };
+
+    /**
+   * Resolves the product image URL for Next.js Image.
+   *
+   * @returns {string} The resolved image URL.
+   */
+  const productImage =
+  typeof item.imgUrl === "string" ? item.imgUrl : item.imgUrl.src;
 
   return (
     <div className="col-lg-3 col-md-4 mb-4">
@@ -45,9 +55,15 @@ export default function ProductCard({ item }: ProductCardProps): JSX.Element {
           <motion.div whileHover={{ scale: 0.9 }}>
             <Link href={`/shop/${item.id}`}>
               <Image
-                src={item.imgUrl}
+                src={productImage}
                 alt={item.productName || "Product image"}
-                style={{ height: "auto" }}
+                width={500}
+                height={500}
+                style={{
+                  width: "100%",
+                  height: "auto",
+                  objectFit: "contain",
+                }}
               />
             </Link>
           </motion.div>
@@ -62,14 +78,16 @@ export default function ProductCard({ item }: ProductCardProps): JSX.Element {
 
         <div className="product__card-bottom d-flex align-items-center justify-content-between p-2">
           <span className="price">${item.price}</span>
-          <motion.span
+
+          <motion.button
+            type="button"
+            className="product__add-button"
             whileTap={{ scale: 1.2 }}
             onClick={handleAddToCart}
-            role="button"
             aria-label={`Add ${item.productName} to cart`}
           >
-            <i className="ri-add-line"></i>
-          </motion.span>
+            <i className="ri-add-line" />
+          </motion.button>
         </div>
       </div>
     </div>

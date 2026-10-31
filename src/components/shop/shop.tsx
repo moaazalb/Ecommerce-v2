@@ -1,102 +1,193 @@
+
 "use client";
 
-import "@/styles/shop.css"
-import { useState } from "react";
+import "@/styles/shop.css";
+import { useMemo, useState } from "react";
 import { Container, Row, Col } from "reactstrap";
 import ProductsList from "@/components/ui/ProductList";
 import CommmonSection from "@/components/ui/CommonSection";
 import products from "@/assets/data/products";
 import Helmet from "../layout/Helmet";
-import { Metadata } from "next";
-
-export const metadata: Metadata = {
-  title: "Shop",
-};
-
+import staticProducts from "@/assets/data/products";
+import useGetData from "@/custom-hooks/useGetData/useGetData";
+/**
+ * Shop page component.
+ *
+ * Allows users to browse products, filter by category,
+ * search by product name, and sort products by price.
+ *
+ * @returns {JSX.Element} The rendered Shop page.
+ */
 export default function Shop() {
-  const [productsData, setProductsData] = useState(products);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [sortOrder, setSortOrder] = useState("default");
+  const {
+  data: firestoreProducts,
+  loading,
+  error,
+} = useGetData("products");
 
-  const handleFilter = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const filterValue = e.target.value;
-    if (filterValue === "sofa") {
-      const filteredProducts = products.filter((item) => item.category === "sofa");
-      setProductsData(filteredProducts);
-    } else if (filterValue === "mobile") {
-      const filteredProducts = products.filter((item) => item.category === "mobile");
-      setProductsData(filteredProducts);
-    } else if (filterValue === "chair") {
-      const filteredProducts = products.filter((item) => item.category === "chair");
-      setProductsData(filteredProducts);
-    } else if (filterValue === "wireless") {
-      const filteredProducts = products.filter((item) => item.category === "wireless");
-      setProductsData(filteredProducts);
-    } else if (filterValue === "watch") {
-      const filteredProducts = products.filter((item) => item.category === "watch");
-      setProductsData(filteredProducts);
+/**
+ * Combines static products with products fetched from Firestore.
+ */
+const allProducts = useMemo(() => {
+  return [...staticProducts, ...firestoreProducts];
+}, [firestoreProducts]);
+
+  /**
+   * Filters and sorts products based on the selected options.
+   *
+   * Search, category filtering, and sorting work together.
+   */
+  const filteredProducts = useMemo(() => {
+    let result = [...allProducts];
+
+    // Filter by category
+    if (selectedCategory !== "all") {
+      result = result.filter(
+        (item) => item.category === selectedCategory
+      );
     }
-  };
 
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const searchTerm = e.target.value;
-    const searchedProducts = products.filter(
-      (item) => item.productName.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    setProductsData(searchedProducts);
+    // Search by product name
+    if (searchTerm.trim()) {
+      result = result.filter((item) =>
+        item.productName
+          .toLowerCase()
+          .includes(searchTerm.trim().toLowerCase())
+      );
+    }
+
+    // Sort by price
+    if (sortOrder === "ascending") {
+      result.sort((a, b) => Number(a.price) - Number(b.price));
+    } else if (sortOrder === "descending") {
+      result.sort((a, b) => Number(b.price) - Number(a.price));
+    }
+
+    return result;
+}, [allProducts, searchTerm, selectedCategory, sortOrder]);
+
+  /**
+   * Resets all shop filters to their default values.
+   */
+  const handleReset = () => {
+    setSearchTerm("");
+    setSelectedCategory("all");
+    setSortOrder("default");
   };
 
   return (
-    <Helmet title='Shop'>     
-     <CommmonSection title="products" />
-      <section>
-        <Container>
-          <Row>
-            <Col lg="3" md="6">
-              <div className="filter__widget">
-                <select onChange={handleFilter}>
-                  <option>Filter By Category</option>
-                  <option value="sofa">Sofa</option>
-                  <option value="mobile">Mobile</option>
-                  <option value="chair">Chair</option>
-                  <option value="watch">Watch</option>
-                  <option value="wireless">Wireless</option>
-                </select>
-              </div>
-            </Col>
-            <Col lg="3" md="6">
-              <div className="filter__widget text-end">
-                <select>
-                  <option>Sort By</option>
-                  <option value="ascending">Ascending</option>
-                  <option value="descending">Descending</option>
-                </select>
-              </div>
-            </Col>
-            <Col lg="6" md="12">
-              <div className="search__box">
-                <input
-                  type="text"
-                  placeholder="Search...."
-                  onChange={handleSearch}
-                />
-                <span>
-                  <i className="ri-search-line"></i>
-                </span>
-              </div>
-            </Col>
-          </Row>
-        </Container>
-      </section>
-      <section className="pt-0">
-        <Container>
-          <Row>
-            {productsData.length === 0 ? (
-              <h1 className="text-center">No Products are found!</h1>
-            ) : (
-              <ProductsList data={productsData} />
-            )}
-          </Row>
-        </Container>
-      </section>
+    <Helmet title="Shop">
+      <div className="shop-page">
+        <CommmonSection title="products" />
+
+        {/* Filters and Search */}
+        <section className="shop__filter-section">
+          <Container>
+            <Row className="align-items-center">
+              {/* Category Filter */}
+              <Col lg="3" md="6" className="mb-3 mb-lg-0">
+                <div className="filter__widget">
+                  <select
+                    value={selectedCategory}
+                    onChange={(e) => setSelectedCategory(e.target.value)}
+                    aria-label="Filter by category"
+                  >
+                    <option value="all">All Categories</option>
+                    <option value="sofa">Sofa</option>
+                    <option value="mobile">Mobile</option>
+                    <option value="chair">Chair</option>
+                    <option value="watch">Watch</option>
+                    <option value="wireless">Wireless</option>
+                  </select>
+                </div>
+              </Col>
+
+              {/* Sorting */}
+              <Col lg="3" md="6" className="mb-3 mb-lg-0">
+                <div className="filter__widget">
+                  <select
+                    value={sortOrder}
+                    onChange={(e) => setSortOrder(e.target.value)}
+                    aria-label="Sort products by price"
+                  >
+                    <option value="default">Default Sorting</option>
+                    <option value="ascending">Price: Low to High</option>
+                    <option value="descending">Price: High to Low</option>
+                  </select>
+                </div>
+              </Col>
+
+              {/* Search */}
+              <Col lg="4" md="9">
+                <div className="search__box">
+                  <input
+                    type="search"
+                    placeholder="Search products..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    aria-label="Search products"
+                  />
+                  <span>
+                    <i className="ri-search-line"></i>
+                  </span>
+                </div>
+              </Col>
+
+              {/* Reset */}
+              <Col lg="2" md="3" className="mt-3 mt-lg-0">
+                <button
+                  type="button"
+                  className="shop__reset-btn"
+                  onClick={handleReset}
+                >
+                  <i className="ri-refresh-line"></i>
+                  Reset
+                </button>
+              </Col>
+            </Row>
+
+            {/* Results Information */}
+            <div className="shop__results-info">
+              <p>
+                Showing <strong>{filteredProducts.length}</strong>{" "}
+                {filteredProducts.length === 1 ? "product" : "products"}
+              </p>
+            </div>
+          </Container>
+        </section>
+
+        {/* Products */}
+        <section className="shop__products-section pt-0">
+          <Container>
+            <Row>
+              {filteredProducts.length === 0 ? (
+                <Col lg="12">
+                  <div className="shop__empty-state">
+                    <i className="ri-search-line"></i>
+                    <h3>No Products Found</h3>
+                    <p>
+                      We couldn't find any products matching your search.
+                      Try changing your filters or search term.
+                    </p>
+                    <button
+                      type="button"
+                      onClick={handleReset}
+                      className="shop__reset-btn"
+                    >
+                      Clear Filters
+                    </button>
+                  </div>
+                </Col>
+              ) : (
+                <ProductsList data={filteredProducts} />
+              )}
+            </Row>
+          </Container>
+        </section>
+      </div>
     </Helmet>
   );
 }

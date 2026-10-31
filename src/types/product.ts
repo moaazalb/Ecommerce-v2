@@ -1,3 +1,4 @@
+
 import type { StaticImageData } from "next/image";
 
 export type ProductCategory = "sofa" | "chair" | "mobile" | "watch" | "wireless";
@@ -7,10 +8,15 @@ export interface Review {
   text: string;
 }
 
+/**
+ * Supports both locally imported images and remote image URLs.
+ */
+export type ProductImage = StaticImageData | string;
+
 export interface Product {
   id: string;
   productName: string;
-  imgUrl: StaticImageData;
+  imgUrl: ProductImage;
   category: ProductCategory;
   price: number;
   shortDesc: string;

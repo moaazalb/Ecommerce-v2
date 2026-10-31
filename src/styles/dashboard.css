@@ -1,45 +1,151 @@
-
-
-
-.revenue__box,
- .order__box,
-  .products__box,
-   .users__box {
-    padding: 20px;
-    border-radius: 10px;
+/* Dashboard */
+.dashboard {
+  min-height: 100vh;
+  padding: 30px 0 50px;
+  background: #f8fafc;
 }
 
-.revenue__box{
-    background: var(--card-bg-01);
+/* Dashboard Header */
+.dashboard__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 30px;
 }
 
-.products__box{
-    background: var(--card-bg-03);
+.dashboard__eyebrow {
+  display: inline-block;
+  color: #94a3b8;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  margin-bottom: 8px;
 }
 
-.order__box{
-    background: var(--card-bg-04);
+.dashboard__header h2 {
+  color: #1e293b;
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 8px;
 }
 
-.users__box{
-    background: var(--card-bg-02);
+.dashboard__header p {
+  color: #64748b;
+  font-size: 0.9rem;
+  margin: 0;
 }
 
-.revenue__box h5,
-.order__box h5,
-.products__box h5,
-.users__box h5{
-  font-size: 1.1rem;
-  font-weight: 500;
-  color: var(--primary-color);
-  margin-bottom: 20px;
+/* Statistics Cards */
+.dashboard__card {
+  height: 100%;
+  min-height: 175px;
+  padding: 22px;
+  background: #ffffff;
+  border: 1px solid #e8edf3;
+  border-radius: 12px;
+  box-shadow: 0 3px 12px rgba(15, 23, 42, 0.03);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
-.revenue__box span,
-.order__box span,
-.products__box span,
-.users__box {
-    color: var(--primary-color);
-    font-weight: 600;
-    font-size: 2rem;
+.dashboard__card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.07);
+}
+
+.dashboard__card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 25px;
+}
+
+.dashboard__card-icon {
+  width: 46px;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  font-size: 1.4rem;
+}
+
+.dashboard__card-label {
+  color: #64748b;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.dashboard__card-bottom h3 {
+  color: #1e293b;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 5px;
+  font-variant-numeric: tabular-nums;
+}
+
+.dashboard__card-bottom p {
+  color: #94a3b8;
+  font-size: 0.8rem;
+  margin: 0;
+}
+
+/* Card Variations */
+.revenue__box .dashboard__card-icon {
+  color: #16a36a;
+  background: #e8f7ef;
+}
+
+.order__box .dashboard__card-icon {
+  color: #6478d3;
+  background: #eef0ff;
+}
+
+.products__box .dashboard__card-icon {
+  color: #d69a36;
+  background: #fff6e5;
+}
+
+.users__box .dashboard__card-icon {
+  color: #dc6b6b;
+  background: #fff0f0;
+}
+
+/* Tablet */
+@media (max-width: 992px) {
+  .dashboard {
+    padding: 25px 0 40px;
+  }
+
+  .dashboard__card {
+    min-height: 160px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 576px) {
+  .dashboard {
+    padding: 20px 0 35px;
+  }
+
+  .dashboard__header {
+    margin-bottom: 22px;
+  }
+
+  .dashboard__header h2 {
+    font-size: 1.5rem;
+  }
+
+  .dashboard__card {
+    min-height: 145px;
+    padding: 18px;
+  }
+
+  .dashboard__card-top {
+    margin-bottom: 18px;
+  }
+
+  .dashboard__card-bottom h3 {
+    font-size: 1.7rem;
+  }
 }

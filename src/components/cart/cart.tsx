@@ -1,3 +1,4 @@
+
 "use client";
 
 import Helmet from "../layout/Helmet";
@@ -8,7 +9,7 @@ import { motion } from "framer-motion";
 import { useSelector, useDispatch } from "react-redux";
 import { cartActions } from "@/store/slices/cartSlice";
 import type { RootState } from "@/store/store";
-import type { CartItem } from "@/models/cart";
+import type { CartItem } from "@/types/cart";
 import "@/styles/cart.css";
 
 /**
@@ -21,6 +22,9 @@ import "@/styles/cart.css";
 function Tr({ item }: { item: CartItem }): JSX.Element {
   const dispatch = useDispatch();
 
+  /**
+   * Removes the selected product from the shopping cart.
+   */
   const handleDeleteProduct = (): void => {
     dispatch(cartActions.deleteItem(item.id));
   };
@@ -28,24 +32,44 @@ function Tr({ item }: { item: CartItem }): JSX.Element {
   return (
     <tr>
       <td>
-        <Image
-          src={item.imgUrl}
-          alt={item.productName || "Cart item"}
-          width={80}
-          height={80}
-        />
+        <div className="cart__product-image">
+          <Image
+            src={item.imgUrl}
+            alt={item.productName || "Cart item"}
+            width={90}
+            height={90}
+          />
+        </div>
       </td>
-      <td>{item.productName}</td>
-      <td>${item.price}</td>
-      <td>{item.quantity}px</td>
+
       <td>
-        <motion.i
-          whileTap={{ scale: 1.2 }}
+        <span className="cart__product-name">
+          {item.productName}
+        </span>
+      </td>
+
+      <td>
+        <span className="cart__product-price">
+          ${Number(item.price).toFixed(2)}
+        </span>
+      </td>
+
+      <td>
+        <span className="cart__quantity">
+          {item.quantity}
+        </span>
+      </td>
+
+      <td>
+        <motion.button
+          type="button"
+          whileTap={{ scale: 0.9 }}
           onClick={handleDeleteProduct}
-          className="ri-delete-bin-line"
-          role="button"
+          className="cart__delete-btn"
           aria-label={`Delete ${item.productName} from cart`}
-        ></motion.i>
+        >
+          <i className="ri-delete-bin-line" aria-hidden="true" />
+        </motion.button>
       </td>
     </tr>
   );
@@ -62,56 +86,134 @@ export default function Cart(): JSX.Element {
 
   return (
     <Helmet title="Cart">
-      <div className="bg-light py-4">
-        <div className="container">
-          <h1 className="fs-2 fw-semibold m-0">Shopping Cart</h1>
-        </div>
-      </div>
+      <main className="cart-page">
+        {/* Page Header */}
+        <section className="cart__header">
+          <div className="container">
+            <span className="cart__eyebrow">YOUR SHOPPING BAG</span>
+            <h1>Shopping Cart</h1>
+            <p>
+              Review your selected products before proceeding to checkout.
+            </p>
+          </div>
+        </section>
 
-      <section>
-        <div className="container">
-          <div className="row">
-            <div className="col-lg-9">
-              {cartItems.length === 0 ? (
-                <h2 className="fs-4 text-center">No item added to the cart</h2>
-              ) : (
-                <table className="table table-bordered align-middle">
-                  <thead>
-                    <tr>
-                      <th>Image</th>
-                      <th>Title</th>
-                      <th>Price</th>
-                      <th>Qty</th>
-                      <th>Delete</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {cartItems.map((item) => (
-                      <Tr item={item} key={item.id} />
-                    ))}
-                  </tbody>
-                </table>
-              )}
-            </div>
+        {/* Cart Content */}
+        <section className="cart__section">
+          <div className="container">
+            {cartItems.length === 0 ? (
+              <div className="cart__empty">
+                <div className="cart__empty-icon">
+                  <i className="ri-shopping-bag-3-line" />
+                </div>
 
-            <div className="col-lg-3">
-              <h6 className="d-flex align-items-center justify-content-between">
-                Subtotal
-                <span className="fs-4 fw-bold">${totalAmount}</span>
-              </h6>
-              <p className="fs-6 mt-2">Taxes and shipping will calculate in checkout</p>
-              <div className="mt-4">
-                <Link href="/shop" className="btn btn-dark w-100 mb-3">
-                  Continue Shopping
-                </Link>
-                <Link href="/checkout" className="btn btn-outline-dark w-100">
-                  Checkout
+                <h2>Your cart is empty</h2>
+
+                <p>
+                  Looks like you haven't added anything to your cart yet.
+                  Explore our collection and find something you love.
+                </p>
+
+                <Link href="/shop" className="cart__shop-btn">
+                  <i className="ri-shopping-bag-line" />
+                  Start Shopping
                 </Link>
               </div>
-            </div>
+            ) : (
+              <div className="row g-4">
+                {/* Products Table */}
+                <div className="col-lg-8">
+                  <div className="cart__card">
+                    <div className="cart__card-header">
+                      <div>
+                        <h2>Your Items</h2>
+                        <p>
+                          {cartItems.length}{" "}
+                          {cartItems.length === 1 ? "product" : "products"} in
+                          your cart
+                        </p>
+                      </div>
+
+                      <span className="cart__items-count">
+                        {cartItems.length}
+                      </span>
+                    </div>
+
+                    <div className="cart__table-wrapper">
+                      <table className="table cart__table align-middle mb-0">
+                        <thead>
+                          <tr>
+                            <th scope="col">Product</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Qty</th>
+                            <th scope="col">Action</th>
+                          </tr>
+                        </thead>
+
+                        <tbody>
+                          {cartItems.map((item) => (
+                            <Tr item={item} key={item.id} />
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Order Summary */}
+                <div className="col-lg-4">
+                  <div className="cart__summary">
+                    <div className="cart__summary-header">
+                      <h2>Order Summary</h2>
+                      <i className="ri-file-list-3-line" />
+                    </div>
+
+                    <div className="cart__summary-row">
+                      <span>Subtotal</span>
+                      <strong>${Number(totalAmount).toFixed(2)}</strong>
+                    </div>
+
+                    <div className="cart__summary-row">
+                      <span>Shipping</span>
+                      <span className="cart__shipping-label">
+                        Calculated at checkout
+                      </span>
+                    </div>
+
+                    <div className="cart__summary-divider" />
+
+                    <div className="cart__summary-total">
+                      <span>Total</span>
+                      <strong>${Number(totalAmount).toFixed(2)}</strong>
+                    </div>
+
+                    <p className="cart__summary-note">
+                      Taxes and shipping costs will be calculated during
+                      checkout.
+                    </p>
+
+                    <Link href="/checkout" className="cart__checkout-btn">
+                      Proceed to Checkout
+                      <i className="ri-arrow-right-line" />
+                    </Link>
+
+                    <Link href="/shop" className="cart__continue-btn">
+                      <i className="ri-arrow-left-line" />
+                      Continue Shopping
+                    </Link>
+
+                    <div className="cart__secure-note">
+                      <i className="ri-shield-check-line" />
+                      Secure checkout experience
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
-        </div>
-      </section>
+        </section>
+      </main>
     </Helmet>
   );
 }

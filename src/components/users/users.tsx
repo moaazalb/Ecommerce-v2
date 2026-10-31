@@ -7,7 +7,7 @@ import { db } from "@/firebase.config";
 import { doc, deleteDoc } from "firebase/firestore";
 import useGetData from "@/custom-hooks/useGetData/useGetData";
 import { toast } from "react-toastify";
-import type { User } from "@/models/user";
+import type { User } from "@/types/user";
 import "@/styles/users.css";
 
 /**

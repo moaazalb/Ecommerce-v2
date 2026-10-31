@@ -27,7 +27,7 @@ import productImg22 from "../images/watch-04.jpg";
 import productImg23 from "../images/wireless-01.jpg";
 import productImg25 from "../images/wireless-03.jpg";
 
-import type { Product, Review } from "@/models/product";
+import type { Product, Review } from "@/types/product";
 
 /**
  * Helper function to create a review object with custom text.

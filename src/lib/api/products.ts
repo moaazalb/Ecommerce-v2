@@ -1,6 +1,6 @@
+
 import { addDoc, collection } from "firebase/firestore";
-import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
-import { db, storage } from "@/firebase.config";
+import { db } from "@/firebase.config";
 
 /** Product data stored in Firestore (without the image URL). */
 export interface NewProduct {
@@ -11,27 +11,53 @@ export interface NewProduct {
   price: string;
 }
 
+/** Cloudinary upload response. */
+interface CloudinaryUploadResponse {
+  secure_url?: string;
+  error?: {
+    message?: string;
+  };
+}
+
 /**
- * Uploads a product image to Firebase Storage.
+ * Uploads a product image to Cloudinary.
  *
  * @param {File} file - The image file to upload.
- * @returns {Promise<string>} The public download URL of the uploaded image.
+ * @returns {Promise<string>} The secure public URL of the uploaded image.
  * @throws {Error} If the upload or URL retrieval fails.
  */
-export function uploadProductImage(file: File): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const storageRef = ref(storage, `productImages/${Date.now()}-${file.name}`);
-    const uploadTask = uploadBytesResumable(storageRef, file);
+export async function uploadProductImage(file: File): Promise<string> {
+  const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
+  const uploadPreset =
+    process.env.NEXT_PUBLIC_CLOUDINARY_PRODUCT_UPLOAD_PRESET;
 
-    uploadTask.on(
-      "state_changed",
-      undefined,
-      reject,
-      () => {
-        getDownloadURL(uploadTask.snapshot.ref).then(resolve).catch(reject);
-      }
+  if (!cloudName || !uploadPreset) {
+    throw new Error("Cloudinary configuration is missing.");
+  }
+
+  const formData = new FormData();
+
+  formData.append("file", file);
+  formData.append("upload_preset", uploadPreset);
+
+  const response = await fetch(
+    `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
+    {
+      method: "POST",
+      body: formData,
+    }
+  );
+
+  const result =
+    (await response.json()) as CloudinaryUploadResponse;
+
+  if (!response.ok || !result.secure_url) {
+    throw new Error(
+      result.error?.message || "Failed to upload product image."
     );
-  });
+  }
+
+  return result.secure_url;
 }
 
 /**
@@ -43,7 +69,14 @@ export function uploadProductImage(file: File): Promise<string> {
  * @returns {Promise<void>}
  * @throws {Error} If the upload or the Firestore write fails.
  */
-export async function addProduct(product: NewProduct, image: File): Promise<void> {
+export async function addProduct(
+  product: NewProduct,
+  image: File
+): Promise<void> {
   const imgUrl = await uploadProductImage(image);
-  await addDoc(collection(db, "products"), { ...product, imgUrl });
+
+  await addDoc(collection(db, "products"), {
+    ...product,
+    imgUrl,
+  });
 }

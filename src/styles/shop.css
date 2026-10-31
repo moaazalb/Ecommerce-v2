@@ -1,49 +1,245 @@
-.filter__widget select{
-    padding: 8px 20px;
-    border: 1px solid var(--primary-color);
-    cursor: pointer;
-    border-radius: 5px;
-    background: var(--primary-color);
-    color: #fff;
+
+/* ========================================
+   SHOP PAGE
+   Modern Luxury - Slate & Powder Blue
+======================================== */
+
+.shop-page {
+  background: var(--body-bg, #ffffff);
+  min-height: 100vh;
 }
 
-.filter__widget select:focus {
-    outline: none !important;
+/* Filter section */
+.shop-page .filter__widget {
+  width: 100%;
+  position: relative;
 }
 
-.filter__widget select option{
-    font-size: 0.9rem;
+.shop-page .filter__widget select {
+  width: 100%;
+  min-height: 46px;
+  padding: 10px 38px 10px 15px;
+  appearance: none;
+  -webkit-appearance: none;
+  border: 1px solid var(--border-color, #e2e8f0);
+  border-radius: 6px;
+  outline: none;
+  background-color: #ffffff;
+  color: var(--heading-text-color, #1e293b);
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25s ease;
+
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23475569' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
 }
 
-.search__box{
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border: 1px solid var(--primary-color);
-    border-radius: 5px;
-    padding-right: 12px;
-    padding-left: 2px;
-    cursor: pointer;
+.shop-page .filter__widget select:hover {
+  border-color: var(--secondary-color, #a8c3d8);
 }
 
-.search__box input{
-    width: 100%;
-    border: none;
-    outline: none;
-    padding: 8px 10px;
+.shop-page .filter__widget select:focus {
+  border-color: var(--primary-color, #475569);
+  box-shadow: 0 0 0 3px rgba(168, 195, 216, 0.2);
 }
 
-.search__box span {
-    color: var(--primary-color);
+.shop-page .filter__widget select option {
+  background: #ffffff;
+  color: #1e293b;
+  padding: 10px;
 }
 
-@media only screen  and (max-width:768px){
-    .filter__widget{
-        margin-bottom: 30px;
-    }
-    .filter__widget select {
-        padding: 7px 20px;
-        font-size: 0.9rem;
-    }
+/* Search Box */
+.shop-page .search__box {
+  width: 100%;
+  min-height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid var(--border-color, #e2e8f0);
+  border-radius: 6px;
+  padding: 0 15px;
+  background: #ffffff;
+  transition: all 0.25s ease;
+}
+
+.shop-page .search__box:focus-within {
+  border-color: var(--primary-color, #475569);
+  box-shadow: 0 0 0 3px rgba(168, 195, 216, 0.2);
+}
+
+.shop-page .search__box input {
+  width: 100%;
+  height: 44px;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--heading-text-color, #1e293b);
+  padding: 8px 5px;
+  font-family: inherit;
+  font-size: 0.88rem;
+}
+
+.shop-page .search__box input::placeholder {
+  color: var(--muted-color, #94a3b8);
+}
+
+.shop-page .search__box span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary-color, #475569);
+  font-size: 1.15rem;
+  padding-left: 10px;
+}
+
+/* Product listing section */
+.shop-page .products__section {
+  padding-top: 10px;
+}
+
+/* Empty state */
+.shop-page .row > h1 {
+  width: 100%;
+  padding: 70px 15px;
+  color: var(--heading-text-color, #1e293b);
+  font-family: "Playfair Display", serif;
+  font-size: 1.8rem;
+  font-weight: 600;
+}
+
+
+/* Results Information */
+.shop-page .shop__results-info {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 22px;
+}
+
+.shop-page .shop__results-info p {
+  color: var(--small-text-color, #64748b);
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+.shop-page .shop__results-info strong {
+  color: var(--primary-dark, #1e293b);
+}
+
+/* Reset Button */
+.shop-page .shop__reset-btn {
+  width: 100%;
+  min-height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid var(--border-color, #e2e8f0);
+  border-radius: 6px;
+  background: #ffffff;
+  color: var(--primary-color, #475569);
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.shop-page .shop__reset-btn:hover {
+  background: var(--primary-color, #475569);
+  border-color: var(--primary-color, #475569);
+  color: #ffffff;
+}
+
+.shop-page .shop__reset-btn i {
+  font-size: 1.1rem;
+}
+
+/* Empty State */
+.shop-page .shop__empty-state {
+  text-align: center;
+  padding: 75px 20px;
+  background: var(--surface-secondary, #f8fafc);
+  border: 1px solid var(--border-color, #e2e8f0);
+  border-radius: 10px;
+}
+
+.shop-page .shop__empty-state > i {
+  display: inline-block;
+  color: var(--secondary-color, #a8c3d8);
+  font-size: 3rem;
+  margin-bottom: 15px;
+}
+
+.shop-page .shop__empty-state h3 {
+  color: var(--heading-text-color, #1e293b);
+  font-family: "Playfair Display", serif;
+  font-size: 1.7rem;
+  margin-bottom: 10px;
+}
+
+.shop-page .shop__empty-state p {
+  color: var(--small-text-color, #64748b);
+  font-size: 0.9rem;
+  margin-bottom: 22px;
+}
+
+.shop-page .shop__empty-state .shop__reset-btn {
+  width: auto;
+  display: inline-flex;
+  padding: 0 25px;
+  background: var(--primary-color, #475569);
+  color: #ffffff;
+}
+
+.shop-page .shop__empty-state .shop__reset-btn:hover {
+  background: var(--primary-hover, #334155);
+}
+
+
+/* ========================================
+   RESPONSIVE DESIGN
+======================================== */
+
+@media (max-width: 991px) {
+  .shop-page .filter__widget {
+    margin-bottom: 15px;
+  }
+
+  .shop-page .search__box {
+    margin-top: 5px;
+  }
+}
+
+@media (max-width: 767px) {
+  .shop-page .filter__widget select {
+    min-height: 44px;
+    font-size: 0.85rem;
+  }
+
+  .shop-page .search__box {
+    min-height: 44px;
+  }
+
+  .shop-page .search__box input {
+    height: 42px;
+    font-size: 0.85rem;
+  }
+
+  .shop-page .row > h1 {
+    font-size: 1.5rem;
+    padding: 50px 15px;
+  }
+}
+
+@media (max-width: 575px) {
+  .shop-page .filter__widget {
+    margin-bottom: 12px;
+  }
+
+  .shop-page .search__box {
+    margin-top: 0;
+  }
 }

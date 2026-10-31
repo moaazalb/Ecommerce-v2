@@ -1,0 +1,379 @@
+
+/* =========================================
+   1. DESIGN SYSTEM - SLATE LUXURY
+========================================= */
+
+:root {
+  /* Brand Colors */
+  --primary-color: #475569;
+  --primary-hover: #334155;
+  --primary-dark: #1e293b;
+
+  --secondary-color: #a8c3d8;
+  --accent-color: #8fa9c0;
+
+  /* Backgrounds */
+  --body-bg: #ffffff;
+  --surface-color: #ffffff;
+  --surface-secondary: #f8fafc;
+  --hero-bg: #f1f5f9;
+
+  /* Text */
+  --heading-text-color: #1e293b;
+  --text-color: #475569;
+  --small-text-color: #64748b;
+  --muted-color: #94a3b8;
+
+  /* Borders */
+  --border-color: #e2e8f0;
+  --border-light: #f1f5f9;
+
+  /* Status Colors */
+  --success-color: #15803d;
+  --error-color: #dc2626;
+  --warning-color: #d97706;
+
+  /* Legacy Compatibility */
+  --card-bg-01: #f1f5f9;
+  --card-bg-02: #e2eaf2;
+  --card-bg-03: #e8eef3;
+  --card-bg-04: #f5f3ef;
+
+  --small-text--color: var(--small-text-color);
+
+  /* Typography */
+  --font-family: var(--font-body), sans-serif;
+  --heading-font: var(--font-heading), serif;
+
+  --heading-fontsize: 2rem;
+  --body-fontsize: 0.95rem;
+
+  /* Font Weights */
+  --font-regular: 400;
+  --font-medium: 500;
+  --font-semibold: 600;
+  --font-bold: 700;
+
+  /* Spacing */
+  --spacing-xs: 8px;
+  --spacing-sm: 16px;
+  --spacing-md: 24px;
+  --spacing-lg: 40px;
+  --spacing-xl: 64px;
+  --spacing-2xl: 90px;
+
+  /* Border Radius */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-full: 999px;
+
+  --border-radius: var(--radius-md);
+  --border-radius-lg: var(--radius-lg);
+
+  /* Shadows */
+  --shadow-sm: 0 2px 8px rgba(30, 41, 59, 0.04);
+  --shadow-md: 0 8px 24px rgba(30, 41, 59, 0.07);
+  --shadow-lg: 0 16px 40px rgba(30, 41, 59, 0.10);
+
+  /* Transitions */
+  --transition-fast: 0.2s ease;
+  --transition: 0.3s ease;
+  --transition-slow: 0.5s ease;
+}
+
+
+/* =========================================
+   2. RESET
+========================================= */
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 90px;
+}
+
+body {
+  font-family: var(--font-family);
+  font-size: var(--body-fontsize);
+  font-weight: var(--font-regular);
+  line-height: 1.7;
+  color: var(--text-color);
+  background: var(--body-bg);
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+img,
+video,
+svg {
+  max-width: 100%;
+}
+
+img {
+  height: auto;
+  vertical-align: middle;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+ul,
+ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+
+/* =========================================
+   3. TYPOGRAPHY
+========================================= */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  padding: 0;
+  color: var(--heading-text-color);
+  font-family: var(--heading-font);
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+h1 {
+  font-size: clamp(2.3rem, 5vw, 4rem);
+}
+
+h2 {
+  font-size: clamp(1.9rem, 3.5vw, 2.8rem);
+}
+
+h3 {
+  font-size: clamp(1.5rem, 2.5vw, 2rem);
+}
+
+h4 {
+  font-size: 1.4rem;
+}
+
+h5 {
+  font-size: 1.15rem;
+}
+
+h6 {
+  font-size: 1rem;
+}
+
+p {
+  margin: 0;
+  color: var(--small-text-color);
+  line-height: 1.7;
+}
+
+
+/* =========================================
+   4. GLOBAL LAYOUT
+========================================= */
+
+section {
+  padding: clamp(48px, 6vw, 90px) 0;
+}
+
+.section__title {
+  color: var(--heading-text-color);
+  font-family: var(--heading-font);
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.section__subtitle {
+  color: var(--small-text-color);
+  font-size: 0.9rem;
+  max-width: 600px;
+  margin-bottom: 35px;
+}
+
+
+/* =========================================
+   5. BUTTON SYSTEM
+========================================= */
+
+.primary__btn,
+.secondary__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  padding: 12px 26px;
+  border-radius: var(--radius-sm);
+
+  font-family: var(--font-family);
+  font-size: 0.85rem;
+  font-weight: var(--font-semibold);
+
+  transition: all var(--transition);
+}
+
+.primary__btn {
+  background: var(--primary-color);
+  color: #ffffff;
+  border: 1px solid var(--primary-color);
+}
+
+.primary__btn:hover {
+  background: var(--primary-hover);
+  border-color: var(--primary-hover);
+  color: #ffffff;
+  transform: translateY(-2px);
+}
+
+.secondary__btn {
+  background: transparent;
+  color: var(--primary-color);
+  border: 1px solid var(--primary-color);
+}
+
+.secondary__btn:hover {
+  background: var(--primary-color);
+  color: #ffffff;
+}
+
+
+/* =========================================
+   6. CARD SYSTEM
+========================================= */
+
+.custom__card {
+  background: var(--surface-color);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition);
+}
+
+.custom__card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-3px);
+}
+
+
+/* =========================================
+   7. FORM SYSTEM
+========================================= */
+
+.form__control {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+
+  background: var(--surface-color);
+  color: var(--heading-text-color);
+
+  transition: all var(--transition-fast);
+}
+
+.form__control:focus {
+  border-color: var(--primary-color);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(71, 85, 105, 0.10);
+}
+
+.form__control::placeholder {
+  color: var(--muted-color);
+}
+
+
+/* =========================================
+   8. ACCESSIBILITY
+========================================= */
+
+:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 3px;
+}
+
+::selection {
+  background: var(--secondary-color);
+  color: var(--primary-dark);
+}
+
+
+/* =========================================
+   9. TOASTIFY
+========================================= */
+
+.Toastify {
+  padding: 0;
+}
+
+
+/* =========================================
+   10. RESPONSIVE
+========================================= */
+
+@media (max-width: 768px) {
+  section {
+    padding: 45px 0;
+  }
+
+  .section__subtitle {
+    margin-bottom: 25px;
+  }
+}
+
+@media (max-width: 480px) {
+  section {
+    padding: 35px 0;
+  }
+
+  .primary__btn,
+  .secondary__btn {
+    padding: 10px 20px;
+    font-size: 0.82rem;
+  }
+}
+
+
+/* =========================================
+   11. REDUCED MOTION
+========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

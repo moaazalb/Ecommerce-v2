@@ -14,18 +14,20 @@ export default function Services(): JSX.Element {
   return (
     <section className="services">
       <div className="container">
-        <div className="row">
+        <div className="row g-4">
           {serviceData.map((item) => (
-            <div className="col-lg-3 col-md-4" key={item.title}>
+            <div className="col-lg-3 col-md-6 col-sm-6" key={item.title}>
               <motion.div
-                whileHover={{ scale: 1.1 }}
+                whileHover={{ y: -6 }}
+                transition={{ duration: 0.25, ease: "easeOut" }}
                 className="services__item"
                 style={{ background: item.bg }}
               >
-                <span>
+                <span className="services__icon">
                   <i className={item.icon} aria-hidden="true"></i>
                 </span>
-                <div>
+
+                <div className="services__content">
                   <h3>{item.title}</h3>
                   <p>{item.subtitle}</p>
                 </div>

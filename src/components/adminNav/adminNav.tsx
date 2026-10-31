@@ -1,7 +1,8 @@
+
 "use client";
 
 import "@/styles/admin-nav.css";
-import { Container, Row } from "reactstrap";
+import { Container } from "reactstrap";
 import useAuth from "@/custom-hooks/useAuth/useAuth";
 import Helmet from "../layout/Helmet";
 import Link from "next/link";
@@ -34,84 +35,114 @@ const admin__nav: AdminNavItem[] = [
     path: "/admin/Users",
     icon: "ri-group-line",
   },
+  {
+  display: "Orders",
+  path: "/admin/Orders",
+  icon: "ri-file-list-3-line",
+},
 ];
 
+/**
+ * Admin navigation component.
+ *
+ * Displays the administration header, user profile, search field,
+ * and navigation links for the admin dashboard.
+ *
+ * @returns {JSX.Element} The rendered admin navigation.
+ */
 const AdminNav = () => {
   const { currentUser } = useAuth();
   const pathname = usePathname();
 
   return (
-    <Helmet title="Admin Nav">
+    <Helmet title="Admin Navigation">
       <header className="admin__header">
-        <div className="admin__nav-top">
-          <Container>
-            <div className="admin__nav-wrapper-top">
-              <div className="logo">
-                <Link href="/admin/Dashboard">
-                  <h2>
-                    <i className="ri-store-3-line"></i> Ecommerce <span className="mt-1">Admin</span>
-                  </h2>
-                </Link>
-              </div>
+        <Container>
+          <div className="admin__nav-wrapper-top">
+            {/* Brand */}
+            <div className="admin__logo">
+              <Link href="/admin/Dashboard">
+                <i className="ri-store-3-line" />
+                <span className="admin__logo-name">Ecommerce</span>
+                <span className="admin__logo-badge">Admin</span>
+              </Link>
+            </div>
 
-              <div className="search__box">
-                <i className="ri-search-line search__icon"></i>
-                <input type="text" placeholder="Search overall stats, products..." />
-              </div>
+            {/* Search */}
+            <div className="admin__search-box">
+              <i className="ri-search-line search__icon" />
+              <input
+                type="search"
+                placeholder="Search products, users..."
+                aria-label="Search admin dashboard"
+              />
+              <span className="admin__search-shortcut">⌘ K</span>
+            </div>
 
-              <div className="admin__nav-top-right">
-                <span className="icon__badge" title="Notifications">
-                  <i className="ri-notification-3-line"></i>
-                  <span className="dot"></span>
-                </span>
-                <span className="icon__badge" title="Settings">
-                  <i className="ri-settings-2-line"></i>
-                </span>
-                <div className="admin__profile">
-                  {currentUser?.photoURL ? (
-                    <img
-                      src={currentUser.photoURL}
-                      alt="User Profile"
-                      className="user-profile"
-                    />
-                  ) : (
-                    <div className="profile__placeholder">
-                      <i className="ri-user-3-line"></i>
-                    </div>
-                  )}
-                </div>
+            {/* Actions */}
+            <div className="admin__nav-top-right">
+              <button
+                type="button"
+                className="admin__icon-button"
+                aria-label="Notifications"
+                title="Notifications"
+              >
+                <i className="ri-notification-3-line" />
+                <span className="admin__notification-dot" />
+              </button>
+
+              <button
+                type="button"
+                className="admin__icon-button"
+                aria-label="Settings"
+                title="Settings"
+              >
+                <i className="ri-settings-3-line" />
+              </button>
+
+              <div className="admin__profile">
+                {currentUser?.photoURL ? (
+                  <img
+                    src={currentUser.photoURL}
+                    alt="User profile"
+                    className="user-profile"
+                  />
+                ) : (
+                  <div className="profile__placeholder">
+                    <i className="ri-user-3-line" />
+                  </div>
+                )}
               </div>
             </div>
-          </Container>
-        </div>
+          </div>
+        </Container>
       </header>
 
-      <section className="admin__menu p-0">
+      {/* Admin navigation menu */}
+      <nav className="admin__menu" aria-label="Admin navigation">
         <Container>
-          <Row>
-            <div className="admin__navigation">
-              <ul className="admin__menu-list">
-                {admin__nav.map((item) => {
-                  const isActive = pathname === item.path;
-                  return (
-                    <li className="admin__menu-item" key={item.path}>
-                      <Link
-                        href={item.path}
-                        className={`admin__menu-link ${
-                          isActive ? "active__admin-menu" : ""
-                        }`}
-                      >
-                        <i className={item.icon}></i>
-                        <span>{item.display}</span>
-                      </Link>
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
-          </Row>
+          <ul className="admin__menu-list">
+            {admin__nav.map((item) => {
+              const isActive = pathname === item.path;
+
+              return (
+                <li className="admin__menu-item" key={item.path}>
+                  <Link
+                    href={item.path}
+                    className={`admin__menu-link ${
+                      isActive ? "active__admin-menu" : ""
+                    }`}
+                    aria-current={isActive ? "page" : undefined}
+                  >
+                    <i className={item.icon} />
+                    <span>{item.display}</span>
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
         </Container>
-      </section>
+      </nav>
     </Helmet>
   );
 };

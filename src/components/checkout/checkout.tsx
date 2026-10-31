@@ -1,15 +1,24 @@
+
 "use client";
 
 import "@/styles/checkout.css";
 import Helmet from "../layout/Helmet";
-import { JSX, useState } from "react";
+import type { JSX } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm, type Path } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "react-toastify";
-import { useSelector } from "react-redux";
-import { checkoutSchema, type CheckoutFormValues } from "@/lib/validations/checkout.schema";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  checkoutSchema,
+  type CheckoutFormValues,
+} from "@/lib/validations/checkout.schema";
 import type { RootState } from "@/store/store";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { db } from "@/firebase.config";
+import { cartActions } from "@/store/slices/cartSlice";
+import useAuth from "@/custom-hooks/useAuth/useAuth";
 
 interface FieldConfig {
   name: Path<CheckoutFormValues>;
@@ -19,12 +28,42 @@ interface FieldConfig {
 }
 
 const FIELDS: FieldConfig[] = [
-  { name: "name", label: "Name", type: "text", placeholder: "Enter your name" },
-  { name: "email", label: "Email", type: "email", placeholder: "Enter your email" },
-  { name: "phone", label: "Phone Number", type: "tel", placeholder: "Phone number" },
-  { name: "streetAddress", label: "Street Address", type: "text", placeholder: "Street address" },
-  { name: "postalCode", label: "Postal Code", type: "text", placeholder: "Postal code" },
-  { name: "country", label: "Country", type: "text", placeholder: "Country" },
+  {
+    name: "name",
+    label: "Full Name",
+    type: "text",
+    placeholder: "Enter your full name",
+  },
+  {
+    name: "email",
+    label: "Email Address",
+    type: "email",
+    placeholder: "Enter your email address",
+  },
+  {
+    name: "phone",
+    label: "Phone Number",
+    type: "tel",
+    placeholder: "Enter your phone number",
+  },
+  {
+    name: "streetAddress",
+    label: "Street Address",
+    type: "text",
+    placeholder: "Enter your street address",
+  },
+  {
+    name: "postalCode",
+    label: "Postal Code",
+    type: "text",
+    placeholder: "Enter your postal code",
+  },
+  {
+    name: "country",
+    label: "Country",
+    type: "text",
+    placeholder: "Enter your country",
+  },
 ];
 
 /**
@@ -36,8 +75,21 @@ export default function Checkout(): JSX.Element {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const totalQty = useSelector((state: RootState) => state.cart.totalQuantity);
-  const totalAmount = useSelector((state: RootState) => state.cart.totalAmount);
+  const dispatch = useDispatch();
+  const { currentUser, authLoading } = useAuth();
+
+  const cartItems = useSelector(
+    (state: RootState) => state.cart.cartItems
+  );
+
+  const totalQty = useSelector(
+    (state: RootState) => state.cart.totalQuantity
+  );
+
+  const totalAmount = useSelector(
+    (state: RootState) => state.cart.totalAmount
+  );
+
   const shippingCost = 0;
   const totalCost = totalAmount + shippingCost;
 
@@ -50,15 +102,81 @@ export default function Checkout(): JSX.Element {
     mode: "onChange",
   });
 
+  /**
+   * Handles checkout form submission and saves the order to Firestore.
+   *
+   * @param {CheckoutFormValues} data The validated customer billing information.
+   * @returns {Promise<void>}
+   */
   const onSubmit = async (data: CheckoutFormValues): Promise<void> => {
     try {
       setIsSubmitting(true);
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      console.log("Order placed:", data);
+
+      // Ensure authentication has finished loading.
+      if (authLoading) {
+        throw new Error("Please wait while we verify your account.");
+      }
+
+      // Orders require an authenticated Firebase user.
+      if (!currentUser) {
+        toast.error("Please log in before placing your order.");
+        router.push("/login");
+        return;
+      }
+
+      // Prevent submitting an empty cart.
+      if (cartItems.length === 0) {
+        toast.error("Your shopping cart is empty.");
+        return;
+      }
+
+      // Prepare order items.
+      const orderItems = cartItems.map((item) => ({
+        productId: item.id,
+        productName: item.productName,
+        price: Number(item.price),
+        quantity: item.quantity,
+        imgUrl: item.imgUrl,
+      }));
+
+      // Save the order in Firestore.
+      await addDoc(collection(db, "orders"), {
+        userId: currentUser.uid,
+
+        customer: {
+          name: data.name,
+          email: data.email,
+          phone: data.phone,
+          streetAddress: data.streetAddress,
+          postalCode: data.postalCode,
+          country: data.country,
+        },
+
+        items: orderItems,
+
+        totalQuantity: totalQty,
+        subtotal: Number(totalAmount),
+        shippingCost,
+        totalAmount: Number(totalCost),
+
+        status: "pending",
+        createdAt: serverTimestamp(),
+      });
+
+      // Clear the cart only after Firestore confirms the order was saved.
+      dispatch(cartActions.clearCart());
+
       toast.success("Order placed successfully!");
-      router.push("/home");
+
+      router.push("/");
     } catch (error: unknown) {
-      toast.error(error instanceof Error ? error.message : "Failed to place order.");
+      console.error("Failed to place order:", error);
+
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : "Failed to place order. Please try again."
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -66,80 +184,195 @@ export default function Checkout(): JSX.Element {
 
   return (
     <Helmet title="Checkout">
-      <div className="bg-light py-4">
-        <div className="container">
-          <h1 className="fs-2 fw-semibold m-0">Checkout</h1>
-        </div>
-      </div>
+      <main className="checkout-page">
+        {/* Page Header */}
+        <section className="checkout__header">
+          <div className="container">
+            <span className="checkout__eyebrow">
+              COMPLETE YOUR PURCHASE
+            </span>
 
-      <section>
-        <div className="container">
-          <form onSubmit={handleSubmit(onSubmit)} noValidate>
-            <div className="row">
-              <div className="col-lg-8 mb-4">
-                <h6 className="mb-4 fw-bold">Billing Information</h6>
+            <h1>Checkout</h1>
 
-                <div className="billing__form">
-                  {FIELDS.map((field) => {
-                    const error = errors[field.name];
-                    return (
-                      <div className="form__group mb-3" key={field.name}>
-                        <label htmlFor={field.name} className="form-label">
-                          {field.label} <span className="text-danger">*</span>
-                        </label>
-                        <input
-                          id={field.name}
-                          type={field.type}
-                          placeholder={field.placeholder}
-                          className="rounded p-2"
-                          style={error ? { borderColor: "#dc3545" } : undefined}
-                          aria-invalid={error ? "true" : "false"}
-                          aria-describedby={error ? `${field.name}-error` : undefined}
-                          {...register(field.name)}
-                        />
-                        {error && (
-                          <p id={`${field.name}-error`} role="alert" className="text-danger small mt-1">
-                            {error.message as string}
+            <p>
+              You're just one step away from completing your order.
+            </p>
+          </div>
+        </section>
+
+        {/* Checkout Content */}
+        <section className="checkout__section">
+          <div className="container">
+            {totalQty === 0 ? (
+              <div className="checkout__empty">
+                <div className="checkout__empty-icon">
+                  <i className="ri-shopping-cart-line" />
+                </div>
+
+                <h2>Your cart is empty</h2>
+
+                <p>
+                  You need to add products to your cart before proceeding
+                  to checkout.
+                </p>
+
+                <button
+                  type="button"
+                  className="checkout__back-btn"
+                  onClick={() => router.push("/shop")}
+                >
+                  <i className="ri-arrow-left-line" />
+                  Back to Shop
+                </button>
+              </div>
+            ) : (
+              <form
+                onSubmit={handleSubmit(onSubmit)}
+                noValidate
+              >
+                <div className="row g-4">
+                  {/* Billing Information */}
+                  <div className="col-lg-8">
+                    <div className="checkout__form-card">
+                      <div className="checkout__card-header">
+                        <div className="checkout__header-icon">
+                          <i className="ri-user-3-line" />
+                        </div>
+
+                        <div>
+                          <h2>Billing Information</h2>
+                          <p>
+                            Please enter your details for delivery.
                           </p>
-                        )}
+                        </div>
                       </div>
-                    );
-                  })}
-                </div>
-              </div>
 
-              <div className="col-lg-4">
-                <div className="checkout__cart">
-                  <h6>
-                    Total Qty: <span>{totalQty} items</span>
-                  </h6>
-                  <h6>
-                    Subtotal: <span>${totalAmount}</span>
-                  </h6>
-                  <h6>
-                    <span>
-                      Shipping: <br />
-                      Free shipping
-                    </span>
-                    <span>${shippingCost}</span>
-                  </h6>
-                  <h4>
-                    Total Cost: <span>${totalCost}</span>
-                  </h4>
-                  <button
-                    type="submit"
-                    className="auth__btn w-100"
-                    disabled={!isValid || isSubmitting}
-                    style={!isValid || isSubmitting ? { opacity: 0.6, cursor: "not-allowed" } : undefined}
-                  >
-                    {isSubmitting ? "Placing Order..." : "Place an order"}
-                  </button>
+                      <div className="checkout__form-grid">
+                        {FIELDS.map((field) => {
+                          const error = errors[field.name];
+
+                          return (
+                            <div
+                              className="checkout__form-group"
+                              key={field.name}
+                            >
+                              <label htmlFor={field.name}>
+                                {field.label}
+                                <span>*</span>
+                              </label>
+
+                              <input
+                                id={field.name}
+                                type={field.type}
+                                placeholder={field.placeholder}
+                                className={
+                                  error
+                                    ? "checkout__input checkout__input--error"
+                                    : "checkout__input"
+                                }
+                                aria-invalid={error ? "true" : "false"}
+                                aria-describedby={
+                                  error
+                                    ? `${field.name}-error`
+                                    : undefined
+                                }
+                                {...register(field.name)}
+                              />
+
+                              {error && (
+                                <p
+                                  id={`${field.name}-error`}
+                                  role="alert"
+                                  className="checkout__error"
+                                >
+                                  {error.message as string}
+                                </p>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+
+                      <div className="checkout__form-note">
+                        <i className="ri-information-line" />
+                        Please make sure your information is correct.
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Order Summary */}
+                  <div className="col-lg-4">
+                    <div className="checkout__summary">
+                      <div className="checkout__summary-header">
+                        <h2>Order Summary</h2>
+                        <i className="ri-file-list-3-line" />
+                      </div>
+
+                      <div className="checkout__summary-items">
+                        <div className="checkout__summary-row">
+                          <span>Items</span>
+                          <strong>{totalQty}</strong>
+                        </div>
+
+                        <div className="checkout__summary-row">
+                          <span>Subtotal</span>
+                          <strong>
+                            ${Number(totalAmount).toFixed(2)}
+                          </strong>
+                        </div>
+
+                        <div className="checkout__summary-row">
+                          <span>Shipping</span>
+                          <strong className="checkout__free-shipping">
+                            Free
+                          </strong>
+                        </div>
+                      </div>
+
+                      <div className="checkout__summary-divider" />
+
+                      <div className="checkout__total">
+                        <span>Total Cost</span>
+                        <strong>
+                          ${Number(totalCost).toFixed(2)}
+                        </strong>
+                      </div>
+
+                      <p className="checkout__summary-note">
+                        Taxes and shipping costs will be calculated
+                        according to your order details.
+                      </p>
+
+                      <button
+                        type="submit"
+                        className="checkout__submit-btn"
+                        disabled={!isValid || isSubmitting || authLoading}
+                      >
+                        {isSubmitting ? (
+                          <>
+                            <span className="checkout__spinner" />
+                            Placing Order...
+                          </>
+                        ) : (
+                          <>
+                            Place Your Order
+                            <i className="ri-arrow-right-line" />
+                          </>
+                        )}
+                      </button>
+
+                      <div className="checkout__secure-note">
+                        <i className="ri-shield-check-line" />
+                        Secure checkout experience
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-          </form>
-        </div>
-      </section>
+              </form>
+            )}
+          </div>
+        </section>
+      </main>
     </Helmet>
   );
 }

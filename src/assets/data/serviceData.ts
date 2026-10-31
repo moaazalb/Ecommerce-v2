@@ -1,4 +1,4 @@
-import { ServiceItem } from "@/models/service";
+import { ServiceItem } from "@/types/service";
 
 
 /**

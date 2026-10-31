@@ -4,7 +4,7 @@ import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import Cart from "./page";
 import cartReducer from "@/redux/slices/cartSlice";
-import type { CartItem } from "@/models/cart";
+import type { CartItem } from "@/types/cart";
 
 // Mock Helmet component
 jest.mock("../Layout/Helmet", () => ({
