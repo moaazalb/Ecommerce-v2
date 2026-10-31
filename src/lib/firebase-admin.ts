@@ -15,7 +15,7 @@ import { getAuth } from "firebase-admin/auth";
  * @returns {App} The initialized Firebase Admin application.
  */
 function initializeFirebaseAdmin(): App {
-  const projectId = process.env.FIREBASE_PROJECT_ID;
+  const projectId = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID;
   const clientEmail = process.env.FIREBASE_CLIENT_EMAIL;
   const privateKey = process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, "\n");
 
