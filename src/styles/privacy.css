@@ -1,0 +1,167 @@
+.privacy-page {
+  background: #fff;
+  color: #222;
+}
+
+.privacy-hero {
+  background: #f6f3ef;
+  padding: 85px 0 70px;
+  text-align: center;
+}
+
+.privacy-hero-content {
+  max-width: 750px;
+  margin: auto;
+}
+
+.privacy-label {
+  color: #b88b5a;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 3px;
+}
+
+.privacy-hero h1 {
+  font-family: var(--font-heading), serif;
+  font-size: clamp(38px, 6vw, 58px);
+  margin: 18px 0;
+  color: #222;
+}
+
+.privacy-hero p {
+  color: #777;
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+.privacy-breadcrumb {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 25px;
+  font-size: 14px;
+  color: #888;
+}
+
+.privacy-breadcrumb a {
+  color: #b88b5a;
+  text-decoration: none;
+}
+
+.privacy-content-section {
+  padding: 75px 0;
+}
+
+.privacy-card {
+  max-width: 950px;
+  margin: auto;
+  padding: 45px;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  box-shadow: 0 5px 30px rgba(0, 0, 0, 0.035);
+}
+
+.privacy-intro {
+  display: flex;
+  gap: 22px;
+  align-items: flex-start;
+}
+
+.privacy-intro > i {
+  font-size: 38px;
+  color: #b88b5a;
+}
+
+.privacy-intro h2 {
+  font-family: var(--font-heading), serif;
+  font-size: 25px;
+  margin-bottom: 12px;
+}
+
+.privacy-intro p,
+.privacy-section p,
+.privacy-contact p {
+  color: #777;
+  font-size: 15px;
+  line-height: 1.9;
+}
+
+.privacy-intro span {
+  display: inline-block;
+  margin-top: 10px;
+  color: #aaa;
+  font-size: 13px;
+}
+
+.privacy-divider {
+  height: 1px;
+  background: #eee;
+  margin: 35px 0;
+}
+
+.privacy-section {
+  margin-bottom: 30px;
+}
+
+.privacy-section h3 {
+  font-size: 19px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #292929;
+}
+
+.privacy-contact {
+  display: flex;
+  gap: 20px;
+  background: #f8f5f1;
+  padding: 28px;
+  margin-top: 45px;
+  border-radius: 6px;
+}
+
+.privacy-contact > i {
+  color: #b88b5a;
+  font-size: 32px;
+}
+
+.privacy-contact h3 {
+  font-size: 19px;
+  margin-bottom: 8px;
+}
+
+.privacy-contact-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #b88b5a;
+  text-decoration: none;
+  font-weight: 600;
+  margin-top: 8px;
+}
+
+.privacy-contact-link:hover {
+  color: #222;
+}
+
+@media (max-width: 767px) {
+  .privacy-hero {
+    padding: 60px 15px;
+  }
+
+  .privacy-content-section {
+    padding: 40px 0;
+  }
+
+  .privacy-card {
+    padding: 25px 20px;
+  }
+
+  .privacy-intro {
+    gap: 12px;
+  }
+
+  .privacy-contact {
+    padding: 20px;
+  }
+}

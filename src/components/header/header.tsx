@@ -12,8 +12,8 @@ import { useSelector } from "react-redux";
 
 import { auth, db } from "@/firebase.config";
 import useAuth from "@/custom-hooks/useAuth/useAuth";
-import logo from "@/assets/images/eco-logo.png";
-import userIcon from "@/assets/images/user-icon.png";
+import logo from "../../../public/assets/images/eco-logo.png";
+import userIcon from "../../../public/assets/images/user-icon.png";
 import type { RootState, AppDispatch } from "@/store/store";
 import { useDispatch } from "react-redux";
 import { cartActions } from "@/store/slices/cartSlice";

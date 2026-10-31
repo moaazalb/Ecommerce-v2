@@ -3,7 +3,7 @@
 import { JSX } from "react";
 import "@/styles/services.css";
 import { motion } from "framer-motion";
-import serviceData from "@/assets/data/serviceData";
+import serviceData from "../../lib/data/serviceData";
 
 /**
  * Services component displaying company features (shipping, returns, secure payment, etc.).

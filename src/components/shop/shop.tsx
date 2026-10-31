@@ -6,9 +6,9 @@ import { useMemo, useState } from "react";
 import { Container, Row, Col } from "reactstrap";
 import ProductsList from "@/components/ui/ProductList";
 import CommmonSection from "@/components/ui/CommonSection";
-import products from "@/assets/data/products";
+import products from "../../lib/data/products";
 import Helmet from "../layout/Helmet";
-import staticProducts from "@/assets/data/products";
+import staticProducts from "../../lib/data/products";
 import useGetData from "@/custom-hooks/useGetData/useGetData";
 /**
  * Shop page component.

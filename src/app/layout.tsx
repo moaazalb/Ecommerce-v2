@@ -30,7 +30,14 @@ export const metadata: Metadata = {
     template: "%s | Your Store",
   },
   description: "Discover timeless fashion and contemporary collections.",
+   icons: {
+      icon: "/assets/images/eco-logo.png",
+      shortcut: "/assets/images/eco-logo.png",
+      apple: "/assets/images/eco-logo.png",
+    },
 };
+
+
 
 export default function RootLayout({
   children,

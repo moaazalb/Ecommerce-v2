@@ -9,9 +9,9 @@ import { motion } from "framer-motion";
 import Services from "@/components/services/Services";
 import ProductsList from "@/components/ui/ProductList";
 import Clock from "@/components/ui/Clock";
-import productsData from "@/assets/data/products";
-import heroImg from "@/assets/images/hero-img.png";
-import counterImg from "@/assets/images/counter-timer-img.png";
+import productsData from "../../lib/data/products";
+import heroImg from "../../../public/assets/images/hero-img.png";
+import counterImg from "../../../public/assets/images/counter-timer-img.png";
 
 /**
  * Home page component showcasing trending products, best sales, limited offers, and categories.

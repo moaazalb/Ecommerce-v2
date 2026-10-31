@@ -1,13 +1,19 @@
 "use client";
 
-import { JSX, FormEvent, useState } from "react";
+import { JSX, FormEvent, useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { useDispatch } from "react-redux";
-import { cartActions } from "@/store/slices/cartSlice";
+import { doc, getDoc } from "firebase/firestore";
 import { toast } from "react-toastify";
-import products from "@/assets/data/products";
+
+import { db } from "@/firebase.config";
+import { cartActions } from "@/store/slices/cartSlice";
+import type { AppDispatch } from "@/store/store";
+import type { Product, ProductCategory } from "@/types/product";
+
+import products from "../../lib/data/products";
 import "@/styles/productId.css";
 
 /**
@@ -21,63 +27,103 @@ import "@/styles/productId.css";
 export default function ProductDetails(): JSX.Element {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
-  const product = products.find((item) => String(item.id) === String(id));
+  const [product, setProduct] = useState<Product | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
   const [tab, setTab] = useState<"desc" | "rev">("desc");
   const [rating, setRating] = useState<number>(5);
   const [reviewMsg, setReviewMsg] = useState<string>("");
   const [reviewName, setReviewName] = useState<string>("");
 
-  if (!product) {
-    return (
-      <div className="product__not-found">
-        <div className="container">
-          <i className="ri-shopping-bag-3-line"></i>
-          <h2>Product not found!</h2>
-          <p>The product you're looking for may have been removed or is unavailable.</p>
-          <button
-            onClick={() => router.push("/shop")}
-            className="buy__btn"
-          >
-            Back to Shop
-          </button>
-        </div>
-      </div>
-    );
-  }
+  /**
+   * Fetches the requested product from Firestore using its document ID.
+   */
+  useEffect(() => {
+    let isMounted = true;
 
-  const {
-    imgUrl,
-    productName,
-    price,
-    avgRating,
-    reviews,
-    shortDesc,
-    description,
-    category,
-  } = product;
+    /**
+     * Retrieves the product document from Firestore.
+     *
+     * @returns {Promise<void>} A promise that resolves after fetching the product.
+     */
+    const fetchProduct = async (): Promise<void> => {
+      try {
+        setLoading(true);
+
+        const productRef = doc(db, "products", id);
+        const productSnapshot = await getDoc(productRef);
+
+        if (!productSnapshot.exists()) {
+          if (isMounted) {
+            setProduct(null);
+          }
+          return;
+        }
+
+        const data = productSnapshot.data();
+
+        const fetchedProduct: Product = {
+          id: productSnapshot.id,
+          productName: data.productName || "",
+          imgUrl: data.imgUrl || "",
+          category: data.category as ProductCategory,
+          price: Number(data.price) || 0,
+          shortDesc: data.shortDesc || "",
+          description: data.description || "",
+          reviews: Array.isArray(data.reviews) ? data.reviews : [],
+          avgRating: Number(data.avgRating) || 0,
+        };
+
+        if (isMounted) {
+          setProduct(fetchedProduct);
+        }
+      } catch (error: unknown) {
+        console.error("Error fetching product:", error);
+
+        if (isMounted) {
+          setProduct(null);
+          toast.error("Failed to load product details.");
+        }
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
+      }
+    };
+
+    if (id) {
+      fetchProduct();
+    }
+
+    return () => {
+      isMounted = false;
+    };
+  }, [id]);
 
   /**
-   * Finds products that belong to the same category, excluding the current product.
+   * Resolves a product image URL for Next.js Image.
    *
-   * @returns Related products from the same category.
+   * @param {Product["imgUrl"]} image - The product image.
+   * @returns {string} The resolved image URL.
    */
-  const relatedProducts = products.filter(
-    (item) => item.category === category && item.id !== product.id
-  );
+  const getProductImage = (image: Product["imgUrl"]): string => {
+    return typeof image === "string" ? image : image.src;
+  };
 
   /**
    * Adds the current product to the shopping cart.
    */
   const addToCart = (): void => {
+    if (!product) return;
+
     dispatch(
       cartActions.addItem({
         id: product.id,
         productName: product.productName,
-        price: product.price,
-        imgUrl: product.imgUrl,
+        price: Number(product.price),
+        imgUrl: getProductImage(product.imgUrl),
       })
     );
 
@@ -119,7 +165,10 @@ export default function ProductDetails(): JSX.Element {
     const safeRating = Math.max(0, Math.min(5, value));
 
     return (
-      <span className="product__stars" aria-label={`${safeRating} out of 5 stars`}>
+      <span
+        className="product__stars"
+        aria-label={`${safeRating} out of 5 stars`}
+      >
         {[1, 2, 3, 4, 5].map((star) => (
           <i
             key={star}
@@ -131,11 +180,65 @@ export default function ProductDetails(): JSX.Element {
                   : "ri-star-s-line"
             }
             aria-hidden="true"
-          ></i>
+          />
         ))}
       </span>
     );
   };
+
+  // Display loading state while fetching the product.
+  if (loading) {
+    return (
+      <div className="product__not-found">
+        <div className="container">
+          <h2>Loading product...</h2>
+        </div>
+      </div>
+    );
+  }
+
+  // Display not found message if the product does not exist.
+  if (!product) {
+    return (
+      <div className="product__not-found">
+        <div className="container">
+          <i className="ri-shopping-bag-3-line"></i>
+          <h2>Product not found!</h2>
+          <p>
+            The product you're looking for may have been removed or is
+            unavailable.
+          </p>
+          <button
+            onClick={() => router.push("/shop")}
+            className="buy__btn"
+          >
+            Back to Shop
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  const {
+    imgUrl,
+    productName,
+    price,
+    avgRating,
+    reviews,
+    shortDesc,
+    description,
+    category,
+  } = product;
+
+  /**
+   * Finds static products that belong to the same category,
+   * excluding the current product.
+   *
+   * @returns Related products from the local products data.
+   */
+  const relatedProducts = products.filter(
+    (item) => item.category === category && item.id !== product.id
+  );
 
   return (
     <div className="product__details-page">
@@ -167,7 +270,7 @@ export default function ProductDetails(): JSX.Element {
               >
                 <div className="product__image">
                   <Image
-                    src={imgUrl}
+                    src={getProductImage(imgUrl)}
                     alt={productName}
                     width={600}
                     height={600}
@@ -175,6 +278,7 @@ export default function ProductDetails(): JSX.Element {
                     sizes="(max-width: 768px) 100vw, 50vw"
                   />
                 </div>
+
                 <span className="product__category">{category}</span>
               </motion.div>
             </div>
@@ -205,6 +309,7 @@ export default function ProductDetails(): JSX.Element {
 
                 <div className="product__price-wrapper">
                   <span className="product__price">${price}</span>
+
                   <span className="product__price-note">
                     Tax included where applicable
                   </span>
@@ -234,6 +339,7 @@ export default function ProductDetails(): JSX.Element {
                 </div>
 
                 <motion.button
+                  type="button"
                   whileTap={{ scale: 0.97 }}
                   whileHover={{ y: -2 }}
                   className="buy__btn product__add-btn"
@@ -313,6 +419,7 @@ export default function ProductDetails(): JSX.Element {
 
                 <div className="review__form">
                   <h3>Share Your Experience</h3>
+
                   <p className="review__form-subtitle">
                     Your feedback helps other customers make better decisions.
                   </p>
@@ -320,6 +427,7 @@ export default function ProductDetails(): JSX.Element {
                   <form onSubmit={submitHandler}>
                     <div className="form__group">
                       <label htmlFor="review-name">Your Name</label>
+
                       <input
                         id="review-name"
                         type="text"
@@ -355,6 +463,7 @@ export default function ProductDetails(): JSX.Element {
 
                     <div className="form__group">
                       <label htmlFor="review-message">Your Review</label>
+
                       <textarea
                         id="review-message"
                         rows={4}
@@ -365,7 +474,10 @@ export default function ProductDetails(): JSX.Element {
                       />
                     </div>
 
-                    <button type="submit" className="buy__btn review__submit">
+                    <button
+                      type="submit"
+                      className="buy__btn review__submit"
+                    >
                       Submit Review
                       <i className="ri-send-plane-line"></i>
                     </button>
@@ -396,7 +508,7 @@ export default function ProductDetails(): JSX.Element {
                     >
                       <div className="related__image">
                         <Image
-                          src={item.imgUrl}
+                          src={getProductImage(item.imgUrl)}
                           alt={item.productName}
                           width={400}
                           height={400}

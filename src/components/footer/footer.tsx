@@ -17,7 +17,7 @@ const TOP_CATEGORIES: FooterLink[] = [
 const USEFUL_LINKS: FooterLink[] = [
   { path: "/shop", display: "Shop" },
   { path: "/cart", display: "Cart" },
-  { path: "/login", display: "Login" },
+  { path: "/checkout", display: "CheckOut" },
   { path: "/privacy", display: "Privacy Policy" },
 ];
 
