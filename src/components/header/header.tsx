@@ -47,6 +47,11 @@ export default function Header(): JSX.Element {
   const [isSticky, setIsSticky] = useState(false);
 
   const profileRef = useRef<HTMLDivElement>(null);
+  const [profileImage, setProfileImage] = useState<string | null>(null);
+
+useEffect(() => {
+  setProfileImage(currentUser?.photoURL || null);
+}, [currentUser?.photoURL]);
 
   // Sticky header
   useEffect(() => {
@@ -254,12 +259,23 @@ export default function Header(): JSX.Element {
                 aria-expanded={isProfileOpen}
                 aria-haspopup="true"
               >
-                <Image
-                  src={currentUser?.photoURL || userIcon}
-                  alt=""
-                  width={38}
-                  height={38}
-                />
+              {profileImage ? (
+              <img
+                key={profileImage}
+                src={profileImage}
+                alt="User profile"
+                width={38}
+                height={38}
+                className="profile__image"
+              />
+            ) : (
+              <Image
+                src={userIcon}
+                alt="User profile"
+                width={38}
+                height={38}
+              />
+            )}
 
                 <i
                   className={`ri-arrow-down-s-line profile__arrow ${
@@ -287,11 +303,20 @@ export default function Header(): JSX.Element {
                           <span className="user__email">
                             {currentUser.email || "Account"}
                           </span>
+                          {!isAdmin && (
+                            <Link
+                              href="/profile"
+                              onClick={() => setIsProfileOpen(false)}
+                            >
+                              <i className="ri-user-settings-line" />
+                              Profile Settings
+                            </Link>
+                          )}
                         </div>
 
                         {isAdmin && (
                           <Link
-                            href="/admin/Dashboard"
+                            href="/admin/dashboard"
                             onClick={() => setIsProfileOpen(false)}
                           >
                             <i className="ri-dashboard-line" />

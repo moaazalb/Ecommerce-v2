@@ -88,7 +88,7 @@ export default function AddProductPage(): JSX.Element {
       );
 
       toast.success("Product successfully added!");
-      router.push("/admin/AllProducts");
+      router.push("/admin/allProducts");
     } catch (error) {
       console.error("Failed to add product:", error);
       toast.error("Product not added. Please try again.");
@@ -319,7 +319,7 @@ export default function AddProductPage(): JSX.Element {
                       <Button
                         type="button"
                         className="add__product-cancel"
-                        onClick={() => router.push("/admin/AllProducts")}
+                        onClick={() => router.push("/admin/allProducts")}
                       >
                         Cancel
                       </Button>

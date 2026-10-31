@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword,  getIdTokenResult } from "firebase/auth";
 import { toast } from "react-toastify";
 
 import Helmet from "../layout/helmet";
@@ -87,7 +87,18 @@ export default function Login(): JSX.Element {
       }
 
       toast.success("Successfully logged in");
-      router.push("/");
+      const tokenResult = await getIdTokenResult(
+        userCredential.user,
+        true
+      );
+
+      const isAdmin = tokenResult.claims.admin === true;
+
+      if (isAdmin) {
+        router.replace("/admin/dashboard");
+      } else {
+        router.replace("/shop");
+      }
     } catch (error: unknown) {
       console.error("Login failed:", error);
 

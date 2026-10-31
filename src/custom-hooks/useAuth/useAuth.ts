@@ -1,63 +1,16 @@
-
 "use client";
 
-import { useState, useEffect } from "react";
-import {
-  onIdTokenChanged,
-  getIdTokenResult,
-  type User,
-} from "firebase/auth";
-import { auth } from "@/firebase.config";
-
-interface AuthState {
-  currentUser: User | null;
-  isAdmin: boolean;
-  authLoading: boolean;
-}
+import { useAuthContext } from "@/context/AuthContext";
 
 /**
  * Authentication hook.
  *
- * Tracks the currently authenticated Firebase user and checks
- * whether the user has the admin custom claim.
+ * Provides shared authentication state and profile update utilities.
  *
- * @returns {AuthState} Current user, admin status, and loading state.
+ * @returns Current user, admin status, loading state and refresh function.
  */
-const useAuth = (): AuthState => {
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [authLoading, setAuthLoading] = useState(true);
-
-  useEffect(() => {
-    const unsubscribe = onIdTokenChanged(auth, async (user) => {
-      setAuthLoading(true);
-      setCurrentUser(user);
-      setIsAdmin(false);
-
-      if (!user) {
-        setAuthLoading(false);
-        return;
-      }
-
-      try {
-        const tokenResult = await getIdTokenResult(user);
-        setIsAdmin(tokenResult.claims.admin === true);
-      } catch (error) {
-        console.error("Failed to verify user permissions:", error);
-        setIsAdmin(false);
-      } finally {
-        setAuthLoading(false);
-      }
-    });
-
-    return () => unsubscribe();
-  }, []);
-
-  return {
-    currentUser,
-    isAdmin,
-    authLoading,
-  };
+const useAuth = () => {
+  return useAuthContext();
 };
 
 export default useAuth;

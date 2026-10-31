@@ -4,7 +4,7 @@ import React, { JSX } from "react";
 import { usePathname } from "next/navigation";
 import Header from "@/components/header/header";
 import Footer from "@/components/footer/footer";
-import AdminNav from "@/app/admin/AdminNav/page";
+import AdminNav from "@/app/admin/adminNav/page";
 
 interface ClientLayoutProps {
   children: React.ReactNode;
