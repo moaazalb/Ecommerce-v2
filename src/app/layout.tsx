@@ -9,8 +9,8 @@ import type { ReactNode } from "react";
 import { Montserrat, Playfair_Display } from "next/font/google";
 
 import { ToastContainer } from "react-toastify";
-import Providers from "@/components/providers/Providers";
-import ClientLayout from "@/components/ClientLayout";
+import Providers from "@/components/providers/providers";
+import ClientLayout from "@/components/clientLayout";
 
 const montserrat = Montserrat({
   subsets: ["latin"],

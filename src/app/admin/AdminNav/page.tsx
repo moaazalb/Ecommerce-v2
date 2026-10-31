@@ -1,4 +1,4 @@
-import AdminNav from "@/components/adminNav/AdminNav"
+import AdminNav from "@/components/adminNav/adminNav"
 
  const AdminNavPage = () => {
 return (

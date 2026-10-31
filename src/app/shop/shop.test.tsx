@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event";
 import Shop from "./page";
 
 // Mock sub-components and assets
-jest.mock("@/components/UI/productList", () => ({
+jest.mock("@/components/ui/productList", () => ({
   __esModule: true,
   default: ({ data }: { data: any[] }) => (
     <div data-testid="product-list">
@@ -16,7 +16,7 @@ jest.mock("@/components/UI/productList", () => ({
   ),
 }));
 
-jest.mock("@/components/UI/commonSection", () => ({
+jest.mock("@/components/ui/commonSection", () => ({
   __esModule: true,
   default: ({ title }: { title: string }) => <div data-testid="common-section">{title}</div>,
 }));

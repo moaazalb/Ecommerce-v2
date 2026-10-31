@@ -7,17 +7,17 @@ jest.mock("@/components/services/services", () => ({
   default: () => <div data-testid="services-mock">Services Component</div>,
 }));
 
-jest.mock("@/components/UI/productList", () => ({
+jest.mock("@/components/ui/productList", () => ({
   __esModule: true,
   default: () => <div data-testid="product-list-mock">Product List</div>,
 }));
 
-jest.mock("@/components/UI/clock", () => ({
+jest.mock("@/components/ui/clock", () => ({
   __esModule: true,
   default: () => <div data-testid="clock-mock">Clock Component</div>,
 }));
 
-jest.mock("../Layout/Helmet", () => ({
+jest.mock("@/components/layout/helmet", () => ({
   __esModule: true,
   default: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
 }), { virtual: true });

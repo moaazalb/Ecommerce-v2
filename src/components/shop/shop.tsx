@@ -4,10 +4,10 @@
 import "@/styles/shop.css";
 import { useMemo, useState } from "react";
 import { Container, Row, Col } from "reactstrap";
-import ProductsList from "@/components/ui/ProductList";
-import CommmonSection from "@/components/ui/CommonSection";
+import ProductsList from "@/components/ui/productList";
+import CommmonSection from "@/components/ui/commonSection";
 import products from "../../lib/data/products";
-import Helmet from "../layout/Helmet";
+import Helmet from "../layout/helmet";
 import staticProducts from "../../lib/data/products";
 import useGetData from "@/custom-hooks/useGetData/useGetData";
 /**

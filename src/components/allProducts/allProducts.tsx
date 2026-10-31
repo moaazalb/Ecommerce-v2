@@ -1,7 +1,7 @@
 
 "use client";
 
-import Helmet from "../layout/Helmet";
+import Helmet from "../layout/helmet";
 import { JSX, useState } from "react";
 import Image from "next/image";
 import { Container, Row, Col, Table, Button, Spinner } from "reactstrap";

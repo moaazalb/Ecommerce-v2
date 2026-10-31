@@ -10,7 +10,7 @@ import {
 } from "firebase/firestore";
 import { db } from "@/firebase.config";
 import useGetData from "@/custom-hooks/useGetData/useGetData";
-import Helmet from "@/components/layout/Helmet";
+import Helmet from "@/components/layout/helmet";
 import {
   Badge,
   Button,

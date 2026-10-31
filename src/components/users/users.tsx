@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import Helmet from "../layout/Helmet";
+import Helmet from "../layout/helmet";
 import Image from "next/image";
 import { Container, Row, Col, Table, Button, Spinner } from "reactstrap";
 import { db } from "@/firebase.config";

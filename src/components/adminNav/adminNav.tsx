@@ -4,7 +4,7 @@
 import "@/styles/admin-nav.css";
 import { Container } from "reactstrap";
 import useAuth from "@/custom-hooks/useAuth/useAuth";
-import Helmet from "../layout/Helmet";
+import Helmet from "../layout/helmet";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 

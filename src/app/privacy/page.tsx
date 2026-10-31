@@ -1,4 +1,4 @@
-import PrivacyPolicy from "@/components/privacy/Privacy"
+import PrivacyPolicy from "@/components/privacy/privacy"
 
  const PrivacyPage = () => {
 return (

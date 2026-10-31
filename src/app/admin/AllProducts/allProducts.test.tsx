@@ -1,6 +1,6 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import AllProducts from "../../../components/allProducts/AllProducts";
+import AllProducts from "../../../components/allProducts/allProducts";
 import useGetData from "@/custom-hooks/useGetData/useGetData";
 import { deleteDoc } from "firebase/firestore";
 import { toast } from "react-toastify";
@@ -26,7 +26,7 @@ jest.mock("next/image", () => ({
 }));
 
 // Mock Helmet component
-jest.mock("../Layout/Helmet", () => ({
+jest.mock("@/components/layout/helmet", () => ({
   __esModule: true,
   default: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
 }));

@@ -2,7 +2,7 @@
 "use client";
 
 import "@/styles/checkout.css";
-import Helmet from "../layout/Helmet";
+import Helmet from "../layout/helmet";
 import type { JSX } from "react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";

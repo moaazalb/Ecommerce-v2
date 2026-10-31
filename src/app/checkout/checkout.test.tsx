@@ -19,7 +19,7 @@ jest.mock("react-toastify", () => ({
 }));
 
 // Mock Helmet component
-jest.mock("../Layout/Helmet", () => ({
+jest.mock("@/components/layout/helmet", () => ({
   __esModule: true,
   default: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
 }), { virtual: true });

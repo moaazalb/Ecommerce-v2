@@ -8,7 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { toast } from "react-toastify";
 
-import Helmet from "../layout/Helmet";
+import Helmet from "../layout/helmet";
 import { auth } from "@/firebase.config";
 import {
   loginSchema,

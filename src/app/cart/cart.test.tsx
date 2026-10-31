@@ -3,11 +3,11 @@ import userEvent from "@testing-library/user-event";
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import Cart from "./page";
-import cartReducer from "@/redux/slices/cartSlice";
+import cartReducer from "@/store/slices/cartSlice";
 import type { CartItem } from "@/types/cart";
 
 // Mock Helmet component
-jest.mock("../Layout/Helmet", () => ({
+jest.mock("@/components/layout/helmet", () => ({
   __esModule: true,
   default: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
 }), { virtual: true });

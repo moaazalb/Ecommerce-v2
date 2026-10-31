@@ -1,7 +1,7 @@
 
 "use client";
 
-import Helmet from "../layout/Helmet";
+import Helmet from "../layout/helmet";
 import type { JSX } from "react";
 import Image from "next/image";
 import Link from "next/link";

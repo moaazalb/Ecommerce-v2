@@ -1,4 +1,4 @@
-import ProductDetails from "@/components/productDetails/ProductDetails";
+import ProductDetails from "@/components/productDetails/productDetails";
 
 const ProductDetailsPage = () => {
     return (
