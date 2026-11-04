@@ -5,13 +5,13 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { signInWithEmailAndPassword,  getIdTokenResult } from "firebase/auth";
+import { signInWithEmailAndPassword, getIdTokenResult } from "firebase/auth";
 import { toast } from "react-toastify";
-
+import { useTranslation } from "react-i18next";
 import Helmet from "../layout/helmet";
 import { auth } from "@/firebase.config";
 import {
-  loginSchema,
+  createLoginSchema,
   type LoginFormValues,
 } from "@/lib/validations/login.schema";
 import { useDispatch } from "react-redux";
@@ -34,10 +34,11 @@ import "@/styles/login.css";
  */
 export default function Login(): JSX.Element {
   const router = useRouter();
+  const { t } = useTranslation();
+  const loginSchema = createLoginSchema(t);
   const dispatch = useDispatch<AppDispatch>();
   const [loading, setLoading] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState<boolean>(false);
-
   const {
     register,
     handleSubmit,
@@ -47,7 +48,6 @@ export default function Login(): JSX.Element {
     mode: "onChange",
   });
 
-  
   /**
    * Handles login form submission and authenticates the user
    * using Firebase Authentication.
@@ -65,33 +65,25 @@ export default function Login(): JSX.Element {
       const userCredential = await signInWithEmailAndPassword(
         auth,
         data.email,
-        data.password
+        data.password,
       );
-
       const userId = userCredential.user.uid;
-
       // Retrieve the user's saved cart.
       const cartRef = doc(db, "carts", userId);
       const cartSnapshot = await getDoc(cartRef);
 
       if (cartSnapshot.exists()) {
         const savedItems = cartSnapshot.data().cartItems;
-
         dispatch(
           cartActions.setCart(
-            Array.isArray(savedItems) ? (savedItems as CartItem[]) : []
-          )
+            Array.isArray(savedItems) ? (savedItems as CartItem[]) : [],
+          ),
         );
       } else {
         dispatch(cartActions.setCart([]));
       }
-
-      toast.success("Successfully logged in");
-      const tokenResult = await getIdTokenResult(
-        userCredential.user,
-        true
-      );
-
+      toast.success(t("login.success"));
+      const tokenResult = await getIdTokenResult(userCredential.user, true);
       const isAdmin = tokenResult.claims.admin === true;
 
       if (isAdmin) {
@@ -102,42 +94,30 @@ export default function Login(): JSX.Element {
     } catch (error: unknown) {
       console.error("Login failed:", error);
 
-      toast.error(
-        error instanceof Error ? error.message : "Failed to log in."
-      );
+      toast.error(t("login.errors.failed"));
     } finally {
       setLoading(false);
     }
   };
 
-
   return (
-    <Helmet title="Login">
+    <Helmet title={t("login.title")}>
       <section className="auth__section">
         <div className="container">
           <div className="auth__layout">
-
             {/* Login introduction */}
             <div className="auth__intro">
-              <span className="auth__eyebrow">
-                WELCOME BACK
-              </span>
-
+              <span className="auth__eyebrow">{t("login.eyebrow")}</span>
               <h1>
-                Good to see
+                {t("login.introTitle")}
                 <br />
-                you <span>again.</span>
+                {t("login.introSubtitle")} <span>{t("login.again")}</span>
               </h1>
-
-              <p>
-                Sign in to your account and continue discovering
-                products you'll love. Your next favorite find is
-                just a few clicks away.
-              </p>
+              <p>{t("login.introDescription")}</p>
 
               <div className="auth__intro-footer">
                 <span className="auth__intro-line" />
-                <span>Simple shopping. Timeless style.</span>
+                <span>{t("login.tagline")}</span>
               </div>
             </div>
 
@@ -147,10 +127,8 @@ export default function Login(): JSX.Element {
                 <span className="auth__card-icon">
                   <i className="ri-user-line" />
                 </span>
-
-                <h2>Welcome back</h2>
-
-                <p>Enter your details to access your account.</p>
+                <h2>{t("login.welcome")}</h2>
+                <p>{t("login.formDescription")}</p>
               </div>
 
               <form
@@ -160,10 +138,7 @@ export default function Login(): JSX.Element {
               >
                 {/* Email */}
                 <div className="auth__field">
-                  <label htmlFor="login-email">
-                    Email address
-                  </label>
-
+                  <label htmlFor="login-email">{t("login.fields.email")}</label>
                   <div
                     className={`auth__input-wrapper ${
                       errors.email ? "has-error" : ""
@@ -174,7 +149,7 @@ export default function Login(): JSX.Element {
                     <input
                       id="login-email"
                       type="email"
-                      placeholder="Enter your email"
+                      placeholder={t("login.placeholders.email")}
                       autoComplete="email"
                       aria-invalid={errors.email ? "true" : "false"}
                       aria-describedby={
@@ -198,7 +173,7 @@ export default function Login(): JSX.Element {
                 {/* Password */}
                 <div className="auth__field">
                   <label htmlFor="login-password">
-                    Password
+                    {t("login.fields.password")}
                   </label>
 
                   <div
@@ -207,17 +182,14 @@ export default function Login(): JSX.Element {
                     }`}
                   >
                     <i className="ri-lock-line auth__input-icon" />
-
                     <input
                       id="login-password"
                       type={showPassword ? "text" : "password"}
-                      placeholder="Enter your password"
+                      placeholder={t("login.placeholders.password")}
                       autoComplete="current-password"
                       aria-invalid={errors.password ? "true" : "false"}
                       aria-describedby={
-                        errors.password
-                          ? "login-password-error"
-                          : undefined
+                        errors.password ? "login-password-error" : undefined
                       }
                       {...register("password")}
                     />
@@ -225,18 +197,16 @@ export default function Login(): JSX.Element {
                     <button
                       type="button"
                       className="auth__password-toggle"
-                      onClick={() =>
-                        setShowPassword((previous) => !previous)
-                      }
+                      onClick={() => setShowPassword((previous) => !previous)}
                       aria-label={
-                        showPassword ? "Hide password" : "Show password"
+                        showPassword
+                          ? t("login.hidePassword")
+                          : t("login.showPassword")
                       }
                     >
                       <i
                         className={
-                          showPassword
-                            ? "ri-eye-off-line"
-                            : "ri-eye-line"
+                          showPassword ? "ri-eye-off-line" : "ri-eye-line"
                         }
                       />
                     </button>
@@ -254,22 +224,15 @@ export default function Login(): JSX.Element {
                 </div>
 
                 {/* Submit */}
-                <button
-                  type="submit"
-                  className="auth__btn"
-                  disabled={loading}
-                >
+                <button type="submit" className="auth__btn" disabled={loading}>
                   {loading ? (
                     <>
-                      <span
-                        className="auth__spinner"
-                        aria-hidden="true"
-                      />
-                      Logging in...
+                      <span className="auth__spinner" aria-hidden="true" />
+                      {t("login.loggingIn")}
                     </>
                   ) : (
                     <>
-                      Login
+                      {t("login.submit")}
                       <i className="ri-arrow-right-line" />
                     </>
                   )}
@@ -277,12 +240,11 @@ export default function Login(): JSX.Element {
 
                 {/* Register link */}
                 <p className="auth__switch">
-                  Don't have an account?
-                  <Link href="/signup">Create an account</Link>
+                  {t("login.noAccount")}
+                  <Link href="/signup">{t("login.createAccount")}</Link>
                 </p>
               </form>
             </div>
-
           </div>
         </div>
       </section>

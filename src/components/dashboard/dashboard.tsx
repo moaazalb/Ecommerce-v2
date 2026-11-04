@@ -1,8 +1,9 @@
 "use client";
 
 import { JSX } from "react";
-import useGetData from "@/custom-hooks/useGetData/useGetData";
+import { useTranslation } from "react-i18next";
 import "@/styles/dashboard.css";
+import { statistics } from "@/lib/data/statistics";
 
 /**
  * Dashboard component displaying the main store statistics.
@@ -12,83 +13,18 @@ import "@/styles/dashboard.css";
  * @returns {JSX.Element} The rendered Dashboard component.
  */
 export default function Dashboard(): JSX.Element {
-  const {
-    data: products,
-    loading: productsLoading,
-    error: productsError,
-  } = useGetData("products");
-
-  const {
-    data: users,
-    loading: usersLoading,
-    error: usersError,
-  } = useGetData("users");
-
-  const {
-    data: orders,
-    loading: ordersLoading,
-    error: ordersError,
-  } = useGetData("orders");
-
-  // Count all orders regardless of their status.
-  const totalOrders = orders.length;
-
-  // Calculate sales from confirmed and delivered orders only.
-  const totalSales = orders.reduce((total, order) => {
-    if (order.status === "confirmed" || order.status === "delivered") {
-      return total + Number(order.totalAmount || 0);
-    }
-
-    return total;
-  }, 0);
-
-  const statistics = [
-    {
-      title: "Total Sales",
-      value: `$${totalSales.toFixed(2)}`,
-      loading: ordersLoading,
-      error: ordersError,
-      icon: "ri-money-dollar-circle-line",
-      className: "revenue__box",
-      description: "Confirmed and delivered orders",
-    },
-    {
-      title: "Orders",
-      value: totalOrders.toString(),
-      loading: ordersLoading,
-      error: ordersError,
-      icon: "ri-shopping-bag-3-line",
-      className: "order__box",
-      description: "Total registered orders",
-    },
-    {
-      title: "Total Products",
-      value: products.length.toString(),
-      loading: productsLoading,
-      error: productsError,
-      icon: "ri-shopping-basket-line",
-      className: "products__box",
-      description: "Available products",
-    },
-    {
-      title: "Total Users",
-      value: users.length.toString(),
-      loading: usersLoading,
-      error: usersError,
-      icon: "ri-user-line",
-      className: "users__box",
-      description: "Registered users",
-    },
-  ];
-
+  const { t } = useTranslation();
+ 
   return (
     <section className="dashboard">
       <div className="container-fluid">
         <div className="dashboard__header">
           <div>
-            <span className="dashboard__eyebrow">OVERVIEW</span>
-            <h2>Dashboard</h2>
-            <p>Welcome back! Here's what's happening with your store.</p>
+            <span className="dashboard__eyebrow">
+              {t("dashboard.eyebrow")}
+            </span>
+            <h2>{t("dashboard.title")}</h2>
+            <p>{t("dashboard.welcome")}</p>
           </div>
         </div>
 
@@ -102,8 +38,8 @@ export default function Dashboard(): JSX.Element {
                   </div>
 
                   <span className="dashboard__card-label">
-                    {item.title}
-                  </span>
+                  {t(item.title)}
+                </span>
                 </div>
 
                 <div className="dashboard__card-bottom">
@@ -116,7 +52,9 @@ export default function Dashboard(): JSX.Element {
                   </h3>
 
                   <p>
-                    {item.error ? "Failed to load data" : item.description}
+                    {item.error
+                      ? t("dashboard.loadError")
+                      : t(item.description)}
                   </p>
                 </div>
               </div>

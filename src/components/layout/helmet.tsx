@@ -1,15 +1,14 @@
 "use client"
-import { ReactNode, useEffect } from "react";
+import { HelmetProps } from "@/types/helmet";
+import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
-interface HelmetProps {
-  title: string;
-  children: ReactNode;
-}
 
 const Helmet = ({ title, children }: HelmetProps) => {
+  const { t } = useTranslation();
   useEffect(() => {
-    document.title = "Ecommerce - " + title;
-  }, [title]);
+     document.title = `${t("common.siteName")} - ${title}`;
+  }, [title,t]);
 
   return <div className="w-100">{children}</div>;
 };

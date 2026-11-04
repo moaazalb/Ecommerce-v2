@@ -1,4 +1,3 @@
-
 "use client";
 
 import {
@@ -8,29 +7,12 @@ import {
   useEffect,
   useMemo,
   useState,
-  type ReactNode,
 } from "react";
-
-import {
-  onIdTokenChanged,
-  getIdTokenResult,
-  type User,
-} from "firebase/auth";
-
+import { onIdTokenChanged, getIdTokenResult, type User } from "firebase/auth";
 import { auth } from "@/firebase.config";
-
-interface AuthState {
-  currentUser: User | null;
-  isAdmin: boolean;
-  authLoading: boolean;
-  refreshUser: () => Promise<void>;
-}
+import { AuthProviderProps, AuthState } from "@/types/auth";
 
 const AuthContext = createContext<AuthState | undefined>(undefined);
-
-interface AuthProviderProps {
-  children: ReactNode;
-}
 
 /**
  * Provides shared authentication state to the application.
@@ -41,9 +23,7 @@ interface AuthProviderProps {
  * @param {AuthProviderProps} props - Provider children.
  * @returns {JSX.Element} The authentication context provider.
  */
-export function AuthProvider({
-  children,
-}: AuthProviderProps) {
+export function AuthProvider({ children }: AuthProviderProps) {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [authLoading, setAuthLoading] = useState(true);
@@ -74,7 +54,7 @@ export function AuthProvider({
     return () => unsubscribe();
   }, []);
 
-    /**
+  /**
    * Reloads the current Firebase user and notifies all consumers.
    *
    * @returns {Promise<void>}
@@ -102,14 +82,10 @@ export function AuthProvider({
       authLoading,
       refreshUser,
     }),
-    [currentUser, isAdmin, authLoading, refreshUser, profileVersion]
+    [currentUser, isAdmin, authLoading, refreshUser, profileVersion],
   );
 
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
 /**

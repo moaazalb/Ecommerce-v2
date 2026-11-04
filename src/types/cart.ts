@@ -5,3 +5,9 @@ export interface CartItem {
   quantity: number;
   imgUrl: string | any;
 }
+
+export interface CartState {
+  cartItems: CartItem[];
+  totalAmount: number;
+  totalQuantity: number;
+}

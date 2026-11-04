@@ -1,4 +1,3 @@
-
 /* ========================================
    HOME PAGE
    Modern Luxury - Slate & Powder Blue
@@ -126,8 +125,6 @@
   font-weight: 600;
   margin-bottom: 15px;
 }
-
-
 
 /* ========================================
    LIMITED OFFER / COUNTDOWN
@@ -298,7 +295,7 @@
     font-size: 1.45rem;
   }
 
-  section:not(.hero__section):not(.timer__count) {
+  section:not(.hero__section):not(.timer__count):not(.Toastify) {
     padding: 35px 0;
   }
 

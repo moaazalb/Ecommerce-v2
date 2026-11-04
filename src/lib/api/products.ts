@@ -1,23 +1,7 @@
-
 import { addDoc, collection } from "firebase/firestore";
 import { db } from "@/firebase.config";
-
-/** Product data stored in Firestore (without the image URL). */
-export interface NewProduct {
-  productName: string;
-  shortDesc: string;
-  description: string;
-  category: string;
-  price: string;
-}
-
-/** Cloudinary upload response. */
-interface CloudinaryUploadResponse {
-  secure_url?: string;
-  error?: {
-    message?: string;
-  };
-}
+import { CloudinaryUploadResponse } from "@/types/cloudinary";
+import { NewProduct } from "@/types/product";
 
 /**
  * Uploads a product image to Cloudinary.
@@ -28,8 +12,7 @@ interface CloudinaryUploadResponse {
  */
 export async function uploadProductImage(file: File): Promise<string> {
   const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
-  const uploadPreset =
-    process.env.NEXT_PUBLIC_CLOUDINARY_PRODUCT_UPLOAD_PRESET;
+  const uploadPreset = process.env.NEXT_PUBLIC_CLOUDINARY_PRODUCT_UPLOAD_PRESET;
 
   if (!cloudName || !uploadPreset) {
     throw new Error("Cloudinary configuration is missing.");
@@ -45,16 +28,13 @@ export async function uploadProductImage(file: File): Promise<string> {
     {
       method: "POST",
       body: formData,
-    }
+    },
   );
 
-  const result =
-    (await response.json()) as CloudinaryUploadResponse;
+  const result = (await response.json()) as CloudinaryUploadResponse;
 
   if (!response.ok || !result.secure_url) {
-    throw new Error(
-      result.error?.message || "Failed to upload product image."
-    );
+    throw new Error(result.error?.message || "Failed to upload product image.");
   }
 
   return result.secure_url;
@@ -71,7 +51,7 @@ export async function uploadProductImage(file: File): Promise<string> {
  */
 export async function addProduct(
   product: NewProduct,
-  image: File
+  image: File,
 ): Promise<void> {
   const imgUrl = await uploadProductImage(image);
 

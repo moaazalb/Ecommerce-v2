@@ -1,0 +1,708 @@
+{
+  "common": {
+    "home": "Home",
+    "shop": "Shop",
+    "cart": "Cart",
+    "login": "Login",
+    "signup": "Sign Up",
+    "logout": "Logout",
+    "search": "Search",
+    "loading": "Loading...",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "language": "Language"
+  },
+  "siteName": "Ecom-Nest",
+  "header": {
+    "brand": "Ecom-Nest",
+    "homeLabel": "Ecommerce home",
+    "closeNavigation": "Close navigation menu",
+    "mainNavigation": "Main navigation",
+    "switchToDark": "Switch to dark mode",
+    "switchToLight": "Switch to light mode",
+    "darkMode": "Dark mode",
+    "lightMode": "Light mode",
+    "wishlist": "Wishlist",
+    "wishlistItems": "Wishlist, {{count}} items",
+    "shoppingCart": "Shopping cart",
+    "shoppingCartItems": "Shopping cart, {{count}} items",
+    "accountMenu": "Account menu",
+    "userProfile": "User profile",
+    "signedInAs": "Signed in as",
+    "account": "Account",
+    "profileSettings": "Profile Settings",
+    "adminDashboard": "Admin Dashboard",
+    "loggingOut": "Logging out...",
+    "logout": "Logout",
+    "login": "Login",
+    "signup": "Sign Up",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu"
+  },
+  "home": {
+  "title": "Home",
+  "trendingProduct": "Trending Product in {{year}}",
+  "heroTitle": "Make Your Interior More Minimalistic & Modern",
+  "heroDescription": "Discover curated home essentials designed to bring effortless elegance, clean lines, and functional comfort into your living space. Transform your environment into a calm, contemporary sanctuary.",
+  "shopNow": "SHOP NOW",
+  "trendingProducts": "Trending Products",
+  "bestSales": "Best Sales",
+  "limitedOffers": "Limited Offers",
+  "qualityArmchair": "Quality Armchair",
+  "visitStore": "Visit Store",
+  "newArrivals": "New Arrivals",
+  "popularCategory": "Popular in Category",
+  "heroImageAlt": "Hero interior furniture",
+  "offerImageAlt": "Limited offer armchair"
+},
+"services": {
+  "freeShipping": {
+    "title": "Free Shipping",
+    "subtitle": "On all orders over $50"
+  },
+  "easyReturns": {
+    "title": "Easy Returns",
+    "subtitle": "30-day hassle-free policy"
+  },
+  "securePayment": {
+    "title": "Secure Payment",
+    "subtitle": "100% protected checkout"
+  },
+  "moneyBack": {
+    "title": "Money Back Guarantee",
+    "subtitle": "Full refund within 14 days"
+  }
+},
+"shop": {
+  "title": "Shop",
+  "products": "Products",
+  "filterCategory": "Filter by category",
+  "allCategories": "All Categories",
+  "categories": {
+    "sofa": "Sofa",
+    "mobile": "Mobile",
+    "chair": "Chair",
+    "watch": "Watch",
+    "wireless": "Wireless"
+  },
+  "sortByPrice": "Sort products by price",
+  "defaultSorting": "Default Sorting",
+  "priceLowToHigh": "Price: Low to High",
+  "priceHighToLow": "Price: High to Low",
+  "searchPlaceholder": "Search products...",
+  "searchLabel": "Search products",
+  "reset": "Reset",
+  "showing": "Showing",
+  "productCount_one": "product",
+  "productCount_other": "products",
+  "noProductsFound": "No Products Found",
+  "noProductsDescription": "We couldn't find any products matching your search. Try changing your filters or search term.",
+  "clearFilters": "Clear Filters"
+},
+"productCard": {
+  "addToCart": "Add {{name}} to cart",
+  "addedSuccessfully": "Product added successfully!"
+},
+"products": {
+  "items": {
+    "01": {
+      "name": "Stone and Beam Westview",
+      "shortDesc": "A sturdy hardwood-frame sofa featuring plush cushions for ultimate family comfort.",
+      "description": "The Stone and Beam Westview sofa combines classic craftsmanship with everyday durability. Designed with high-resiliency foam cushions and a solid hardwood frame, it offers long-lasting support and timeless elegance for your living room."
+    },
+    "02": {
+      "name": "Rivet Bigelow Modern",
+      "shortDesc": "Sleek mid-century design with tapered legs and luxurious upholstery.",
+      "description": "Bring a touch of vintage flair to your home with the Rivet Bigelow Modern sofa. Featuring clean lines, soft yet supportive cushioning, and durable wooden legs, it is an ideal centerpiece for contemporary living spaces."
+    },
+    "03": {
+      "name": "Amazon Brand Modern Sofa",
+      "shortDesc": "Minimalist and compact design tailored for apartments and urban spaces.",
+      "description": "This modern sofa offers smart space-saving proportions without sacrificing comfort. Wrapped in breathable, high-grade fabric with an engineered wood frame, it provides reliable daily seating with effortless style."
+    },
+    "26": {
+      "name": "Rivet Bigelow Modern",
+      "shortDesc": "Sleek mid-century design with tapered legs and luxurious upholstery.",
+      "description": "Bring a touch of vintage flair to your home with the Rivet Bigelow Modern sofa. Featuring clean lines, soft yet supportive cushioning, and durable wooden legs, it is an ideal centerpiece for contemporary living spaces."
+    },
+    "04": {
+      "name": "Fluffy Sheep Sofa",
+      "shortDesc": "Ultra-soft textured fabric finish designed for maximum relaxation.",
+      "description": "Indulge in cozy comfort with the Fluffy Sheep Sofa. Its plush, textured upholstery feels exceptionally soft against the skin, making it the ultimate lounging spot for reading or unwinding after a long day."
+    },
+    "05": {
+      "name": "Faux Velvet Sofa",
+      "shortDesc": "Rich velvet texture offering a luxurious look and plush seating experience.",
+      "description": "Elevate your interior decor with the elegant sheen of our Faux Velvet Sofa. Crafted with dense padding and premium velvet fabric, it adds a sophisticated and chic accent to modern and eclectic rooms."
+    },
+    "06": {
+      "name": "Fluffy Sheep Sofa",
+      "shortDesc": "Ultra-soft textured fabric finish designed for maximum relaxation.",
+      "description": "Indulge in cozy comfort with the Fluffy Sheep Sofa. Its plush, textured upholstery feels exceptionally soft against the skin, making it the ultimate lounging spot for reading or unwinding after a long day."
+    },
+    "07": {
+      "name": "Sakarias Armchair",
+      "shortDesc": "Ergonomic armchair designed to provide exceptional back support and style.",
+      "description": "The Sakarias Armchair blends ergonomic contouring with elegant aesthetics. Whether placed in a reading nook or as an accent piece in your living room, it delivers reliable comfort and graceful style."
+    },
+    "27": {
+      "name": "Modern Arm Sofa",
+      "shortDesc": "Compact single-arm sofa built for modern lounge areas.",
+      "description": "A sleek and versatile seating solution, the Modern Arm Sofa features a streamlined profile and supportive cushions. Perfect for compact spaces looking for a clean, contemporary aesthetic."
+    },
+    "08": {
+      "name": "Baltsar Chair",
+      "shortDesc": "Lightweight, contemporary accent chair with sturdy wooden legs.",
+      "description": "The Baltsar Chair offers clean Scandinavian design lines and reliable durability. Its lightweight structure makes it easy to reposition around your home while maintaining a chic decorative appeal."
+    },
+    "09": {
+      "name": "Helmar Chair",
+      "shortDesc": "Padded accent chair featuring deep cushioning and durable upholstery.",
+      "description": "Designed for prolonged seating comfort, the Helmar Chair features generous padding and robust construction. It serves as a stylish and comfortable addition to dining areas or study rooms."
+    },
+    "10": {
+      "name": "Apple iPhone 12 Pro",
+      "shortDesc": "Advanced dual-camera system, A14 Bionic chip, and brilliant Super Retina XDR display.",
+      "description": "The Apple iPhone 12 Pro delivers lightning-fast performance and pro-grade photography capabilities. Equipped with Night mode, Ceramic Shield front cover, and immersive display technology, it is built to perform brilliantly."
+    },
+    "25": {
+      "name": "Sakarias Armchair",
+      "shortDesc": "Ergonomic armchair designed to provide exceptional back support and style.",
+      "description": "The Sakarias Armchair blends ergonomic contouring with elegant aesthetics. Whether placed in a reading nook or as an accent piece in your living room, it delivers reliable comfort and graceful style."
+    },
+    "11": {
+      "name": "Apple iPhone 12 Max",
+      "shortDesc": "Large-screen flagship smartphone with exceptional battery life and fluid performance.",
+      "description": "Experience expansive visuals and powerful processing with the iPhone 12 Max. Featuring a stunning large OLED display, advanced camera optics, and long-lasting battery capacity for all-day productivity."
+    },
+    "12": {
+      "name": "Realme 8",
+      "shortDesc": "Vibrant Super AMOLED display and fast-charging capabilities in a slim profile.",
+      "description": "The Realme 8 is engineered for speed and clarity, featuring a vivid display, capable multi-lens camera setup, and rapid battery charging support to keep up with your active lifestyle."
+    },
+    "13": {
+      "name": "One Plus Nord",
+      "shortDesc": "Smooth 90Hz fluid AMOLED display and robust Snapdragon performance.",
+      "description": "OnePlus Nord delivers flagship-level smoothness and premium photography features at an accessible price. Enjoy a seamless user experience, fast multitasking, and clean software."
+    },
+    "14": {
+      "name": "Apple iPhone 13 Pro",
+      "shortDesc": "Pro camera system with macro photography, Cinematic mode, and ProMotion display.",
+      "description": "The iPhone 13 Pro pushes the boundaries of smartphone capability with its breakthrough ProMotion display, lightning-fast A15 Bionic chip, and professional-grade video recording features."
+    },
+    "15": {
+      "name": "Samsung Galaxy S22",
+      "shortDesc": "Dynamic AMOLED 2X display, nightography camera, and sleek armor aluminum frame.",
+      "description": "The Samsung Galaxy S22 combines cutting-edge mobile innovation with a refined design. Capture stunning low-light photos and enjoy ultra-smooth scrolling on a brilliant, vibrant display."
+    },
+    "16": {
+      "name": "Rolex Watch",
+      "shortDesc": "Timeless luxury timepiece crafted with precision automatic movement.",
+      "description": "An iconic symbol of status and precision engineering, this luxury timepiece features robust stainless steel construction, a sophisticated dial, and dependable Swiss automatic movement."
+    },
+    "17": {
+      "name": "Timex Easy Reader Watch",
+      "shortDesc": "Classic casual watch featuring clear Arabic numerals and INDIGLO backlight.",
+      "description": "The Timex Easy Reader offers effortless readability and classic everyday style. Equipped with a genuine leather strap and reliable quartz movement, it is a dependable companion for any occasion."
+    },
+    "18": {
+      "name": "Rolex Watch",
+      "shortDesc": "Exquisite luxury wrist watch with sophisticated dial detailing.",
+      "description": "Blending elegance with enduring performance, this luxury watch makes a bold statement on the wrist. Built with scratch-resistant crystal and high-grade materials for lasting durability."
+    },
+    "19": {
+      "name": "Apple Watch",
+      "shortDesc": "Advanced fitness tracking, ECG monitoring, and seamless notifications on your wrist.",
+      "description": "Stay connected, active, and healthy with the Apple Watch. Featuring comprehensive workout metrics, blood oxygen sensing, and a brilliant always-on retina display."
+    },
+    "20": {
+      "name": "Beat Studio Wireless",
+      "shortDesc": "Active Noise Cancelling (ANC) headphones with premium acoustics and deep bass.",
+      "description": "Immerse yourself in pure sound with Beat Studio Wireless headphones. Featuring real-time audio calibration, long battery life, and plush over-ear cushions for all-day listening comfort."
+    },
+    "22": {
+      "name": "Beat EP Headphones",
+      "shortDesc": "Battery-free sleek on-ear headphones delivering masterfully tuned sound.",
+      "description": "The Beat EP headphones offer battery-free lightweight listening with robust durability. Engineered with stainless steel reinforcement and crisp acoustic performance for music lovers."
+    }
+  }
+},
+"cart": {
+  "title": "Cart",
+  "eyebrow": "YOUR SHOPPING BAG",
+  "heading": "Shopping Cart",
+  "description": "Review your selected products before proceeding to checkout.",
+  "emptyTitle": "Your cart is empty",
+  "emptyDescription": "Looks like you haven't added anything to your cart yet. Explore our collection and find something you love.",
+  "startShopping": "Start Shopping",
+  "yourItems": "Your Items",
+  "itemsInCart_one": "{{count}} product in your cart",
+  "itemsInCart_other": "{{count}} products in your cart",
+  "product": "Product",
+  "name": "Name",
+  "price": "Price",
+  "quantity": "Qty",
+  "action": "Action",
+  "orderSummary": "Order Summary",
+  "subtotal": "Subtotal",
+  "shipping": "Shipping",
+  "calculatedAtCheckout": "Calculated at checkout",
+  "total": "Total",
+  "taxesNote": "Taxes and shipping costs will be calculated during checkout.",
+  "proceedToCheckout": "Proceed to Checkout",
+  "continueShopping": "Continue Shopping",
+  "secureCheckout": "Secure checkout experience",
+  "deleteProduct": "Delete {{name}} from cart"
+},
+"checkout": {
+  "title": "Checkout",
+  "eyebrow": "COMPLETE YOUR PURCHASE",
+  "heading": "Checkout",
+  "description": "You're just one step away from completing your order.",
+  "emptyTitle": "Your cart is empty",
+  "emptyDescription": "You need to add products to your cart before proceeding to checkout.",
+  "backToShop": "Back to Shop",
+  "billingTitle": "Billing Information",
+  "billingDescription": "Please enter your details for delivery.",
+  "formNote": "Please make sure your information is correct.",
+  "orderSummary": "Order Summary",
+  "items": "Items",
+  "subtotal": "Subtotal",
+  "shipping": "Shipping",
+  "free": "Free",
+  "totalCost": "Total Cost",
+  "summaryNote": "Taxes and shipping costs will be calculated according to your order details.",
+  "placingOrder": "Placing Order...",
+  "placeOrder": "Place Your Order",
+  "secureNote": "Secure checkout experience",
+  "success": "Order placed successfully!",
+  "fields": {
+    "name": {
+      "label": "Full Name",
+      "placeholder": "Enter your full name"
+    },
+    "email": {
+      "label": "Email Address",
+      "placeholder": "Enter your email address"
+    },
+    "phone": {
+      "label": "Phone Number",
+      "placeholder": "Enter your phone number"
+    },
+    "streetAddress": {
+      "label": "Street Address",
+      "placeholder": "Enter your street address"
+    },
+    "postalCode": {
+      "label": "Postal Code",
+      "placeholder": "Enter your postal code"
+    },
+    "country": {
+      "label": "Country",
+      "placeholder": "Enter your country"
+    }
+  },
+  "errors": {
+    "authLoading": "Please wait while we verify your account.",
+    "loginRequired": "Please log in before placing your order.",
+    "emptyCart": "Your shopping cart is empty.",
+    "placeOrder": "Failed to place order. Please try again."
+  }
+    },
+    "productDetails": {
+        "loading": "Loading product...",
+        "notFound": "Product not found!",
+        "notFoundDescription": "The product you're looking for may have been removed or is unavailable.",
+        "backToShop": "Back to Shop",
+        "eyebrow": "Product Details",
+        "reviewsCount_one": "({{count}} review)",
+        "reviewsCount_other": "({{count}} reviews)",
+        "ratingAria": "{{rating}} out of 5 stars",
+        "taxNote": "Tax included where applicable",
+        "features": {
+        "fastShipping": "Fast Shipping",
+        "secureShopping": "Secure Shopping",
+        "easyReturns": "Easy Returns"
+        },
+        "addToCart": "Add to Cart",
+        "addedSuccessfully": "Product added successfully!",
+        "descriptionTab": "Description",
+        "reviewsTab": "Reviews ({{count}})",
+        "productDescription": "Product Description",
+        "customerReviews": "Customer Reviews",
+        "noReviews": "No reviews yet. Be the first to review this product!",
+        "customer": "Customer",
+        "shareExperience": "Share Your Experience",
+        "reviewSubtitle": "Your feedback helps other customers make better decisions.",
+        "yourName": "Your Name",
+        "namePlaceholder": "Enter your name",
+        "yourRating": "Your Rating",
+        "selectRating": "Select your rating",
+        "starsCount": "{{count}} stars",
+        "yourReview": "Your Review",
+        "reviewPlaceholder": "Write your review here...",
+        "submitReview": "Submit Review",
+        "reviewSubmitted": "Review submitted successfully!",
+        "recommendationEyebrow": "You May Also Like",
+        "relatedProducts": "Related Products",
+        "errors": {
+        "loadFailed": "Failed to load product details.",
+        "enterName": "Please enter your name.",
+        "enterReview": "Please enter a review message."
+        }
+    },
+  "privacy": {
+    "label": "YOUR PRIVACY MATTERS",
+    "title": "Privacy Policy",
+    "description": "Your trust matters to us. Learn how we collect, use, and protect your personal information.",
+    "introTitle": "Your Privacy Is Important",
+    "introDescription": "This policy explains how we handle your personal information when you visit or shop through our website.",
+    "lastUpdated": "Last updated: October 31, 2026",
+    "contactTitle": "Need More Information?",
+    "contactDescription": "Our team is here to help with any privacy-related questions.",
+    "contactButton": "Contact Us",
+    "sections": {
+      "information": {
+        "title": "1. Information We Collect",
+        "content": "When you use our website, we may collect personal information such as your name, email address, phone number, shipping address, and account details. We also collect information about your orders and shopping activity."
+      },
+      "usage": {
+        "title": "2. How We Use Your Information",
+        "content": "We use your information to process orders, manage your account, provide customer support, improve our website, communicate important updates, and maintain the security of our services."
+      },
+      "sharing": {
+        "title": "3. Information Sharing",
+        "content": "We do not sell your personal information. We may share necessary information with service providers who help us operate our store, process orders, manage payments, and deliver products."
+      },
+      "security": {
+        "title": "4. Data Security",
+        "content": "We take reasonable measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction. However, no method of internet transmission or electronic storage is completely secure."
+      },
+      "cookies": {
+        "title": "5. Cookies and Website Technologies",
+        "content": "Our website may use cookies and similar technologies to improve your browsing experience, remember preferences, and understand how visitors interact with our website."
+      },
+      "thirdParty": {
+        "title": "6. Third-Party Services",
+        "content": "Our store uses third-party services, including Firebase for authentication and database services and Cloudinary for image hosting. These providers may process information according to their own privacy policies."
+      },
+      "rights": {
+        "title": "7. Your Privacy Rights",
+        "content": "You may request access to, correction of, or deletion of your personal information, subject to applicable legal requirements. You can also contact us with questions about how your information is handled."
+      },
+      "children": {
+        "title": "8. Children's Privacy",
+        "content": "Our website is not intended for children under the age of 13, and we do not knowingly collect personal information from children."
+      },
+      "changes": {
+        "title": "9. Changes to This Policy",
+        "content": "We may update this Privacy Policy from time to time. Any changes will be published on this page along with an updated revision date."
+      },
+      "contact": {
+        "title": "10. Contact Us",
+        "content": "If you have questions or concerns about this Privacy Policy or the way we handle your personal information, please contact our support team."
+      }
+    }
+  },
+  "settings": {
+    "eyebrow": "ACCOUNT PREFERENCES",
+    "title": "Profile Settings",
+    "description": "Manage your personal information and profile picture.",
+    "loading": "Loading settings...",
+    "loginRequired": "Please log in first.",
+    "profilePicture": "Profile Picture",
+    "imageRequirements": "JPG, PNG or WEBP. Maximum size 5 MB.",
+    "changePhoto": "Change Photo",
+    "fullName": "Full Name",
+    "namePlaceholder": "Enter your name",
+    "email": "Email Address",
+    "emailNote": "Email address cannot be changed here.",
+    "saving": "Saving Changes...",
+    "saveChanges": "Save Changes",
+    "success": "Profile updated successfully!",
+    "errors": {
+      "invalidImage": "Please select a JPG, PNG or WEBP image.",
+      "imageTooLarge": "Image size must not exceed 5 MB.",
+      "cloudinaryConfig": "Cloudinary configuration is missing.",
+      "uploadFailed": "Failed to upload profile image.",
+      "loginRequired": "Please log in to update your profile.",
+      "emptyName": "Name cannot be empty.",
+      "updateFailed": "Failed to update profile."
+    }
+  },
+  "users": {
+    "title": "Users",
+    "heading": "Users Management",
+    "description": "View and manage registered store accounts.",
+    "totalUsers": "Total Users",
+    "avatar": "Avatar",
+    "username": "Username",
+    "email": "Email",
+    "action": "Action",
+    "loading": "Loading users...",
+    "noUsers": "No users found.",
+    "profileImage": "User profile image",
+    "notAvailable": "N/A",
+    "deleting": "Deleting...",
+    "delete": "Delete",
+    "confirmDelete": "Are you sure you want to delete this user?",
+    "deleteSuccess": "User deleted successfully!",
+    "errors": {
+      "deleteFailed": "Failed to delete user."
+    }
+  },
+  "clock": {
+    "days": "Days",
+    "hours": "Hours",
+    "minutes": "Minutes",
+    "seconds": "Seconds"
+  },
+   "orders": {
+    "title": "Orders Management",
+    "heading": "Orders Management",
+    "description": "View and manage customer orders.",
+    "totalOrders": "Total Orders",
+    "orderId": "Order ID",
+    "loading": "Loading orders...",
+    "customerInformation": "Customer Information",
+    "orderedProducts": "Ordered Products ({{count}})",
+    "noName": "No name",
+    "noEmail": "No email",
+    "noPhone": "No phone",
+    "noAddress": "No address",
+    "noProducts": "No products found in this order.",
+    "itemsCount_one": "{{count}} Item",
+    "itemsCount_other": "{{count}} Items",
+    "subtotal": "Subtotal",
+    "total": "Total",
+    "updateStatus": "Update Status",
+    "statusUpdated": "Order status updated successfully!",
+    "emptyTitle": "No orders found",
+    "emptyDescription": "There are no orders in this category yet.",
+    "filters": {
+      "all": "All Orders",
+      "pending": "Pending",
+      "confirmed": "Confirmed",
+      "delivered": "Delivered"
+    },
+    "status": {
+      "pending": "Pending",
+      "confirmed": "Confirmed",
+      "delivered": "Delivered"
+    },
+    "errors": {
+      "loadFailed": "Failed to load orders: {{error}}",
+      "updateFailed": "Failed to update order status.",
+      "dateUnavailable": "Date unavailable"
+    }
+  },
+  "dashboard": {
+    "eyebrow": "OVERVIEW",
+    "title": "Dashboard",
+    "welcome": "Welcome back! Here's what's happening with your store.",
+    "totalSales": "Total Sales",
+    "salesDescription": "Confirmed and delivered orders",
+    "orders": "Orders",
+    "ordersDescription": "Total registered orders",
+    "totalProducts": "Total Products",
+    "productsDescription": "Available products",
+    "totalUsers": "Total Users",
+    "usersDescription": "Registered users",
+    "loadError": "Failed to load data"
+  },
+   "allProducts": {
+    "title": "All Products",
+    "eyebrow": "INVENTORY MANAGEMENT",
+    "description": "Manage your inventory, review product details, and keep your store up to date.",
+    "totalProducts": "Total Products",
+    "inventoryTitle": "Product Inventory",
+    "inventoryDescription": "All products currently available in your store.",
+    "inventory": "Inventory",
+    "product": "Product",
+    "category": "Category",
+    "price": "Price",
+    "actions": "Actions",
+    "loading": "Loading products",
+    "loadingDescription": "Please wait while we retrieve your inventory.",
+    "emptyTitle": "No products yet",
+    "emptyDescription": "Your inventory is empty. Add a product to see it listed here.",
+    "productImage": "Product image",
+    "untitled": "Untitled product",
+    "uncategorized": "Uncategorized",
+    "deleting": "Deleting",
+    "delete": "Delete",
+    "cancel": "Cancel",
+    "confirmTitle": "Delete Product?",
+    "confirmMessage": "Are you sure you want to delete",
+    "deleteProduct": "Delete {{name}}",
+    "deleteSuccess": "Product deleted successfully!",
+    "showing": "Showing",
+    "productCount_one": "product",
+    "productCount_other": "products",
+    "inventoryManagement": "Inventory management",
+    "errors": {
+      "deleteFailed": "Failed to delete product. Please try again."
+    }
+  },
+  "addProduct": {
+  "title": "Add Product",
+  "eyebrow": "PRODUCT MANAGEMENT",
+  "heading": "Add New Product",
+  "description": "Enter the product details below to add a new item to your inventory.",
+  "loading": "Uploading image and adding product...",
+  "loadingDescription": "Please wait while we save your product.",
+  "fields": {
+    "title": "Product Title",
+    "shortDescription": "Short Description",
+    "description": "Full Description",
+    "price": "Price (USD)",
+    "category": "Category",
+    "image": "Product Image"
+  },
+  "placeholders": {
+    "title": "e.g. Modern Minimalist Sofa",
+    "shortDescription": "A brief summary of the product",
+    "description": "Describe the product, its features, and details...",
+    "price": "199.00",
+    "category": "Select category"
+  },
+  "upload": {
+    "title": "Choose a product image",
+    "description": "Select an image from your device. Supported formats are listed below."
+  },
+  "cancel": "Cancel",
+  "submit": "Add Product",
+  "securityNote": "Your product details will be saved securely.",
+  "success": "Product successfully added!",
+  "errors": {
+    "addFailed": "Product not added. Please try again."
+  }
+},
+"adminNav": {
+  "title": "Admin Navigation",
+  "dashboard": "Dashboard",
+  "allProducts": "All Products",
+  "addProduct": "Add Product",
+  "users": "Users",
+  "orders": "Orders",
+  "searchPlaceholder": "Search products, users...",
+  "searchLabel": "Search admin dashboard",
+  "notifications": "Notifications",
+  "settings": "Settings",
+  "viewStore": "View Store",
+  "profileSettings": "Profile Settings",
+  "darkMode": "Dark Mode",
+  "lightMode": "Light Mode",
+  "arabic": "العربية",
+  "english": "English",
+  "logout": "Logout",
+  "logoutSuccess": "Logged out successfully!",
+  "profileImage": "Admin profile",
+  "navigation": "Admin navigation",
+  "badge": "Admin",
+  "errors": {
+    "logoutFailed": "Failed to log out. Please try again."
+  }
+},
+"login": {
+  "validation": {
+      "emailInvalid": "Please enter a valid email address",
+      "passwordRequired": "Password is required"
+    },
+  "title": "Login",
+  "eyebrow": "WELCOME BACK",
+  "introTitle": "Good to see",
+  "introSubtitle": "you",
+  "again": "again.",
+  "introDescription": "Sign in to your account and continue discovering products you'll love. Your next favorite find is just a few clicks away.",
+  "tagline": "Simple shopping. Timeless style.",
+  "welcome": "Welcome back",
+  "formDescription": "Enter your details to access your account.",
+  "fields": {
+    "email": "Email address",
+    "password": "Password"
+  },
+  "placeholders": {
+    "email": "Enter your email",
+    "password": "Enter your password"
+  },
+  "showPassword": "Show password",
+  "hidePassword": "Hide password",
+  "loggingIn": "Logging in...",
+  "submit": "Login",
+  "noAccount": "Don't have an account?",
+  "createAccount": "Create an account",
+  "success": "Successfully logged in!",
+  "errors": {
+    "failed": "Failed to log in. Please check your credentials and try again."
+  }
+},
+"signup": {
+  "validation": {
+      "usernameMin": "Username must be at least 3 characters",
+      "usernameMax": "Username is too long (max 50)",
+      "emailInvalid": "Please enter a valid email address",
+      "passwordMin": "Password must be at least 6 characters",
+      "passwordMax": "Password is too long",
+      "imageRequired": "Profile image is required",
+      "imageSize": "Image must be 5 MB or smaller",
+      "imageType": "Only JPG, PNG or WEBP images are allowed"
+    },
+  "title": "Sign Up",
+  "eyebrow": "JOIN OUR COMMUNITY",
+  "introTitle": "Your style.",
+  "introSubtitle": "Your",
+  "story": "story.",
+  "introDescription": "Create your account and enjoy a more personal shopping experience. Discover products, save your favorites, and make every purchase count.",
+  "tagline": "Discover. Express. Enjoy.",
+  "heading": "Create your account",
+  "formDescription": "Fill in your details to get started.",
+  "fields": {
+    "username": "Username",
+    "email": "Email address",
+    "password": "Password",
+    "profilePicture": "Profile picture"
+  },
+  "placeholders": {
+    "username": "Enter your username",
+    "email": "Enter your email",
+    "password": "Create a password"
+  },
+  "showPassword": "Show password",
+  "hidePassword": "Hide password",
+  "changeProfilePicture": "Change profile picture",
+  "chooseProfilePicture": "Choose a profile picture",
+  "imageFormats": "JPG, PNG or WEBP",
+  "creatingAccount": "Creating account...",
+  "submit": "Create an account",
+  "haveAccount": "Already have an account?",
+  "login": "Login",
+  "success": "Account created successfully!",
+  "errors": {
+    "failed": "Something went wrong. Please try again.",
+    "imageUploadFailed": "Failed to upload profile image. Please try again."
+  }
+},
+  "footer": {
+  "brand": "Ecom-Nest",
+  "description": "Discover a better way to shop. Explore quality products, timeless style, and everyday essentials — all in one place.",
+  "tagline": "SHOP WITH CONFIDENCE",
+  "topCategories": "Top Categories",
+  "mobilePhones": "Mobile Phones",
+  "modernSofa": "Modern Sofa",
+  "armChair": "Arm Chair",
+  "smartWatches": "Smart Watches",
+  "explore": "Explore",
+  "shop": "Shop",
+  "cart": "Cart",
+  "checkout": "Checkout",
+  "privacyPolicy": "Privacy Policy",
+  "contact": "Get in Touch",
+  "location": "Syria, Damascus",
+  "copyright": "All rights reserved.",
+  "designedBy": "Designed & developed by",
+  "owner":"Mohammad Moaaz Albari"
+}
+}

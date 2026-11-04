@@ -6,18 +6,15 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  createUserWithEmailAndPassword,
-  updateProfile,
-} from "firebase/auth";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { setDoc, doc } from "firebase/firestore";
 import { toast } from "react-toastify";
 import { auth, db } from "@/firebase.config";
 import {
-  signupSchema,
+  createSignupSchema,
   type SignupFormValues,
 } from "@/lib/validations/signup.schema";
-
+import { useTranslation } from "react-i18next";
 import "@/styles/signup.css";
 
 /**
@@ -33,10 +30,10 @@ import "@/styles/signup.css";
  */
 export default function Signup(): JSX.Element {
   const router = useRouter();
-
+  const { t } = useTranslation();
+  const signupSchema = createSignupSchema(t);
   const [loading, setLoading] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState<boolean>(false);
-
   const {
     register,
     handleSubmit,
@@ -46,7 +43,6 @@ export default function Signup(): JSX.Element {
     resolver: zodResolver(signupSchema),
     mode: "onChange",
   });
-
   const selectedFile = watch("file")?.[0];
 
   /**
@@ -64,95 +60,76 @@ export default function Signup(): JSX.Element {
 
     try {
       const { username, email, password, file } = data;
-const avatar = file[0];
+      const avatar = file[0];
 
-// Upload profile image to Cloudinary
-const cloudinaryFormData = new FormData();
+      // Upload profile image to Cloudinary
+      const cloudinaryFormData = new FormData();
+      cloudinaryFormData.append("file", avatar);
+      cloudinaryFormData.append(
+        "upload_preset",
+        process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET!,
+      );
+      const cloudinaryResponse = await fetch(
+        `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
+        {
+          method: "POST",
+          body: cloudinaryFormData,
+        },
+      );
 
-cloudinaryFormData.append("file", avatar);
-cloudinaryFormData.append(
-  "upload_preset",
-  process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET!
-);
+      if (!cloudinaryResponse.ok) {
+        throw new Error(t("signup.errors.imageUploadFailed"));
+      }
 
-const cloudinaryResponse = await fetch(
-  `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
-  {
-    method: "POST",
-    body: cloudinaryFormData,
-  }
-);
-
-if (!cloudinaryResponse.ok) {
-  throw new Error("Failed to upload profile image");
-}
-
-const cloudinaryData = await cloudinaryResponse.json();
-const downloadURL: string = cloudinaryData.secure_url;
-
-// Create Firebase account
-const userCredential = await createUserWithEmailAndPassword(
-  auth,
-  email,
-  password
-);
-
-const user = userCredential.user;
-
-// Update Firebase Auth profile
-await updateProfile(user, {
-  displayName: username,
-  photoURL: downloadURL,
-});
-
-// Store user data in Firestore
-await setDoc(doc(db, "users", user.uid), {
-  uid: user.uid,
-  displayName: username,
-  email,
-  photoURL: downloadURL,
-});
-
-      toast.success("Account created successfully!");
+      const cloudinaryData = await cloudinaryResponse.json();
+      const downloadURL: string = cloudinaryData.secure_url;
+      // Create Firebase account
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password,
+      );
+      const user = userCredential.user;
+      // Update Firebase Auth profile
+      await updateProfile(user, {
+        displayName: username,
+        photoURL: downloadURL,
+      });
+      // Store user data in Firestore
+      await setDoc(doc(db, "users", user.uid), {
+        uid: user.uid,
+        displayName: username,
+        email,
+        photoURL: downloadURL,
+      });
+      toast.success(t("signup.success"));
       router.push("/login");
     } catch (error: unknown) {
-      toast.error(
-        error instanceof Error
-          ? error.message
-          : "Something went wrong. Please try again."
-      );
+      console.error("Signup failed:", error);
+      toast.error(t("signup.errors.failed"));
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <Helmet title="Sign Up">
+    <Helmet title={t("signup.title")}>
       <section className="auth__section signup__section">
         <div className="container">
           <div className="auth__layout signup__layout">
-
             {/* Signup introduction */}
             <div className="auth__intro signup__intro">
-              <span className="auth__eyebrow">
-                JOIN OUR COMMUNITY
-              </span>
-
+              <span className="auth__eyebrow">{t("signup.eyebrow")}</span>
               <h1>
-                Your style.
+                {t("signup.introTitle")}
                 <br />
-                Your <span>story.</span>
+                {t("signup.introSubtitle")} <span>{t("signup.story")}</span>
               </h1>
-
-              <p>
-                Create your account and enjoy a more personal
-                shopping experience. Discover products, save
-                your favorites, and make every purchase count.
-              </p>
+              <p>{t("signup.introDescription")}</p>
 
               <div className="auth__intro-footer">
                 <span className="auth__intro-line" />
-                <span>Discover. Express. Enjoy.</span>
+                <span>{t("signup.tagline")}</span>
               </div>
             </div>
 
@@ -162,10 +139,8 @@ await setDoc(doc(db, "users", user.uid), {
                 <span className="auth__card-icon">
                   <i className="ri-user-add-line" />
                 </span>
-
-                <h2>Create your account</h2>
-
-                <p>Fill in your details to get started.</p>
+                <h2>{t("signup.heading")}</h2>
+                <p>{t("signup.formDescription")}</p>
               </div>
 
               <form
@@ -176,26 +151,22 @@ await setDoc(doc(db, "users", user.uid), {
                 {/* Username */}
                 <div className="auth__field">
                   <label htmlFor="signup-username">
-                    Username
+                    {t("signup.fields.username")}
                   </label>
-
                   <div
                     className={`auth__input-wrapper ${
                       errors.username ? "has-error" : ""
                     }`}
                   >
                     <i className="ri-user-line auth__input-icon" />
-
                     <input
                       id="signup-username"
                       type="text"
-                      placeholder="Enter your username"
+                      placeholder={t("signup.placeholders.username")}
                       autoComplete="username"
                       aria-invalid={errors.username ? "true" : "false"}
                       aria-describedby={
-                        errors.username
-                          ? "signup-username-error"
-                          : undefined
+                        errors.username ? "signup-username-error" : undefined
                       }
                       {...register("username")}
                     />
@@ -215,7 +186,7 @@ await setDoc(doc(db, "users", user.uid), {
                 {/* Email */}
                 <div className="auth__field">
                   <label htmlFor="signup-email">
-                    Email address
+                    {t("signup.fields.email")}
                   </label>
 
                   <div
@@ -228,7 +199,7 @@ await setDoc(doc(db, "users", user.uid), {
                     <input
                       id="signup-email"
                       type="email"
-                      placeholder="Enter your email"
+                      placeholder={t("signup.placeholders.email")}
                       autoComplete="email"
                       aria-invalid={errors.email ? "true" : "false"}
                       aria-describedby={
@@ -252,7 +223,7 @@ await setDoc(doc(db, "users", user.uid), {
                 {/* Password */}
                 <div className="auth__field">
                   <label htmlFor="signup-password">
-                    Password
+                    {t("signup.fields.password")}
                   </label>
 
                   <div
@@ -265,13 +236,11 @@ await setDoc(doc(db, "users", user.uid), {
                     <input
                       id="signup-password"
                       type={showPassword ? "text" : "password"}
-                      placeholder="Create a password"
+                      placeholder={t("signup.placeholders.password")}
                       autoComplete="new-password"
                       aria-invalid={errors.password ? "true" : "false"}
                       aria-describedby={
-                        errors.password
-                          ? "signup-password-error"
-                          : undefined
+                        errors.password ? "signup-password-error" : undefined
                       }
                       {...register("password")}
                     />
@@ -279,18 +248,16 @@ await setDoc(doc(db, "users", user.uid), {
                     <button
                       type="button"
                       className="auth__password-toggle"
-                      onClick={() =>
-                        setShowPassword((previous) => !previous)
-                      }
+                      onClick={() => setShowPassword((previous) => !previous)}
                       aria-label={
-                        showPassword ? "Hide password" : "Show password"
+                        showPassword
+                          ? t("signup.hidePassword")
+                          : t("signup.showPassword")
                       }
                     >
                       <i
                         className={
-                          showPassword
-                            ? "ri-eye-off-line"
-                            : "ri-eye-line"
+                          showPassword ? "ri-eye-off-line" : "ri-eye-line"
                         }
                       />
                     </button>
@@ -310,7 +277,7 @@ await setDoc(doc(db, "users", user.uid), {
                 {/* Profile Image */}
                 <div className="auth__field signup__upload-field">
                   <label htmlFor="signup-avatar">
-                    Profile picture
+                    {t("signup.fields.profilePicture")}
                   </label>
 
                   <div
@@ -325,14 +292,14 @@ await setDoc(doc(db, "users", user.uid), {
                     <div className="signup__upload-content">
                       <label htmlFor="signup-avatar">
                         {selectedFile
-                          ? "Change profile picture"
-                          : "Choose a profile picture"}
+                          ? t("signup.changeProfilePicture")
+                          : t("signup.chooseProfilePicture")}
                       </label>
 
                       <span>
                         {selectedFile
                           ? selectedFile.name
-                          : "JPG, PNG or WEBP"}
+                          : t("signup.imageFormats")}
                       </span>
                     </div>
 
@@ -362,22 +329,15 @@ await setDoc(doc(db, "users", user.uid), {
                 </div>
 
                 {/* Submit */}
-                <button
-                  type="submit"
-                  className="auth__btn"
-                  disabled={loading}
-                >
+                <button type="submit" className="auth__btn" disabled={loading}>
                   {loading ? (
                     <>
-                      <span
-                        className="auth__spinner"
-                        aria-hidden="true"
-                      />
-                      Creating account...
+                      <span className="auth__spinner" aria-hidden="true" />
+                      {t("signup.creatingAccount")}
                     </>
                   ) : (
                     <>
-                      Create an account
+                      {t("signup.submit")}
                       <i className="ri-arrow-right-line" />
                     </>
                   )}
@@ -385,12 +345,11 @@ await setDoc(doc(db, "users", user.uid), {
 
                 {/* Login link */}
                 <p className="auth__switch">
-                  Already have an account?
-                  <Link href="/login">Login</Link>
+                  {t("signup.haveAccount")}
+                  <Link href="/login">{t("signup.login")}</Link>
                 </p>
               </form>
             </div>
-
           </div>
         </div>
       </section>

@@ -35,7 +35,7 @@ export default function useGetData(collectionName: string) {
           snapshot.docs.map((document) => ({
             ...document.data(),
             id: document.id,
-          }))
+          })),
         );
         setError(null);
         setLoading(false);
@@ -43,12 +43,12 @@ export default function useGetData(collectionName: string) {
       (snapshotError) => {
         console.error(
           `Failed to fetch "${collectionName}" collection:`,
-          snapshotError
+          snapshotError,
         );
 
         setError(snapshotError.message);
         setLoading(false);
-      }
+      },
     );
 
     return () => unsubscribe();

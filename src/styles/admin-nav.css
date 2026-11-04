@@ -1,4 +1,3 @@
-
 /* ========================================
    ADMIN NAVIGATION
    Modern Luxury - Slate & Powder Blue
@@ -84,9 +83,9 @@
 }
 
 .admin__search-box input:focus {
-  border-color: #a8c3d8;
+  border-color: var(--accent-color);
   background: rgba(255, 255, 255, 0.11);
-  box-shadow: 0 0 0 3px rgba(168, 195, 216, 0.12);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-color) 20%, transparent);
 }
 
 .admin__search-box .search__icon {
@@ -183,9 +182,9 @@
 
 .admin__menu {
   width: 100%;
-  background: #ffffff;
-  border-bottom: 1px solid #e2e8f0;
-  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.035);
+  background: var(--surface-color);
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
 }
 
 .admin__menu-list {
@@ -209,7 +208,7 @@
   gap: 9px;
   padding: 11px 17px;
   border-radius: 6px;
-  color: #64748b;
+  color: var(--small-text-color);
   text-decoration: none;
   font-size: 0.88rem;
   font-weight: 500;
@@ -221,14 +220,14 @@
 }
 
 .admin__menu-link:hover {
-  background: #f1f5f9;
-  color: #334155;
+  background: var(--surface-secondary);
+  color: var(--heading-text-color);
 }
 
 /* Active Link */
 .admin__menu-link.active__admin-menu {
-  background: #eaf1f7;
-  color: #334155;
+  background: var(--card-bg-02);
+  color: var(--heading-text-color);
   font-weight: 700;
 }
 
@@ -239,7 +238,7 @@
   left: 17px;
   right: 17px;
   height: 2px;
-  background: #8fa9c0;
+  background: var(--accent-color);
   border-radius: 2px;
 }
 
@@ -251,8 +250,8 @@
   padding: 9px 16px;
   border: 1px solid #dc3545;
   border-radius: 8px;
-  background: transparent;
-  color: #dc3545;
+  border-color: var(--error-color);
+  color: var(--error-color);
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
@@ -260,7 +259,7 @@
 }
 
 .admin__logout-button:hover {
-  background: #dc3545;
+  background: var(--error-color);
   color: #fff;
 }
 
@@ -286,8 +285,8 @@
   padding: 9px 16px;
   border: 1px solid #198754;
   border-radius: 8px;
-  background: transparent;
-  color: #198754;
+  border-color: var(--success-color);
+  color: var(--success-color);
   font-size: 14px;
   font-weight: 600;
   text-decoration: none;
@@ -295,7 +294,7 @@
 }
 
 .admin__store-button:hover {
-  background: #198754;
+  background: var(--success-color);
   color: #fff;
 }
 
@@ -313,16 +312,14 @@
   }
 }
 
-
-
 /* Settings Dropdown */
 .admin__settings-wrapper {
   position: relative;
 }
 
 .admin__icon-button.settings-active {
-  background: #f1f5f9;
-  color: #2563eb;
+  background: var(--surface-secondary);
+  color: var(--primary-color);
 }
 
 .admin__settings-dropdown {
@@ -331,10 +328,10 @@
   right: 0;
   min-width: 190px;
   padding: 7px;
-  background: #fff;
-  border: 1px solid #e5e7eb;
+  background: var(--surface-color);
+  border: 1px solid var(--border-color);
   border-radius: 10px;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+  box-shadow: var(--shadow-lg);
   z-index: 1002;
   animation: dropdownFade 0.2s ease;
 }
@@ -348,36 +345,58 @@
   border: none;
   border-radius: 7px;
   background: transparent;
-  color: #334155;
+  color: var(--text-color);
+  font-family: inherit;
   font-size: 14px;
   font-weight: 500;
+  text-align: left;
   text-decoration: none;
   cursor: pointer;
-  transition: background 0.2s ease;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+  appearance: none;
+}
+
+.admin__dropdown-item span {
+  color: inherit;
 }
 
 .admin__dropdown-item i {
   font-size: 18px;
+  flex-shrink: 0;
 }
 
 .admin__dropdown-item:hover {
-  background: #f1f5f9;
+  background: var(--surface-secondary);
+  color: var(--heading-text-color);
 }
 
 .admin__dropdown-item:first-child i {
-  color: #198754;
+  color: var(--success-color);
 }
 
-.admin__dropdown-item.logout-item {
-  color: #dc3545;
+/* Logout */
+.admin__settings-dropdown .admin__dropdown-item.logout-item,
+.admin__settings-dropdown .admin__dropdown-item.logout-item span,
+.admin__settings-dropdown .admin__dropdown-item.logout-item i {
+  color: var(--error-color);
 }
 
-.admin__dropdown-item.logout-item i {
-  color: #dc3545;
+.admin__settings-dropdown .admin__dropdown-item.logout-item:hover {
+  background: color-mix(in srgb, var(--error-color) 10%, var(--surface-color));
+  color: var(--error-color);
 }
 
-.admin__dropdown-item.logout-item:hover {
-  background: #fff1f2;
+.admin__settings-dropdown {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.admin__dropdown-item:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
 }
 
 .admin__dropdown-overlay {

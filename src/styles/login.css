@@ -1,4 +1,3 @@
-
 /* =========================================
    Authentication Section
 ========================================= */
@@ -25,6 +24,14 @@
   grid-template-columns: 1fr 440px;
   align-items: center;
   gap: 90px;
+}
+
+:root[data-theme="dark"] .auth__btn {
+  color: var(--primary-dark);
+}
+
+:root[data-theme="dark"] .auth__btn:hover:not(:disabled) {
+  color: var(--primary-dark);
 }
 
 /* =========================================
@@ -90,7 +97,7 @@
   background: var(--surface-color, #ffffff);
   border: 1px solid var(--border-color, #e2e8f0);
   border-radius: 14px;
-  box-shadow: 0 15px 50px rgba(30, 41, 59, 0.07);
+  box-shadow: var(--shadow-lg);
 }
 
 .auth__card-header {
@@ -149,13 +156,15 @@
   min-height: 50px;
   border: 1px solid var(--border-color, #e2e8f0);
   border-radius: 7px;
-  background: #fff;
-  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  background: var(--surface-color, #fff);
+  transition:
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
 .auth__input-wrapper:focus-within {
   border-color: var(--primary-color, #475569);
-  box-shadow: 0 0 0 3px rgba(71, 85, 105, 0.1);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-color) 25%, transparent);
 }
 
 .auth__input-wrapper.has-error {
@@ -256,7 +265,7 @@
 }
 
 .auth__btn:focus-visible {
-  outline: 3px solid rgba(71, 85, 105, 0.25);
+  outline: 3px solid var(--accent-color);
   outline-offset: 3px;
 }
 

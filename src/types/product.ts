@@ -24,3 +24,21 @@ export interface Product {
   reviews: Review[];
   avgRating: number;
 }
+
+export interface ProductCardProps {
+  item: Product;
+}
+
+export interface ProductsListProps {
+  data: Product[];
+}
+
+/** Product data stored in Firestore (without the image URL). */
+export interface NewProduct {
+  productName: string;
+  shortDesc: string;
+  description: string;
+  category: string;
+  price: string;
+}
+

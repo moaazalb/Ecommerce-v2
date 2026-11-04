@@ -1,12 +1,5 @@
-
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import type { CartItem } from "@/types/cart";
-
-interface CartState {
-  cartItems: CartItem[];
-  totalAmount: number;
-  totalQuantity: number;
-}
+import type { CartItem, CartState } from "@/types/cart";
 
 const initialState: CartState = {
   cartItems: [],
@@ -30,7 +23,7 @@ const cartSlice = createSlice({
     addItem(state, action: PayloadAction<Omit<CartItem, "quantity">>) {
       const newItem = action.payload;
       const existingItem = state.cartItems.find(
-        (item) => item.id === newItem.id
+        (item) => item.id === newItem.id,
       );
 
       state.totalQuantity++;
@@ -46,7 +39,7 @@ const cartSlice = createSlice({
 
       state.totalAmount = state.cartItems.reduce(
         (total, item) => total + Number(item.price) * Number(item.quantity),
-        0
+        0,
       );
     },
 
@@ -67,7 +60,7 @@ const cartSlice = createSlice({
 
       state.totalAmount = state.cartItems.reduce(
         (total, item) => total + Number(item.price) * Number(item.quantity),
-        0
+        0,
       );
     },
 
@@ -83,15 +76,13 @@ const cartSlice = createSlice({
       state.cartItems = action.payload;
       state.totalQuantity = action.payload.reduce(
         (total, item) => total + Number(item.quantity),
-        0
+        0,
       );
       state.totalAmount = action.payload.reduce(
-        (total, item) =>
-          total + Number(item.price) * Number(item.quantity),
-        0
+        (total, item) => total + Number(item.price) * Number(item.quantity),
+        0,
       );
     },
-    
 
     /**
      * Clears all items and resets the shopping cart totals.

@@ -1,17 +1,10 @@
 "use client";
 
 import { useState, useEffect, JSX } from "react";
+import { useTranslation } from "react-i18next";
+import { EMPTY_TIME, TARGET_DATE, TimeLeft } from "@/types/clock";
 import "@/styles/clock.css";
 
-interface TimeLeft {
-  days: number;
-  hours: number;
-  minutes: number;
-  seconds: number;
-}
-
-const TARGET_DATE = "Dec 31, 2026";
-const EMPTY_TIME: TimeLeft = { days: 0, hours: 0, minutes: 0, seconds: 0 };
 
 /**
  * Clock component displaying a countdown timer to a target date.
@@ -19,6 +12,7 @@ const EMPTY_TIME: TimeLeft = { days: 0, hours: 0, minutes: 0, seconds: 0 };
  * @returns {JSX.Element} The rendered Clock component.
  */
 export default function Clock(): JSX.Element {
+  const { t } = useTranslation();
   const [timeLeft, setTimeLeft] = useState<TimeLeft>(EMPTY_TIME);
 
   useEffect(() => {
@@ -35,7 +29,9 @@ export default function Clock(): JSX.Element {
 
       setTimeLeft({
         days: Math.floor(difference / (1000 * 60 * 60 * 24)),
-        hours: Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+        hours: Math.floor(
+          (difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
+        ),
         minutes: Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60)),
         seconds: Math.floor((difference % (1000 * 60)) / 1000),
       });
@@ -45,10 +41,10 @@ export default function Clock(): JSX.Element {
   }, []);
 
   const units: { label: string; value: number }[] = [
-    { label: "Days", value: timeLeft.days },
-    { label: "Hours", value: timeLeft.hours },
-    { label: "Minutes", value: timeLeft.minutes },
-    { label: "Seconds", value: timeLeft.seconds },
+    { label: t("clock.days"), value: timeLeft.days },
+    { label: t("clock.hours"), value: timeLeft.hours },
+    { label: t("clock.minutes"), value: timeLeft.minutes },
+    { label: t("clock.seconds"), value: timeLeft.seconds },
   ];
 
   return (
@@ -59,7 +55,9 @@ export default function Clock(): JSX.Element {
             <h1 className="text-white fs-3 mb-2">{unit.value}</h1>
             <h5 className="text-white fs-6">{unit.label}</h5>
           </div>
-          {index < units.length - 1 && <span className="text-white fs-3">:</span>}
+          {index < units.length - 1 && (
+            <span className="text-white fs-3">:</span>
+          )}
         </div>
       ))}
     </div>

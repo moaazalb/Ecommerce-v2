@@ -2,7 +2,8 @@
 .dashboard {
   min-height: 100vh;
   padding: 30px 0 50px;
-  background: #f8fafc;
+  background: var(--body-bg);
+  color: var(--text-color);
 }
 
 /* Dashboard Header */
@@ -15,7 +16,7 @@
 
 .dashboard__eyebrow {
   display: inline-block;
-  color: #94a3b8;
+  color: var(--muted-color);
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 1.5px;
@@ -23,14 +24,14 @@
 }
 
 .dashboard__header h2 {
-  color: #1e293b;
+  color: var(--heading-text-color);
   font-size: 1.8rem;
   font-weight: 700;
   margin-bottom: 8px;
 }
 
 .dashboard__header p {
-  color: #64748b;
+  color: var(--small-text-color);
   font-size: 0.9rem;
   margin: 0;
 }
@@ -40,16 +41,19 @@
   height: 100%;
   min-height: 175px;
   padding: 22px;
-  background: #ffffff;
-  border: 1px solid #e8edf3;
+  background: var(--surface-color);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
   border-radius: 12px;
-  box-shadow: 0 3px 12px rgba(15, 23, 42, 0.03);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  box-shadow: var(--shadow-md);
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
 .dashboard__card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.07);
+  box-shadow: var(--shadow-lg);
 }
 
 .dashboard__card-top {
@@ -71,13 +75,13 @@
 }
 
 .dashboard__card-label {
-  color: #64748b;
+  color: var(--small-text-color);
   font-size: 0.85rem;
   font-weight: 600;
 }
 
 .dashboard__card-bottom h3 {
-  color: #1e293b;
+  color: var(--heading-text-color);
   font-size: 2rem;
   font-weight: 700;
   margin-bottom: 5px;
@@ -85,30 +89,34 @@
 }
 
 .dashboard__card-bottom p {
-  color: #94a3b8;
+  color: var(--muted-color);
   font-size: 0.8rem;
   margin: 0;
 }
 
 /* Card Variations */
 .revenue__box .dashboard__card-icon {
-  color: #16a36a;
-  background: #e8f7ef;
+  color: var(--success-color);
+  background: color-mix(
+    in srgb,
+    var(--success-color) 12%,
+    var(--surface-color)
+  );
 }
 
 .order__box .dashboard__card-icon {
   color: #6478d3;
-  background: #eef0ff;
+  background: color-mix(in srgb, #6478d3 12%, var(--surface-color));
 }
 
 .products__box .dashboard__card-icon {
   color: #d69a36;
-  background: #fff6e5;
+  background: color-mix(in srgb, #d69a36 12%, var(--surface-color));
 }
 
 .users__box .dashboard__card-icon {
-  color: #dc6b6b;
-  background: #fff0f0;
+  color: var(--error-color);
+  background: color-mix(in srgb, var(--error-color) 12%, var(--surface-color));
 }
 
 /* Tablet */

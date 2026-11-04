@@ -1,27 +1,11 @@
 import { type JSX } from "react";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
+import { TOP_CATEGORIES, USEFUL_LINKS } from "@/lib/data/footer";
 import "@/styles/footer.css";
 
-interface FooterLink {
-  path: string;
-  display: string;
-}
-
-const TOP_CATEGORIES: FooterLink[] = [
-  { path: "/shop?category=mobile", display: "Mobile Phones" },
-  { path: "/shop?category=sofa", display: "Modern Sofa" },
-  { path: "/shop?category=chair", display: "Arm Chair" },
-  { path: "/shop?category=watch", display: "Smart Watches" },
-];
-
-const USEFUL_LINKS: FooterLink[] = [
-  { path: "/shop", display: "Shop" },
-  { path: "/cart", display: "Cart" },
-  { path: "/checkout", display: "CheckOut" },
-  { path: "/privacy", display: "Privacy Policy" },
-];
-
 export default function Footer(): JSX.Element {
+  const { t } = useTranslation();
   const year = new Date().getFullYear();
 
   return (
@@ -29,7 +13,6 @@ export default function Footer(): JSX.Element {
       <div className="container">
         <div className="footer__main">
           <div className="row g-4 g-lg-5">
-
             {/* Brand */}
             <div className="col-lg-4 col-md-6">
               <div className="footer__brand">
@@ -37,17 +20,14 @@ export default function Footer(): JSX.Element {
                   <span className="footer__logo-mark">
                     <i className="ri-shopping-bag-3-line" />
                   </span>
-                  <span>ECOMMERCE</span>
+                  <span>{t("footer.brand")}</span>
                 </Link>
 
-                <p className="footer__text">
-                  Discover a better way to shop. Explore quality products,
-                  timeless style, and everyday essentials — all in one place.
-                </p>
+                <p className="footer__text">{t("footer.description")}</p>
 
                 <div className="footer__brand-caption">
                   <span className="footer__caption-line" />
-                  <span>SHOP WITH CONFIDENCE</span>
+                  <span>{t("footer.contact")}</span>
                 </div>
               </div>
             </div>
@@ -55,14 +35,13 @@ export default function Footer(): JSX.Element {
             {/* Categories */}
             <div className="col-lg-3 col-md-6">
               <div className="footer__quick-links">
-                <h2 className="footer__heading">Top Categories</h2>
-
+                <h2 className="footer__heading">{t("footer.topCategories")}</h2>
                 <ul>
                   {TOP_CATEGORIES.map((item) => (
                     <li key={item.path}>
                       <Link href={item.path}>
                         <i className="ri-arrow-right-s-line" />
-                        {item.display}
+                        {t(item.display)}
                       </Link>
                     </li>
                   ))}
@@ -73,14 +52,13 @@ export default function Footer(): JSX.Element {
             {/* Useful Links */}
             <div className="col-lg-2 col-md-6">
               <div className="footer__quick-links">
-                <h2 className="footer__heading">Explore</h2>
-
+                <h2 className="footer__heading">{t("footer.explore")}</h2>
                 <ul>
                   {USEFUL_LINKS.map((item) => (
                     <li key={item.path}>
                       <Link href={item.path}>
                         <i className="ri-arrow-right-s-line" />
-                        {item.display}
+                        {t(item.display)}
                       </Link>
                     </li>
                   ))}
@@ -91,23 +69,21 @@ export default function Footer(): JSX.Element {
             {/* Contact */}
             <div className="col-lg-3 col-md-6">
               <div className="footer__quick-links">
-                <h2 className="footer__heading">Get in Touch</h2>
+                <h2 className="footer__heading">{t("footer.contact")}</h2>
 
                 <ul className="footer__contact">
                   <li>
                     <span className="footer__contact-icon">
                       <i className="ri-map-pin-line" />
                     </span>
-                    <span>Syria, Damascus</span>
+                    <span>{t("footer.location")}</span>
                   </li>
 
                   <li>
                     <span className="footer__contact-icon">
                       <i className="ri-phone-line" />
                     </span>
-                    <a href="tel:+963936862796">
-                      +963 936862796
-                    </a>
+                    <a href="tel:+963936862796">+963 936862796</a>
                   </li>
 
                   <li>
@@ -121,18 +97,17 @@ export default function Footer(): JSX.Element {
                 </ul>
               </div>
             </div>
-
           </div>
         </div>
 
         {/* Bottom Bar */}
         <div className="footer__bottom">
           <p className="footer__copyright">
-            © {year} <span>ECOMMERCE</span>. All rights reserved.
+            © {year} <span>{t("footer.brand")}</span> {t("footer.copyright")}
           </p>
 
           <p className="footer__made">
-            Designed & developed by <span>Moaaz Albari</span>
+            {t("footer.designedBy")} <span>{t("footer.owner")}</span>
           </p>
         </div>
       </div>

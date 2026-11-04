@@ -1,14 +1,13 @@
 "use client";
 
-import React, { JSX } from "react";
+import { JSX } from "react";
 import { usePathname } from "next/navigation";
 import Header from "@/components/header/header";
 import Footer from "@/components/footer/footer";
 import AdminNav from "@/app/admin/adminNav/page";
+import { ClientLayoutProps } from "@/types/clientLayout";
 
-interface ClientLayoutProps {
-  children: React.ReactNode;
-}
+
 
 export default function ClientLayout({ children }: ClientLayoutProps): JSX.Element {
   const pathname = usePathname();

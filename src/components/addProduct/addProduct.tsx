@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslation } from "react-i18next";
 import Helmet from "../layout/helmet";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
@@ -23,27 +24,7 @@ import {
   type ProductFormValues,
 } from "@/lib/validations/product.schema";
 import "@/styles/add-product.css";
-
-interface FieldErrorProps {
-  id: string;
-  message?: string;
-}
-
-/**
- * Shows a validation message under a field (renders nothing when there is no error).
- *
- * @param {FieldErrorProps} props Component props.
- * @returns {JSX.Element | null} The error element or null.
- */
-function FieldError({ id, message }: FieldErrorProps): JSX.Element | null {
-  if (!message) return null;
-
-  return (
-    <p id={id} role="alert" className="add-product__field-error">
-      {message}
-    </p>
-  );
-}
+import { FieldError } from "../common/fieldError";
 
 /**
  * "Add Product" page: validates the form, uploads the image, saves the product
@@ -53,7 +34,7 @@ function FieldError({ id, message }: FieldErrorProps): JSX.Element | null {
  */
 export default function AddProductPage(): JSX.Element {
   const router = useRouter();
-
+  const { t, i18n } = useTranslation();
   const {
     register,
     handleSubmit,
@@ -84,19 +65,19 @@ export default function AddProductPage(): JSX.Element {
           category: values.category,
           price: values.price,
         },
-        values.image[0]
+        values.image[0],
       );
 
-      toast.success("Product successfully added!");
+      toast.success(t("addProduct.success"));
       router.push("/admin/allProducts");
     } catch (error) {
       console.error("Failed to add product:", error);
-      toast.error("Product not added. Please try again.");
+      toast.error(t("addProduct.errors.addFailed"));
     }
   };
 
   return (
-    <Helmet title="Add Product">
+    <Helmet title={t("addProduct.title")}>
       <section className="add__product-section">
         <Container>
           <Row className="justify-content-center">
@@ -109,12 +90,13 @@ export default function AddProductPage(): JSX.Element {
 
                   <div>
                     <span className="add__product-eyebrow">
-                      PRODUCT MANAGEMENT
+                      {t("addProduct.eyebrow")}
                     </span>
-                    <h1 className="products__title">Add New Product</h1>
+                    <h1 className="products__title">
+                      {t("addProduct.heading")}
+                    </h1>
                     <p className="products__subtitle">
-                      Enter the product details below to add a new item to
-                      your inventory.
+                      {t("addProduct.description")}
                     </p>
                   </div>
                 </div>
@@ -124,8 +106,8 @@ export default function AddProductPage(): JSX.Element {
                 {isSubmitting ? (
                   <div className="add__product-loading" role="status">
                     <Spinner color="primary" />
-                    <p>Uploading image and adding product...</p>
-                    <span>Please wait while we save your product.</span>
+                    <p>{t("addProduct.loading")}</p>
+                    <span>{t("addProduct.loadingDescription")}</span>
                   </div>
                 ) : (
                   <Form
@@ -135,7 +117,7 @@ export default function AddProductPage(): JSX.Element {
                   >
                     <FormGroup className="add__product-field">
                       <label htmlFor="title">
-                        Product Title <span>*</span>
+                        {t("addProduct.fields.title")} <span>*</span>
                       </label>
                       <input
                         id="title"
@@ -143,7 +125,7 @@ export default function AddProductPage(): JSX.Element {
                         className={`form-control ${
                           errors.title ? "is-invalid" : ""
                         }`}
-                        placeholder="e.g. Modern Minimalist Sofa"
+                        placeholder={t("addProduct.placeholders.title")}
                         aria-invalid={!!errors.title}
                         aria-describedby={
                           errors.title ? "title-error" : undefined
@@ -158,7 +140,7 @@ export default function AddProductPage(): JSX.Element {
 
                     <FormGroup className="add__product-field">
                       <label htmlFor="shortDesc">
-                        Short Description <span>*</span>
+                        {t("addProduct.fields.shortDescription")} <span>*</span>
                       </label>
                       <input
                         id="shortDesc"
@@ -166,12 +148,12 @@ export default function AddProductPage(): JSX.Element {
                         className={`form-control ${
                           errors.shortDesc ? "is-invalid" : ""
                         }`}
-                        placeholder="A brief summary of the product"
+                        placeholder={t(
+                          "addProduct.placeholders.shortDescription",
+                        )}
                         aria-invalid={!!errors.shortDesc}
                         aria-describedby={
-                          errors.shortDesc
-                            ? "shortDesc-error"
-                            : undefined
+                          errors.shortDesc ? "shortDesc-error" : undefined
                         }
                         {...register("shortDesc")}
                       />
@@ -183,7 +165,7 @@ export default function AddProductPage(): JSX.Element {
 
                     <FormGroup className="add__product-field">
                       <label htmlFor="description">
-                        Full Description <span>*</span>
+                        {t("addProduct.fields.description")} <span>*</span>
                       </label>
                       <textarea
                         id="description"
@@ -191,12 +173,10 @@ export default function AddProductPage(): JSX.Element {
                         className={`form-control ${
                           errors.description ? "is-invalid" : ""
                         }`}
-                        placeholder="Describe the product, its features, and details..."
+                        placeholder={t("addProduct.placeholders.description")}
                         aria-invalid={!!errors.description}
                         aria-describedby={
-                          errors.description
-                            ? "description-error"
-                            : undefined
+                          errors.description ? "description-error" : undefined
                         }
                         {...register("description")}
                       />
@@ -210,7 +190,7 @@ export default function AddProductPage(): JSX.Element {
                       <Col md="6">
                         <FormGroup className="add__product-field">
                           <label htmlFor="price">
-                            Price (USD) <span>*</span>
+                            {t("addProduct.fields.price")} <span>*</span>
                           </label>
                           <div className="add__product-price-input">
                             <span aria-hidden="true">$</span>
@@ -221,7 +201,7 @@ export default function AddProductPage(): JSX.Element {
                               className={`form-control ${
                                 errors.price ? "is-invalid" : ""
                               }`}
-                              placeholder="199.00"
+                              placeholder={t("addProduct.placeholders.price")}
                               aria-invalid={!!errors.price}
                               aria-describedby={
                                 errors.price ? "price-error" : undefined
@@ -239,26 +219,31 @@ export default function AddProductPage(): JSX.Element {
                       <Col md="6">
                         <FormGroup className="add__product-field">
                           <label htmlFor="category">
-                            Category <span>*</span>
+                            {t("addProduct.fields.category")} <span>*</span>
                           </label>
                           <select
                             id="category"
+                            dir={i18n.language === "ar" ? "rtl" : "ltr"}
                             className={`form-select ${
                               errors.category ? "is-invalid" : ""
                             }`}
                             aria-invalid={!!errors.category}
                             aria-describedby={
-                              errors.category
-                                ? "category-error"
-                                : undefined
+                              errors.category ? "category-error" : undefined
                             }
                             {...register("category")}
                           >
-                            <option value="">Select category</option>
+                            <option value="">
+                              {t("addProduct.placeholders.category")}
+                            </option>
+
                             {PRODUCT_CATEGORIES.map((category) => (
                               <option key={category} value={category}>
-                                {category.charAt(0).toUpperCase() +
-                                  category.slice(1)}
+                                {t(`shop.categories.${category}`, {
+                                  defaultValue:
+                                    category.charAt(0).toUpperCase() +
+                                    category.slice(1),
+                                })}
                               </option>
                             ))}
                           </select>
@@ -272,26 +257,22 @@ export default function AddProductPage(): JSX.Element {
 
                     <FormGroup className="add__product-field">
                       <label htmlFor="image">
-                        Product Image <span>*</span>
+                        {t("addProduct.fields.image")} <span>*</span>
                       </label>
                       <div
                         className={`add__product-upload ${
                           errors.image ? "has-error" : ""
                         }`}
                       >
-                        <i
-                          className="ri-image-add-line"
-                          aria-hidden="true"
-                        />
+                        <i className="ri-image-add-line" aria-hidden="true" />
                         <div className="add__product-upload-content">
-                          <strong>Choose a product image</strong>
-                          <span>
-                            Select an image from your device. Supported formats
-                            are listed below.
-                          </span>
+                          <strong>
+                            {t("addProduct.placeholders.category")}
+                          </strong>
+                          <span>{t("addProduct.upload.title")}</span>
                           <small>
                             {ACCEPTED_IMAGE_TYPES.map((type) =>
-                              type.replace("image/", "").toUpperCase()
+                              type.replace("image/", "").toUpperCase(),
                             ).join(", ")}
                           </small>
                         </div>
@@ -309,9 +290,7 @@ export default function AddProductPage(): JSX.Element {
                       </div>
                       <FieldError
                         id="image-error"
-                        message={errors.image?.message as
-                          | string
-                          | undefined}
+                        message={errors.image?.message as string | undefined}
                       />
                     </FormGroup>
 
@@ -321,7 +300,7 @@ export default function AddProductPage(): JSX.Element {
                         className="add__product-cancel"
                         onClick={() => router.push("/admin/allProducts")}
                       >
-                        Cancel
+                        {t("addProduct.cancel")}
                       </Button>
 
                       <Button
@@ -329,11 +308,8 @@ export default function AddProductPage(): JSX.Element {
                         disabled={isSubmitting}
                         className="submit__btn"
                       >
-                        <i
-                          className="ri-add-line"
-                          aria-hidden="true"
-                        />
-                        Add Product
+                        <i className="ri-add-line" aria-hidden="true" />
+                        {t("addProduct.submit")}
                       </Button>
                     </div>
                   </Form>
@@ -342,7 +318,7 @@ export default function AddProductPage(): JSX.Element {
 
               <div className="add__product-security">
                 <i className="ri-shield-check-line" aria-hidden="true" />
-                Your product details will be saved securely.
+                {t("addProduct.securityNote")}
               </div>
             </Col>
           </Row>

@@ -1,10 +1,10 @@
 .privacy-page {
-  background: #fff;
-  color: #222;
+  background: var(--body-bg);
+  color: var(--text-color);
 }
 
 .privacy-hero {
-  background: #f6f3ef;
+  background: var(--hero-bg);
   padding: 85px 0 70px;
   text-align: center;
 }
@@ -15,7 +15,7 @@
 }
 
 .privacy-label {
-  color: #b88b5a;
+  color: var(--accent-color);
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 3px;
@@ -25,11 +25,11 @@
   font-family: var(--font-heading), serif;
   font-size: clamp(38px, 6vw, 58px);
   margin: 18px 0;
-  color: #222;
+  color: var(--heading-text-color);
 }
 
 .privacy-hero p {
-  color: #777;
+  color: var(--small-text-color);
   font-size: 16px;
   line-height: 1.8;
 }
@@ -41,11 +41,11 @@
   gap: 10px;
   margin-top: 25px;
   font-size: 14px;
-  color: #888;
+  color: var(--muted-color);
 }
 
 .privacy-breadcrumb a {
-  color: #b88b5a;
+  color: var(--accent-color);
   text-decoration: none;
 }
 
@@ -57,9 +57,11 @@
   max-width: 950px;
   margin: auto;
   padding: 45px;
-  border: 1px solid #eee;
-  border-radius: 8px;
-  box-shadow: 0 5px 30px rgba(0, 0, 0, 0.035);
+  background: var(--surface-color);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
 }
 
 .privacy-intro {
@@ -70,10 +72,11 @@
 
 .privacy-intro > i {
   font-size: 38px;
-  color: #b88b5a;
+  color: var(--accent-color);
 }
 
 .privacy-intro h2 {
+  color: var(--heading-text-color);
   font-family: var(--font-heading), serif;
   font-size: 25px;
   margin-bottom: 12px;
@@ -82,7 +85,7 @@
 .privacy-intro p,
 .privacy-section p,
 .privacy-contact p {
-  color: #777;
+  color: var(--small-text-color);
   font-size: 15px;
   line-height: 1.9;
 }
@@ -90,13 +93,13 @@
 .privacy-intro span {
   display: inline-block;
   margin-top: 10px;
-  color: #aaa;
+  color: var(--muted-color);
   font-size: 13px;
 }
 
 .privacy-divider {
   height: 1px;
-  background: #eee;
+  background: var(--border-color);
   margin: 35px 0;
 }
 
@@ -108,40 +111,42 @@
   font-size: 19px;
   font-weight: 600;
   margin-bottom: 12px;
-  color: #292929;
+  color: var(--heading-text-color);
 }
 
 .privacy-contact {
   display: flex;
   gap: 20px;
-  background: #f8f5f1;
+  background: var(--surface-secondary);
   padding: 28px;
   margin-top: 45px;
+  border: 1px solid var(--border-color);
   border-radius: 6px;
 }
 
 .privacy-contact > i {
-  color: #b88b5a;
+  color: var(--accent-color);
   font-size: 32px;
 }
 
 .privacy-contact h3 {
   font-size: 19px;
   margin-bottom: 8px;
+  color: var(--heading-text-color);
 }
 
 .privacy-contact-link {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  color: #b88b5a;
+  color: var(--accent-color);
   text-decoration: none;
   font-weight: 600;
   margin-top: 8px;
 }
 
 .privacy-contact-link:hover {
-  color: #222;
+  color: var(--heading-text-color);
 }
 
 @media (max-width: 767px) {

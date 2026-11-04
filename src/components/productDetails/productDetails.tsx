@@ -7,12 +7,11 @@ import { motion } from "framer-motion";
 import { useDispatch } from "react-redux";
 import { doc, getDoc } from "firebase/firestore";
 import { toast } from "react-toastify";
-
 import { db } from "@/firebase.config";
 import { cartActions } from "@/store/slices/cartSlice";
 import type { AppDispatch } from "@/store/store";
 import type { Product, ProductCategory } from "@/types/product";
-
+import { useTranslation } from "react-i18next";
 import products from "../../lib/data/products";
 import "@/styles/productId.css";
 
@@ -27,11 +26,10 @@ import "@/styles/productId.css";
 export default function ProductDetails(): JSX.Element {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
+  const { t } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
-
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-
   const [tab, setTab] = useState<"desc" | "rev">("desc");
   const [rating, setRating] = useState<number>(5);
   const [reviewMsg, setReviewMsg] = useState<string>("");
@@ -42,7 +40,6 @@ export default function ProductDetails(): JSX.Element {
    */
   useEffect(() => {
     let isMounted = true;
-
     /**
      * Retrieves the product document from Firestore.
      *
@@ -56,14 +53,16 @@ export default function ProductDetails(): JSX.Element {
         const productSnapshot = await getDoc(productRef);
 
         if (!productSnapshot.exists()) {
+          // If the product is not in Firestore, look for it in dummy data.
+          const staticProduct = products.find(
+            (item) => String(item.id) === String(id),
+          );
           if (isMounted) {
-            setProduct(null);
+            setProduct(staticProduct ?? null);
           }
           return;
         }
-
         const data = productSnapshot.data();
-
         const fetchedProduct: Product = {
           id: productSnapshot.id,
           productName: data.productName || "",
@@ -84,7 +83,7 @@ export default function ProductDetails(): JSX.Element {
 
         if (isMounted) {
           setProduct(null);
-          toast.error("Failed to load product details.");
+          toast.error(t("productDetails.errors.loadFailed"));
         }
       } finally {
         if (isMounted) {
@@ -117,17 +116,15 @@ export default function ProductDetails(): JSX.Element {
    */
   const addToCart = (): void => {
     if (!product) return;
-
     dispatch(
       cartActions.addItem({
         id: product.id,
         productName: product.productName,
         price: Number(product.price),
         imgUrl: getProductImage(product.imgUrl),
-      })
+      }),
     );
-
-    toast.success("Product added successfully");
+    toast.success(t("productDetails.addedSuccessfully"));
   };
 
   /**
@@ -137,19 +134,15 @@ export default function ProductDetails(): JSX.Element {
    */
   const submitHandler = (e: FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
-
     if (!reviewName.trim()) {
-      toast.error("Please enter your name.");
+      toast.error(t("productDetails.errors.enterName"));
       return;
     }
-
     if (!reviewMsg.trim()) {
-      toast.error("Please enter a review message.");
+      toast.error(t("productDetails.errors.enterReview"));
       return;
     }
-
-    toast.success("Review submitted successfully!");
-
+    toast.success(t("productDetails.reviewSubmitted"));
     setReviewName("");
     setReviewMsg("");
     setRating(5);
@@ -167,7 +160,9 @@ export default function ProductDetails(): JSX.Element {
     return (
       <span
         className="product__stars"
-        aria-label={`${safeRating} out of 5 stars`}
+        aria-label={t("productDetails.ratingAria", {
+          rating: safeRating,
+        })}
       >
         {[1, 2, 3, 4, 5].map((star) => (
           <i
@@ -191,7 +186,7 @@ export default function ProductDetails(): JSX.Element {
     return (
       <div className="product__not-found">
         <div className="container">
-          <h2>Loading product...</h2>
+          <h2>{t("productDetails.loading")}</h2>
         </div>
       </div>
     );
@@ -203,32 +198,33 @@ export default function ProductDetails(): JSX.Element {
       <div className="product__not-found">
         <div className="container">
           <i className="ri-shopping-bag-3-line"></i>
-          <h2>Product not found!</h2>
-          <p>
-            The product you're looking for may have been removed or is
-            unavailable.
-          </p>
-          <button
-            onClick={() => router.push("/shop")}
-            className="buy__btn"
-          >
-            Back to Shop
+          <h2>{t("productDetails.notFound")}</h2>
+          <p>{t("productDetails.notFoundDescription")}</p>
+          <button onClick={() => router.push("/shop")} className="buy__btn">
+            {t("productDetails.backToShop")}
           </button>
         </div>
       </div>
     );
   }
 
-  const {
-    imgUrl,
-    productName,
-    price,
-    avgRating,
-    reviews,
-    shortDesc,
-    description,
-    category,
-  } = product;
+  const { imgUrl, price, avgRating, reviews, category } = product;
+
+  const productName = t(`products.items.${product.id}.name`, {
+    defaultValue: product.productName,
+  });
+
+  const shortDesc = t(`products.items.${product.id}.shortDesc`, {
+    defaultValue: product.shortDesc,
+  });
+
+  const description = t(`products.items.${product.id}.description`, {
+    defaultValue: product.description,
+  });
+
+  const categoryLabel = t(`shop.categories.${product.category}`, {
+    defaultValue: product.category,
+  });
 
   /**
    * Finds static products that belong to the same category,
@@ -237,7 +233,7 @@ export default function ProductDetails(): JSX.Element {
    * @returns Related products from the local products data.
    */
   const relatedProducts = products.filter(
-    (item) => item.category === category && item.id !== product.id
+    (item) => item.category === category && item.id !== product.id,
   );
 
   return (
@@ -246,9 +242,9 @@ export default function ProductDetails(): JSX.Element {
       <section className="product__header">
         <div className="container">
           <div className="product__breadcrumb">
-            <span onClick={() => router.push("/")}>Home</span>
+            <span onClick={() => router.push("/")}>{t("common.home")}</span>
             <i className="ri-arrow-right-s-line"></i>
-            <span onClick={() => router.push("/shop")}>Shop</span>
+            <span onClick={() => router.push("/shop")}>{t("common.shop")}</span>
             <i className="ri-arrow-right-s-line"></i>
             <span className="current">{productName}</span>
           </div>
@@ -259,6 +255,7 @@ export default function ProductDetails(): JSX.Element {
 
       <section className="product__main-section">
         <div className="container">
+          {/* Product Image and Information */}
           <div className="row product__main-wrapper">
             {/* Product Image */}
             <div className="col-lg-6 col-md-6">
@@ -279,7 +276,7 @@ export default function ProductDetails(): JSX.Element {
                   />
                 </div>
 
-                <span className="product__category">{category}</span>
+                <span className="product__category">{categoryLabel}</span>
               </motion.div>
             </div>
 
@@ -291,27 +288,28 @@ export default function ProductDetails(): JSX.Element {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.5, delay: 0.1 }}
               >
-                <span className="product__eyebrow">Product Details</span>
+                <span className="product__eyebrow">
+                  {t("productDetails.eyebrow")}
+                </span>
 
                 <h2>{productName}</h2>
 
                 <div className="product__rating">
                   {renderStars(Number(avgRating) || 0)}
 
-                  <span className="product__rating-value">
-                    {avgRating}
-                  </span>
+                  <span className="product__rating-value">{avgRating}</span>
 
                   <span className="product__rating-label">
-                    ({reviews.length} reviews)
+                    {t("productDetails.reviewsCount", {
+                      count: reviews.length,
+                    })}
                   </span>
                 </div>
 
                 <div className="product__price-wrapper">
                   <span className="product__price">${price}</span>
-
                   <span className="product__price-note">
-                    Tax included where applicable
+                    {t("productDetails.taxNote")}
                   </span>
                 </div>
 
@@ -324,17 +322,17 @@ export default function ProductDetails(): JSX.Element {
                 <div className="product__features">
                   <div>
                     <i className="ri-truck-line"></i>
-                    <span>Fast Shipping</span>
+                    <span>{t("productDetails.features.fastShipping")}</span>
                   </div>
 
                   <div>
                     <i className="ri-shield-check-line"></i>
-                    <span>Secure Shopping</span>
+                    <span>{t("productDetails.features.secureShopping")}</span>
                   </div>
 
                   <div>
                     <i className="ri-refresh-line"></i>
-                    <span>Easy Returns</span>
+                    <span>{t("productDetails.features.easyReturns")}</span>
                   </div>
                 </div>
 
@@ -346,7 +344,7 @@ export default function ProductDetails(): JSX.Element {
                   onClick={addToCart}
                 >
                   <i className="ri-shopping-cart-line"></i>
-                  Add to Cart
+                  {t("productDetails.addToCart")}
                 </motion.button>
               </motion.div>
             </div>
@@ -360,7 +358,7 @@ export default function ProductDetails(): JSX.Element {
                 className={tab === "desc" ? "active__tab" : ""}
                 onClick={() => setTab("desc")}
               >
-                Description
+                {t("productDetails.descriptionTab")}
               </button>
 
               <button
@@ -368,7 +366,9 @@ export default function ProductDetails(): JSX.Element {
                 className={tab === "rev" ? "active__tab" : ""}
                 onClick={() => setTab("rev")}
               >
-                Reviews ({reviews.length})
+                {t("productDetails.reviewsTab", {
+                  count: reviews.length,
+                })}
               </button>
             </div>
 
@@ -380,7 +380,7 @@ export default function ProductDetails(): JSX.Element {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.25 }}
               >
-                <h3>Product Description</h3>
+                <h3>{t("productDetails.productDescription")}</h3>
                 <p>{description}</p>
               </motion.div>
             ) : (
@@ -392,11 +392,11 @@ export default function ProductDetails(): JSX.Element {
                 transition={{ duration: 0.25 }}
               >
                 <div className="review__list">
-                  <h3>Customer Reviews</h3>
+                  <h3>{t("productDetails.customerReviews")}</h3>
 
                   {reviews.length === 0 ? (
                     <p className="review__empty">
-                      No reviews yet. Be the first to review this product!
+                      {t("productDetails.noReviews")}
                     </p>
                   ) : (
                     <ul>
@@ -407,7 +407,7 @@ export default function ProductDetails(): JSX.Element {
                           </div>
 
                           <div className="review__body">
-                            <h4>Customer</h4>
+                            <h4>{t("productDetails.customer")}</h4>
                             {renderStars(Number(item.rating) || 0)}
                             <p>{item.text}</p>
                           </div>
@@ -418,20 +418,22 @@ export default function ProductDetails(): JSX.Element {
                 </div>
 
                 <div className="review__form">
-                  <h3>Share Your Experience</h3>
+                  <h3>{t("productDetails.shareExperience")}</h3>
 
                   <p className="review__form-subtitle">
-                    Your feedback helps other customers make better decisions.
+                    {t("productDetails.reviewSubtitle")}
                   </p>
 
                   <form onSubmit={submitHandler}>
                     <div className="form__group">
-                      <label htmlFor="review-name">Your Name</label>
+                      <label htmlFor="review-name">
+                        {t("productDetails.yourName")}
+                      </label>
 
                       <input
                         id="review-name"
                         type="text"
-                        placeholder="Enter your name"
+                        placeholder={t("productDetails.namePlaceholder")}
                         value={reviewName}
                         onChange={(e) => setReviewName(e.target.value)}
                         required
@@ -439,12 +441,12 @@ export default function ProductDetails(): JSX.Element {
                     </div>
 
                     <div className="form__group">
-                      <label>Your Rating</label>
+                      <label>{t("productDetails.yourRating")}</label>
 
                       <div
                         className="rating__group"
                         role="group"
-                        aria-label="Select your rating"
+                        aria-label={t("productDetails.selectRating")}
                       >
                         {[1, 2, 3, 4, 5].map((num) => (
                           <button
@@ -452,7 +454,9 @@ export default function ProductDetails(): JSX.Element {
                             key={num}
                             className={rating >= num ? "selected" : ""}
                             onClick={() => setRating(num)}
-                            aria-label={`${num} stars`}
+                            aria-label={t("productDetails.starsCount", {
+                              count: num,
+                            })}
                             aria-pressed={rating === num}
                           >
                             <i className="ri-star-s-fill"></i>
@@ -462,23 +466,22 @@ export default function ProductDetails(): JSX.Element {
                     </div>
 
                     <div className="form__group">
-                      <label htmlFor="review-message">Your Review</label>
+                      <label htmlFor="review-message">
+                        {t("productDetails.yourReview")}
+                      </label>
 
                       <textarea
                         id="review-message"
                         rows={4}
-                        placeholder="Write your review here..."
+                        placeholder={t("productDetails.reviewPlaceholder")}
                         value={reviewMsg}
                         onChange={(e) => setReviewMsg(e.target.value)}
                         required
                       />
                     </div>
 
-                    <button
-                      type="submit"
-                      className="buy__btn review__submit"
-                    >
-                      Submit Review
+                    <button type="submit" className="buy__btn review__submit">
+                      {t("productDetails.submitReview")}
                       <i className="ri-send-plane-line"></i>
                     </button>
                   </form>
@@ -489,50 +492,58 @@ export default function ProductDetails(): JSX.Element {
 
           {/* Related Products */}
           {relatedProducts.length > 0 && (
-            <div className="related__section">
-              <div className="related__heading">
-                <span>You May Also Like</span>
-                <h2>Related Products</h2>
-              </div>
+            <section className="related__products-section">
+              <h2>{t("productDetails.relatedProducts")}</h2>
 
               <div className="row">
-                {relatedProducts.slice(0, 4).map((item) => (
-                  <div
-                    key={item.id}
-                    className="col-lg-3 col-md-4 col-sm-6 mb-4"
-                  >
-                    <motion.div
-                      whileHover={{ y: -5 }}
-                      className="product__item"
-                      onClick={() => router.push(`/shop/${item.id}`)}
+                {relatedProducts.slice(0, 4).map((item) => {
+                  const relatedName = t(`products.items.${item.id}.name`, {
+                    defaultValue: item.productName,
+                  });
+
+                  const relatedCategory = t(
+                    `shop.categories.${item.category}`,
+                    { defaultValue: item.category },
+                  );
+
+                  return (
+                    <div
+                      key={item.id}
+                      className="col-lg-3 col-md-4 col-sm-6 mb-4"
                     >
-                      <div className="related__image">
-                        <Image
-                          src={getProductImage(item.imgUrl)}
-                          alt={item.productName}
-                          width={400}
-                          height={400}
-                          sizes="(max-width: 576px) 50vw, 25vw"
-                        />
-                      </div>
-
-                      <div className="product__info">
-                        <span className="related__category">
-                          {item.category}
-                        </span>
-
-                        <h3>{item.productName}</h3>
-
-                        <div className="related__bottom">
-                          <span className="price">${item.price}</span>
-                          <i className="ri-arrow-right-line"></i>
+                      <motion.div
+                        whileHover={{ y: -5 }}
+                        className="product__item"
+                        onClick={() => router.push(`/shop/${item.id}`)}
+                      >
+                        <div className="related__image">
+                          <Image
+                            src={getProductImage(item.imgUrl)}
+                            alt={relatedName}
+                            width={400}
+                            height={400}
+                            sizes="(max-width: 576px) 50vw, 25vw"
+                          />
                         </div>
-                      </div>
-                    </motion.div>
-                  </div>
-                ))}
+
+                        <div className="product__info">
+                          <span className="related__category">
+                            {relatedCategory}
+                          </span>
+
+                          <h3>{relatedName}</h3>
+
+                          <div className="related__bottom">
+                            <span className="price">${item.price}</span>
+                            <i className="ri-arrow-right-line"></i>
+                          </div>
+                        </div>
+                      </motion.div>
+                    </div>
+                  );
+                })}
               </div>
-            </div>
+            </section>
           )}
         </div>
       </section>

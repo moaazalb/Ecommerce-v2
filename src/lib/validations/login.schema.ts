@@ -1,13 +1,21 @@
-// src/lib/validations/login.schema.ts
 import { z } from "zod";
+import type { TFunction } from "i18next";
 
 /**
- * Validation schema for the login form.
+ * Creates a localized validation schema for the login form.
  */
-export const loginSchema = z.object({
-  email: z.string().trim().email("Please enter a valid email address"),
-  password: z.string().min(1, "Password is required"),
-});
+export const createLoginSchema = (t: TFunction) =>
+  z.object({
+    email: z
+      .string()
+      .trim()
+      .email(t("login.validation.emailInvalid")),
+    password: z
+      .string()
+      .min(1, t("login.validation.passwordRequired")),
+  });
 
-/** Form values inferred from {@link loginSchema}. */
-export type LoginFormValues = z.infer<typeof loginSchema>;
+/** Form values inferred from the login schema. */
+export type LoginFormValues = z.infer<
+  ReturnType<typeof createLoginSchema>
+>;

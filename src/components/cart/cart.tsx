@@ -1,4 +1,3 @@
-
 "use client";
 
 import Helmet from "../layout/helmet";
@@ -10,6 +9,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { cartActions } from "@/store/slices/cartSlice";
 import type { RootState } from "@/store/store";
 import type { CartItem } from "@/types/cart";
+import { useTranslation } from "react-i18next";
 import "@/styles/cart.css";
 
 /**
@@ -21,6 +21,7 @@ import "@/styles/cart.css";
  */
 function Tr({ item }: { item: CartItem }): JSX.Element {
   const dispatch = useDispatch();
+  const { t } = useTranslation();
 
   /**
    * Removes the selected product from the shopping cart.
@@ -41,32 +42,26 @@ function Tr({ item }: { item: CartItem }): JSX.Element {
           />
         </div>
       </td>
-
       <td>
-        <span className="cart__product-name">
-          {item.productName}
-        </span>
+        <span className="cart__product-name">{item.productName}</span>
       </td>
-
       <td>
         <span className="cart__product-price">
           ${Number(item.price).toFixed(2)}
         </span>
       </td>
-
       <td>
-        <span className="cart__quantity">
-          {item.quantity}
-        </span>
+        <span className="cart__quantity">{item.quantity}</span>
       </td>
-
       <td>
         <motion.button
           type="button"
           whileTap={{ scale: 0.9 }}
           onClick={handleDeleteProduct}
           className="cart__delete-btn"
-          aria-label={`Delete ${item.productName} from cart`}
+          aria-label={t("cart.deleteProduct", {
+            name: item.productName,
+          })}
         >
           <i className="ri-delete-bin-line" aria-hidden="true" />
         </motion.button>
@@ -81,20 +76,19 @@ function Tr({ item }: { item: CartItem }): JSX.Element {
  * @returns {JSX.Element} The rendered Cart page.
  */
 export default function Cart(): JSX.Element {
+  const { t } = useTranslation();
   const cartItems = useSelector((state: RootState) => state.cart.cartItems);
   const totalAmount = useSelector((state: RootState) => state.cart.totalAmount);
 
   return (
-    <Helmet title="Cart">
+    <Helmet title={t("cart.title")}>
       <main className="cart-page">
         {/* Page Header */}
         <section className="cart__header">
           <div className="container">
-            <span className="cart__eyebrow">YOUR SHOPPING BAG</span>
-            <h1>Shopping Cart</h1>
-            <p>
-              Review your selected products before proceeding to checkout.
-            </p>
+            <span className="cart__eyebrow">t{"cart.eyebrow"}</span>
+            <h1>{t("cart.heading")}</h1>
+            <p>{"cart.description"}</p>
           </div>
         </section>
 
@@ -107,16 +101,11 @@ export default function Cart(): JSX.Element {
                   <i className="ri-shopping-bag-3-line" />
                 </div>
 
-                <h2>Your cart is empty</h2>
-
-                <p>
-                  Looks like you haven't added anything to your cart yet.
-                  Explore our collection and find something you love.
-                </p>
-
+                <h2>{t("cart.emptyTitle")}</h2>
+                <p>{t("cart.emptyDescription")}</p>
                 <Link href="/shop" className="cart__shop-btn">
                   <i className="ri-shopping-bag-line" />
-                  Start Shopping
+                  {t("cart.startShopping")}
                 </Link>
               </div>
             ) : (
@@ -126,11 +115,9 @@ export default function Cart(): JSX.Element {
                   <div className="cart__card">
                     <div className="cart__card-header">
                       <div>
-                        <h2>Your Items</h2>
+                        <h2>{t("cart.yourItems")}</h2>
                         <p>
-                          {cartItems.length}{" "}
-                          {cartItems.length === 1 ? "product" : "products"} in
-                          your cart
+                          {t("cart.itemsInCart", { count: cartItems.length })}
                         </p>
                       </div>
 
@@ -143,11 +130,11 @@ export default function Cart(): JSX.Element {
                       <table className="table cart__table align-middle mb-0">
                         <thead>
                           <tr>
-                            <th scope="col">Product</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Price</th>
-                            <th scope="col">Qty</th>
-                            <th scope="col">Action</th>
+                            <th scope="col">{t("cart.yourItems")}</th>
+                            <th scope="col">{t("cart.name")}</th>
+                            <th scope="col">{t("cart.price")}</th>
+                            <th scope="col">{t("cart.quantity")}</th>
+                            <th scope="col">{t("cart.action")}</th>
                           </tr>
                         </thead>
 
@@ -165,47 +152,41 @@ export default function Cart(): JSX.Element {
                 <div className="col-lg-4">
                   <div className="cart__summary">
                     <div className="cart__summary-header">
-                      <h2>Order Summary</h2>
+                      <h2>{t("cart.orderSummary")}</h2>
                       <i className="ri-file-list-3-line" />
                     </div>
 
                     <div className="cart__summary-row">
-                      <span>Subtotal</span>
+                      <span>{t("cart.subtotal")}</span>
                       <strong>${Number(totalAmount).toFixed(2)}</strong>
                     </div>
 
                     <div className="cart__summary-row">
-                      <span>Shipping</span>
+                      <span>{t("cart.shipping")}</span>
                       <span className="cart__shipping-label">
-                        Calculated at checkout
+                        {t("cart.calculatedAtCheckout")}
                       </span>
                     </div>
 
                     <div className="cart__summary-divider" />
-
                     <div className="cart__summary-total">
-                      <span>Total</span>
+                      <span>{t("cart.total")}</span>
                       <strong>${Number(totalAmount).toFixed(2)}</strong>
                     </div>
 
-                    <p className="cart__summary-note">
-                      Taxes and shipping costs will be calculated during
-                      checkout.
-                    </p>
-
+                    <p className="cart__summary-note">{t("cart.taxesNote")}</p>
                     <Link href="/checkout" className="cart__checkout-btn">
-                      Proceed to Checkout
+                      {t("cart.proceedToCheckout")}
                       <i className="ri-arrow-right-line" />
                     </Link>
-
                     <Link href="/shop" className="cart__continue-btn">
                       <i className="ri-arrow-left-line" />
-                      Continue Shopping
+                      {t("cart.continueShopping")}
                     </Link>
 
                     <div className="cart__secure-note">
                       <i className="ri-shield-check-line" />
-                      Secure checkout experience
+                      {t("cart.secureCheckout")}
                     </div>
                   </div>
                 </div>

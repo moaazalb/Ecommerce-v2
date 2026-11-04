@@ -1,22 +1,25 @@
-
 .product__item {
   cursor: pointer;
-  border: 1px solid #e5e5e5;
-  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
   padding: 10px;
   height: 100%;
   overflow: hidden;
-  background: #fff;
-  transition: box-shadow 0.2s ease;
+  background: var(--surface-color);
+  color: var(--text-color);
+  transition:
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
 }
 
 .product__item:hover {
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+  box-shadow: var(--shadow-md);
+  border-color: var(--accent-color);
 }
 
 .product__info h3 {
   font-size: 1.2rem;
-  color: var(--primary-color);
+  color: var(--heading-text-color);
   font-weight: 600;
   margin-top: 15px;
 }
@@ -28,6 +31,7 @@
 
 .product__info span {
   font-size: 0.9rem;
+  color: var(--small-text-color);
 }
 
 .product__card-bottom .price {
@@ -48,7 +52,9 @@
   color: #fff;
   border-radius: 50%;
   cursor: pointer;
-  transition: background 0.2s ease;
+  transition:
+    background 0.2s ease,
+    opacity 0.2s ease;
 }
 
 .product__add-button:hover {

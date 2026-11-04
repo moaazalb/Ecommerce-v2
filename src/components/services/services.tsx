@@ -3,6 +3,7 @@
 import { JSX } from "react";
 import "@/styles/services.css";
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import serviceData from "../../lib/data/serviceData";
 
 /**
@@ -11,6 +12,8 @@ import serviceData from "../../lib/data/serviceData";
  * @returns {JSX.Element} The rendered Services section.
  */
 export default function Services(): JSX.Element {
+  const { t } = useTranslation();
+
   return (
     <section className="services">
       <div className="container">
@@ -28,8 +31,10 @@ export default function Services(): JSX.Element {
                 </span>
 
                 <div className="services__content">
-                  <h3>{item.title}</h3>
-                  <p>{item.subtitle}</p>
+                  <div className="services__content">
+                    <h3>{t(item.title)}</h3>
+                    <p>{t(item.subtitle)}</p>
+                  </div>
                 </div>
               </motion.div>
             </div>

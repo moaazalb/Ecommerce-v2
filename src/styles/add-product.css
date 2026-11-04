@@ -12,7 +12,7 @@
   background: var(--surface-color, #fff);
   border: 1px solid var(--border-color, #e2e8f0);
   border-radius: 16px;
-  box-shadow: 0 8px 30px rgba(30, 41, 59, 0.04);
+  box-shadow: var(--shadow-md);
 }
 
 .add__product-header {
@@ -29,7 +29,7 @@
   height: 54px;
   min-width: 54px;
   border-radius: 12px;
-  background: rgba(168, 195, 216, 0.25);
+  background: color-mix(in srgb, var(--accent-color) 25%, var(--surface-color));
   color: var(--primary-color, #475569);
   font-size: 1.65rem;
 }
@@ -94,11 +94,13 @@
   padding: 11px 13px;
   border: 1px solid var(--border-color, #e2e8f0);
   border-radius: 8px;
-  background-color: #fff;
+  background-color: var(--surface-color);
   color: var(--text-color, #475569);
   font-size: 0.9rem;
   box-shadow: none;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .add__product-field textarea.form-control {
@@ -112,14 +114,13 @@
 
 .add__product-field .form-control:focus,
 .add__product-field .form-select:focus {
-  border-color: var(--secondary-color, #a8c3d8);
-  box-shadow: 0 0 0 3px rgba(168, 195, 216, 0.2);
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-color) 25%, transparent);
 }
 
-.add__product-field .form-control.is-invalid,
-.add__product-field .form-select.is-invalid {
-  border-color: var(--error-color, #dc2626);
-  background-image: none;
+.add__product-field .form-control.is-invalid:focus,
+.add__product-field .form-select.is-invalid:focus {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--error-color) 15%, transparent);
 }
 
 .add__product-field .form-control.is-invalid:focus,
@@ -165,12 +166,14 @@
   border: 1px dashed var(--secondary-color, #a8c3d8);
   border-radius: 10px;
   background: var(--surface-secondary, #f8fafc);
-  transition: border-color 0.2s ease, background 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease;
 }
 
 .add__product-upload:hover {
-  border-color: var(--primary-color, #475569);
-  background: #f1f5f9;
+  border-color: var(--primary-color);
+  background: var(--card-bg-02);
 }
 
 .add__product-upload.has-error {
@@ -211,6 +214,7 @@
   min-width: 0;
   border: none;
   background: transparent;
+  color: var(--text-color);
   font-size: 0.8rem;
 }
 
@@ -233,12 +237,14 @@
   border-radius: 8px;
   font-size: 0.88rem;
   font-weight: 600;
-  transition: background 0.2s ease, border-color 0.2s ease,
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
     transform 0.2s ease;
 }
 
 .add__product-actions .btn:focus-visible {
-  outline: 3px solid rgba(168, 195, 216, 0.6);
+  outline: 3px solid var(--accent-color);
   outline-offset: 3px;
 }
 
@@ -259,15 +265,21 @@
   opacity: 0.65;
 }
 
+:root[data-theme="dark"]
+  .add__product-actions
+  .submit__btn:hover:not(:disabled) {
+  color: var(--primary-dark) !important;
+}
+
 .add__product-actions .add__product-cancel {
-  border: 1px solid var(--border-color, #e2e8f0);
-  background: #fff;
-  color: var(--text-color, #475569);
+  border: 1px solid var(--border-color);
+  background: var(--surface-color);
+  color: var(--text-color);
 }
 
 .add__product-actions .add__product-cancel:hover {
-  border-color: var(--secondary-color, #a8c3d8);
-  background: var(--surface-secondary, #f8fafc);
+  border-color: var(--accent-color);
+  background: var(--surface-secondary);
 }
 
 /* Loading */
@@ -386,4 +398,15 @@
     text-align: center;
     line-height: 1.5;
   }
+}
+
+.add__product-field select {
+  padding-inline: 14px 40px;
+  text-align: start;
+}
+
+.add__product-field select[dir="rtl"] {
+  background-position: left 12px center;
+  padding-left: 40px;
+  padding-right: 14px;
 }

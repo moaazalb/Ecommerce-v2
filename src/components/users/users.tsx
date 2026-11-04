@@ -8,33 +8,43 @@ import { doc, deleteDoc } from "firebase/firestore";
 import useGetData from "@/custom-hooks/useGetData/useGetData";
 import { toast } from "react-toastify";
 import type { User } from "@/types/user";
+import { useTranslation } from "react-i18next";
 import "@/styles/users.css";
 
 /**
  * Users component for displaying and managing registered users in the admin dashboard.
- * 
+ *
  * @returns {JSX.Element} The rendered Users component.
  */
 export default function Users() {
-  const { data: usersData, loading } = useGetData("users") as { data: User[]; loading: boolean };
+  const { t } = useTranslation();
+  const { data: usersData, loading } = useGetData("users") as {
+    data: User[];
+    loading: boolean;
+  };
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
   /**
    * Deletes a user from Firestore by ID after confirmation.
-   * 
+   *
    * @param {string} id The user ID (uid).
    * @returns {Promise<void>}
    */
   const handleDeleteUser = async (id: string): Promise<void> => {
-    const isConfirmed = window.confirm("Are you sure you want to delete this user?");
+    const isConfirmed = window.confirm(t("users.confirmDelete"));
+
     if (!isConfirmed) return;
 
     try {
       setDeletingId(id);
+
       await deleteDoc(doc(db, "users", id));
-      toast.success("User deleted successfully!");
+
+      toast.success(t("users.deleteSuccess"));
     } catch (error: unknown) {
-      const errorMessage = error instanceof Error ? error.message : "Failed to delete user.";
+      const errorMessage =
+        error instanceof Error ? error.message : t("users.errors.deleteFailed");
+
       toast.error(errorMessage);
     } finally {
       setDeletingId(null);
@@ -42,18 +52,22 @@ export default function Users() {
   };
 
   return (
-    <Helmet title="Users">
+    <Helmet title={t("users.title")}>
       <section className="users__section py-5">
         <Container>
           {/* Header */}
           <Row className="mb-4 align-items-center">
             <Col lg="6" md="6">
-              <h2 className="users__title">Users Management</h2>
-              <p className="users__subtitle text-muted">View and manage registered store accounts.</p>
+              <h2 className="users__title">{t("users.heading")}</h2>
+
+              <p className="users__subtitle text-muted">
+                {t("users.description")}
+              </p>
             </Col>
             <Col lg="6" md="6" className="text-md-end mt-3 mt-md-0">
               <div className="users__count-badge d-inline-block">
-                Total Users: <strong>{usersData?.length || 0}</strong>
+                {t("users.totalUsers")}:{" "}
+                <strong>{usersData?.length || 0}</strong>
               </div>
             </Col>
           </Row>
@@ -65,10 +79,10 @@ export default function Users() {
                 <Table hover responsive className="align-middle mb-0">
                   <thead>
                     <tr>
-                      <th>Avatar</th>
-                      <th>Username</th>
-                      <th>Email</th>
-                      <th className="text-end">Action</th>
+                      <th>{t("users.avatar")}</th>
+                      <th>{t("users.username")}</th>
+                      <th>{t("users.email")}</th>
+                      <th className="text-end">{t("users.action")}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -76,14 +90,16 @@ export default function Users() {
                       <tr>
                         <td colSpan={4} className="text-center py-5">
                           <Spinner color="primary" size="sm" />
-                          <span className="ms-2 text-muted fw-medium">Loading users...</span>
+                          <span className="ms-2 text-muted fw-medium">
+                            {t("users.loading")}
+                          </span>
                         </td>
                       </tr>
                     ) : usersData?.length === 0 ? (
                       <tr>
                         <td colSpan={4} className="text-center py-5 text-muted">
                           <i className="ri-user-unfollow-line fs-2 d-block mb-2"></i>
-                          <span>No users found.</span>
+                          <span>{t("users.noUsers")}</span>
                         </td>
                       </tr>
                     ) : (
@@ -95,15 +111,19 @@ export default function Users() {
                               <div className="user__avatar-box">
                                 <Image
                                   src={user.photoURL || "/default-avatar.png"}
-                                  alt={user.displayName || "User profile image"}
+                                  alt={
+                                    user.displayName || t("users.profileImage")
+                                  }
                                   fill
                                   className="object-fit-cover"
                                   sizes="45px"
                                 />
                               </div>
                             </td>
-                            <td className="fw-semibold text-dark">{user.displayName || "N/A"}</td>
-                            <td className="text-muted">{user.email}</td>
+                            <td className="fw-semibold text-dark">
+                              {user.displayName || t("users.notAvailable")}
+                            </td>
+                            <td className="user__email">{user.email}</td>
                             <td className="text-end">
                               <Button
                                 color="danger"
@@ -113,7 +133,9 @@ export default function Users() {
                                 disabled={deletingId === userId}
                               >
                                 <i className="ri-delete-bin-line me-1"></i>
-                                {deletingId === userId ? "Deleting..." : "Delete"}
+                                {deletingId === userId
+                                  ? t("users.deleting")
+                                  : t("users.delete")}
                               </Button>
                             </td>
                           </tr>

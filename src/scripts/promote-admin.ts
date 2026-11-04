@@ -30,14 +30,13 @@ export async function promoteAdmin(): Promise<void> {
           privateKey,
         }),
       },
-      "admin-script"
+      "admin-script",
     );
 
   const adminAuth = getAuth(app);
   const email = "mohazalbari@gmail.com";
 
   const user = await adminAuth.getUserByEmail(email);
-
 
   await adminAuth.setCustomUserClaims(user.uid, {
     ...user.customClaims,

@@ -1,9 +1,7 @@
-import React, { JSX } from "react";
+import { JSX } from "react";
+import { CommonSectionProps } from "@/types/commonSection";
 import "@/styles/common-section.css";
 
-interface CommonSectionProps {
-  title: string;
-}
 
 /**
  * CommonSection component for rendering banner section titles across pages.

@@ -1,10 +1,8 @@
-import React, { JSX } from "react";
+import { JSX } from "react";
 import ProductCard from "./productCard";
-import type { Product } from "@/types/product";
+import type {ProductsListProps } from "@/types/product";
 
-interface ProductsListProps {
-  data: Product[];
-}
+
 
 /**
  * ProductsList component for rendering a list of product cards.

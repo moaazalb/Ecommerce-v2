@@ -1,15 +1,15 @@
-
 "use client";
 
-import "@/styles/shop.css";
 import { useMemo, useState } from "react";
 import { Container, Row, Col } from "reactstrap";
 import ProductsList from "@/components/ui/productList";
 import CommmonSection from "@/components/ui/commonSection";
-import products from "../../lib/data/products";
 import Helmet from "../layout/helmet";
 import staticProducts from "../../lib/data/products";
 import useGetData from "@/custom-hooks/useGetData/useGetData";
+import { useTranslation } from "react-i18next";
+import "@/styles/shop.css";
+
 /**
  * Shop page component.
  *
@@ -19,21 +19,18 @@ import useGetData from "@/custom-hooks/useGetData/useGetData";
  * @returns {JSX.Element} The rendered Shop page.
  */
 export default function Shop() {
+  const { t } = useTranslation();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [sortOrder, setSortOrder] = useState("default");
-  const {
-  data: firestoreProducts,
-  loading,
-  error,
-} = useGetData("products");
+  const { data: firestoreProducts } = useGetData("products");
 
-/**
- * Combines static products with products fetched from Firestore.
- */
-const allProducts = useMemo(() => {
-  return [...staticProducts, ...firestoreProducts];
-}, [firestoreProducts]);
+  /**
+   * Combines static products with products fetched from Firestore.
+   */
+  const allProducts = useMemo(() => {
+    return [...staticProducts, ...firestoreProducts];
+  }, [firestoreProducts]);
 
   /**
    * Filters and sorts products based on the selected options.
@@ -45,9 +42,7 @@ const allProducts = useMemo(() => {
 
     // Filter by category
     if (selectedCategory !== "all") {
-      result = result.filter(
-        (item) => item.category === selectedCategory
-      );
+      result = result.filter((item) => item.category === selectedCategory);
     }
 
     // Search by product name
@@ -55,7 +50,7 @@ const allProducts = useMemo(() => {
       result = result.filter((item) =>
         item.productName
           .toLowerCase()
-          .includes(searchTerm.trim().toLowerCase())
+          .includes(searchTerm.trim().toLowerCase()),
       );
     }
 
@@ -67,7 +62,7 @@ const allProducts = useMemo(() => {
     }
 
     return result;
-}, [allProducts, searchTerm, selectedCategory, sortOrder]);
+  }, [allProducts, searchTerm, selectedCategory, sortOrder]);
 
   /**
    * Resets all shop filters to their default values.
@@ -79,9 +74,9 @@ const allProducts = useMemo(() => {
   };
 
   return (
-    <Helmet title="Shop">
+    <Helmet title={t("shop.title")}>
       <div className="shop-page">
-        <CommmonSection title="products" />
+        <CommmonSection title={t("shop.products")} />
 
         {/* Filters and Search */}
         <section className="shop__filter-section">
@@ -93,14 +88,18 @@ const allProducts = useMemo(() => {
                   <select
                     value={selectedCategory}
                     onChange={(e) => setSelectedCategory(e.target.value)}
-                    aria-label="Filter by category"
+                    aria-label={t("shop.filterCategory")}
                   >
-                    <option value="all">All Categories</option>
-                    <option value="sofa">Sofa</option>
-                    <option value="mobile">Mobile</option>
-                    <option value="chair">Chair</option>
-                    <option value="watch">Watch</option>
-                    <option value="wireless">Wireless</option>
+                    <option value="all">{t("shop.allCategories")}</option>
+                    <option value="sofa">{t("shop.categories.sofa")}</option>
+                    <option value="mobile">
+                      {t("shop.categories.mobile")}
+                    </option>
+                    <option value="chair">{t("shop.categories.chair")}</option>
+                    <option value="watch">{t("shop.categories.watch")}</option>
+                    <option value="wireless">
+                      {t("shop.categories.wireless")}
+                    </option>
                   </select>
                 </div>
               </Col>
@@ -111,11 +110,15 @@ const allProducts = useMemo(() => {
                   <select
                     value={sortOrder}
                     onChange={(e) => setSortOrder(e.target.value)}
-                    aria-label="Sort products by price"
+                    aria-label={t("shop.sortByPrice")}
                   >
-                    <option value="default">Default Sorting</option>
-                    <option value="ascending">Price: Low to High</option>
-                    <option value="descending">Price: High to Low</option>
+                    <option value="default">{t("shop.defaultSorting")}</option>
+                    <option value="ascending">
+                      {t("shop.priceLowToHigh")}
+                    </option>
+                    <option value="descending">
+                      {t("shop.priceHighToLow")}
+                    </option>
                   </select>
                 </div>
               </Col>
@@ -125,10 +128,10 @@ const allProducts = useMemo(() => {
                 <div className="search__box">
                   <input
                     type="search"
-                    placeholder="Search products..."
+                    placeholder={t("shop.searchPlaceholder")}
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    aria-label="Search products"
+                    aria-label={t("shop.searchLabel")}
                   />
                   <span>
                     <i className="ri-search-line"></i>
@@ -144,7 +147,7 @@ const allProducts = useMemo(() => {
                   onClick={handleReset}
                 >
                   <i className="ri-refresh-line"></i>
-                  Reset
+                  {t("shop.reset")}
                 </button>
               </Col>
             </Row>
@@ -152,8 +155,10 @@ const allProducts = useMemo(() => {
             {/* Results Information */}
             <div className="shop__results-info">
               <p>
-                Showing <strong>{filteredProducts.length}</strong>{" "}
-                {filteredProducts.length === 1 ? "product" : "products"}
+                {t("shop.showing")} <strong>{filteredProducts.length}</strong>{" "}
+                {t("shop.productCount", {
+                  count: filteredProducts.length,
+                })}
               </p>
             </div>
           </Container>
@@ -167,17 +172,14 @@ const allProducts = useMemo(() => {
                 <Col lg="12">
                   <div className="shop__empty-state">
                     <i className="ri-search-line"></i>
-                    <h3>No Products Found</h3>
-                    <p>
-                      We couldn't find any products matching your search.
-                      Try changing your filters or search term.
-                    </p>
+                    <h3>{t("shop.noProductsFound")}</h3>
+                    <p>{t("shop.noProductsDescription")}</p>
                     <button
                       type="button"
                       onClick={handleReset}
                       className="shop__reset-btn"
                     >
-                      Clear Filters
+                      {t("shop.clearFilters")}
                     </button>
                   </div>
                 </Col>

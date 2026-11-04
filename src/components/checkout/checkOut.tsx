@@ -1,4 +1,3 @@
-
 "use client";
 
 import "@/styles/checkout.css";
@@ -19,52 +18,8 @@ import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { db } from "@/firebase.config";
 import { cartActions } from "@/store/slices/cartSlice";
 import useAuth from "@/custom-hooks/useAuth/useAuth";
-
-interface FieldConfig {
-  name: Path<CheckoutFormValues>;
-  label: string;
-  type: string;
-  placeholder: string;
-}
-
-const FIELDS: FieldConfig[] = [
-  {
-    name: "name",
-    label: "Full Name",
-    type: "text",
-    placeholder: "Enter your full name",
-  },
-  {
-    name: "email",
-    label: "Email Address",
-    type: "email",
-    placeholder: "Enter your email address",
-  },
-  {
-    name: "phone",
-    label: "Phone Number",
-    type: "tel",
-    placeholder: "Enter your phone number",
-  },
-  {
-    name: "streetAddress",
-    label: "Street Address",
-    type: "text",
-    placeholder: "Enter your street address",
-  },
-  {
-    name: "postalCode",
-    label: "Postal Code",
-    type: "text",
-    placeholder: "Enter your postal code",
-  },
-  {
-    name: "country",
-    label: "Country",
-    type: "text",
-    placeholder: "Enter your country",
-  },
-];
+import { useTranslation } from "react-i18next";
+import { FIELDS } from "@/lib/data/fields";
 
 /**
  * Checkout page component for handling customer billing information and order placement.
@@ -73,26 +28,15 @@ const FIELDS: FieldConfig[] = [
  */
 export default function Checkout(): JSX.Element {
   const router = useRouter();
+  const { t } = useTranslation();
   const [isSubmitting, setIsSubmitting] = useState(false);
-
   const dispatch = useDispatch();
   const { currentUser, authLoading } = useAuth();
-
-  const cartItems = useSelector(
-    (state: RootState) => state.cart.cartItems
-  );
-
-  const totalQty = useSelector(
-    (state: RootState) => state.cart.totalQuantity
-  );
-
-  const totalAmount = useSelector(
-    (state: RootState) => state.cart.totalAmount
-  );
-
+  const cartItems = useSelector((state: RootState) => state.cart.cartItems);
+  const totalQty = useSelector((state: RootState) => state.cart.totalQuantity);
+  const totalAmount = useSelector((state: RootState) => state.cart.totalAmount);
   const shippingCost = 0;
   const totalCost = totalAmount + shippingCost;
-
   const {
     register,
     handleSubmit,
@@ -111,25 +55,19 @@ export default function Checkout(): JSX.Element {
   const onSubmit = async (data: CheckoutFormValues): Promise<void> => {
     try {
       setIsSubmitting(true);
-
       // Ensure authentication has finished loading.
       if (authLoading) {
-        throw new Error("Please wait while we verify your account.");
+        throw new Error("checkout.errors.authLoading");
       }
-
-      // Orders require an authenticated Firebase user.
       if (!currentUser) {
-        toast.error("Please log in before placing your order.");
+        toast.error(t("checkout.errors.loginRequired"));
         router.push("/login");
         return;
       }
-
-      // Prevent submitting an empty cart.
       if (cartItems.length === 0) {
-        toast.error("Your shopping cart is empty.");
+        toast.error(t("checkout.errors.emptyCart"));
         return;
       }
-
       // Prepare order items.
       const orderItems = cartItems.map((item) => ({
         productId: item.id,
@@ -142,7 +80,6 @@ export default function Checkout(): JSX.Element {
       // Save the order in Firestore.
       await addDoc(collection(db, "orders"), {
         userId: currentUser.uid,
-
         customer: {
           name: data.name,
           email: data.email,
@@ -151,31 +88,26 @@ export default function Checkout(): JSX.Element {
           postalCode: data.postalCode,
           country: data.country,
         },
-
         items: orderItems,
-
         totalQuantity: totalQty,
         subtotal: Number(totalAmount),
         shippingCost,
         totalAmount: Number(totalCost),
-
         status: "pending",
         createdAt: serverTimestamp(),
       });
 
       // Clear the cart only after Firestore confirms the order was saved.
       dispatch(cartActions.clearCart());
-
-      toast.success("Order placed successfully!");
-
+      toast.success(t("checkout.success"));
       router.push("/");
     } catch (error: unknown) {
       console.error("Failed to place order:", error);
-
+      const message = error instanceof Error ? error.message : "";
       toast.error(
-        error instanceof Error
-          ? error.message
-          : "Failed to place order. Please try again."
+        message.startsWith("checkout.")
+          ? t(message)
+          : t("checkout.errors.placeOrder"),
       );
     } finally {
       setIsSubmitting(false);
@@ -183,20 +115,14 @@ export default function Checkout(): JSX.Element {
   };
 
   return (
-    <Helmet title="Checkout">
+    <Helmet title={t("checkout.title")}>
       <main className="checkout-page">
         {/* Page Header */}
         <section className="checkout__header">
           <div className="container">
-            <span className="checkout__eyebrow">
-              COMPLETE YOUR PURCHASE
-            </span>
-
-            <h1>Checkout</h1>
-
-            <p>
-              You're just one step away from completing your order.
-            </p>
+            <span className="checkout__eyebrow">{t("checkout.title")}</span>
+            <h1>{t("checkout.heading")}</h1>
+            <p>{t("checkout.description")}</p>
           </div>
         </section>
 
@@ -209,27 +135,19 @@ export default function Checkout(): JSX.Element {
                   <i className="ri-shopping-cart-line" />
                 </div>
 
-                <h2>Your cart is empty</h2>
-
-                <p>
-                  You need to add products to your cart before proceeding
-                  to checkout.
-                </p>
-
+                <h2>{t("checkout.emptyTitle")}</h2>
+                <p>{t("checkout.emptyDescription")}</p>
                 <button
                   type="button"
                   className="checkout__back-btn"
                   onClick={() => router.push("/shop")}
                 >
                   <i className="ri-arrow-left-line" />
-                  Back to Shop
+                  {t("checkout.backToShop")}
                 </button>
               </div>
             ) : (
-              <form
-                onSubmit={handleSubmit(onSubmit)}
-                noValidate
-              >
+              <form onSubmit={handleSubmit(onSubmit)} noValidate>
                 <div className="row g-4">
                   {/* Billing Information */}
                   <div className="col-lg-8">
@@ -240,10 +158,8 @@ export default function Checkout(): JSX.Element {
                         </div>
 
                         <div>
-                          <h2>Billing Information</h2>
-                          <p>
-                            Please enter your details for delivery.
-                          </p>
+                          <h2>{t("checkout.billingTitle")}</h2>
+                          <p>{t("checkout.billingDescription")}</p>
                         </div>
                       </div>
 
@@ -257,14 +173,14 @@ export default function Checkout(): JSX.Element {
                               key={field.name}
                             >
                               <label htmlFor={field.name}>
-                                {field.label}
+                                {t(field.label)}
                                 <span>*</span>
                               </label>
 
                               <input
                                 id={field.name}
                                 type={field.type}
-                                placeholder={field.placeholder}
+                                placeholder={t(field.placeholder)}
                                 className={
                                   error
                                     ? "checkout__input checkout__input--error"
@@ -272,9 +188,7 @@ export default function Checkout(): JSX.Element {
                                 }
                                 aria-invalid={error ? "true" : "false"}
                                 aria-describedby={
-                                  error
-                                    ? `${field.name}-error`
-                                    : undefined
+                                  error ? `${field.name}-error` : undefined
                                 }
                                 {...register(field.name)}
                               />
@@ -295,7 +209,7 @@ export default function Checkout(): JSX.Element {
 
                       <div className="checkout__form-note">
                         <i className="ri-information-line" />
-                        Please make sure your information is correct.
+                        {t("checkout.formNote")}
                       </div>
                     </div>
                   </div>
@@ -304,27 +218,25 @@ export default function Checkout(): JSX.Element {
                   <div className="col-lg-4">
                     <div className="checkout__summary">
                       <div className="checkout__summary-header">
-                        <h2>Order Summary</h2>
+                        <h2>{t("checkout.orderSummary")}</h2>
                         <i className="ri-file-list-3-line" />
                       </div>
 
                       <div className="checkout__summary-items">
                         <div className="checkout__summary-row">
-                          <span>Items</span>
+                          <span>{t("checkout.items")}</span>
                           <strong>{totalQty}</strong>
                         </div>
 
                         <div className="checkout__summary-row">
-                          <span>Subtotal</span>
-                          <strong>
-                            ${Number(totalAmount).toFixed(2)}
-                          </strong>
+                          <span>{t("checkout.subtotal")}</span>
+                          <strong>${Number(totalAmount).toFixed(2)}</strong>
                         </div>
 
                         <div className="checkout__summary-row">
-                          <span>Shipping</span>
+                          <span>{t("checkout.shipping")}</span>
                           <strong className="checkout__free-shipping">
-                            Free
+                            {t("checkout.free")}
                           </strong>
                         </div>
                       </div>
@@ -332,15 +244,12 @@ export default function Checkout(): JSX.Element {
                       <div className="checkout__summary-divider" />
 
                       <div className="checkout__total">
-                        <span>Total Cost</span>
-                        <strong>
-                          ${Number(totalCost).toFixed(2)}
-                        </strong>
+                        <span>{t("checkout.totalCost")}</span>
+                        <strong>${Number(totalCost).toFixed(2)}</strong>
                       </div>
 
                       <p className="checkout__summary-note">
-                        Taxes and shipping costs will be calculated
-                        according to your order details.
+                        {t("checkout.summaryNote")}
                       </p>
 
                       <button
@@ -351,11 +260,11 @@ export default function Checkout(): JSX.Element {
                         {isSubmitting ? (
                           <>
                             <span className="checkout__spinner" />
-                            Placing Order...
+                            {t("checkout.placingOrder")}
                           </>
                         ) : (
                           <>
-                            Place Your Order
+                            {t("checkout.placeOrder")}
                             <i className="ri-arrow-right-line" />
                           </>
                         )}
@@ -363,7 +272,7 @@ export default function Checkout(): JSX.Element {
 
                       <div className="checkout__secure-note">
                         <i className="ri-shield-check-line" />
-                        Secure checkout experience
+                        {t("checkout.secureNote")}
                       </div>
                     </div>
                   </div>

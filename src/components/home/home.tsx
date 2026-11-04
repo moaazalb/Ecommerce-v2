@@ -9,6 +9,7 @@ import { motion } from "framer-motion";
 import Services from "@/components/services/services";
 import ProductsList from "@/components/ui/productList";
 import Clock from "@/components/ui/clock";
+import { useTranslation } from "react-i18next";
 import productsData from "../../lib/data/products";
 import heroImg from "../../../public/assets/images/hero-img.png";
 import counterImg from "../../../public/assets/images/counter-timer-img.png";
@@ -20,34 +21,60 @@ import counterImg from "../../../public/assets/images/counter-timer-img.png";
  */
 export default function Home(): JSX.Element {
   const year = new Date().getFullYear();
-
-  const trendingProducts = useMemo(() => productsData.filter((p) => p.category === "chair"), []);
-  const bestSalesProducts = useMemo(() => productsData.filter((p) => p.category === "sofa"), []);
-  const mobileProducts = useMemo(() => productsData.filter((p) => p.category === "mobile"), []);
-  const wirelessProducts = useMemo(() => productsData.filter((p) => p.category === "wireless"), []);
-  const popularProducts = useMemo(() => productsData.filter((p) => p.category === "watch"), []);
+  const { t } = useTranslation();
+  const trendingProducts = useMemo(
+    () => productsData.filter((p) => p.category === "chair"),
+    [],
+  );
+  const bestSalesProducts = useMemo(
+    () => productsData.filter((p) => p.category === "sofa"),
+    [],
+  );
+  const mobileProducts = useMemo(
+    () => productsData.filter((p) => p.category === "mobile"),
+    [],
+  );
+  const wirelessProducts = useMemo(
+    () => productsData.filter((p) => p.category === "wireless"),
+    [],
+  );
+  const popularProducts = useMemo(
+    () => productsData.filter((p) => p.category === "watch"),
+    [],
+  );
 
   return (
-    <Helmet title="Home">
+    <Helmet title={t("home.title")}>
       <section className="hero__section">
         <div className="container">
           <div className="row align-items-center">
             <div className="col-lg-6 col-md-6">
               <div className="hero__content">
-                <p className="hero__subtitle">Trending Product in {year}</p>
-                <h2>Make Your Interior More Minimalistic &amp; Modern</h2>
-                <p>
-                  Discover curated home essentials designed to bring effortless elegance, clean lines, and functional comfort into your living space. Transform your environment into a calm, contemporary sanctuary.
+                <p className="hero__subtitle">
+                  {t("home.trendingProduct", { year })}
                 </p>
-                <motion.div whileTap={{ scale: 1.1 }} className="buy__btn d-inline-block">
-                  <Link href="/shop">SHOP NOW</Link>
+
+                <h2>{t("home.heroTitle")}</h2>
+
+                <p>{t("home.heroDescription")}</p>
+
+                <motion.div
+                  whileTap={{ scale: 1.1 }}
+                  className="buy__btn d-inline-block"
+                >
+                  <Link href="/shop">{t("home.shopNow")}</Link>
                 </motion.div>
               </div>
             </div>
 
             <div className="col-lg-6 col-md-6">
               <div className="hero__img">
-                <Image src={heroImg} alt="Hero interior furniture" priority style={{ height: "auto" }} />
+                <Image
+                  src={heroImg}
+                  alt={t("home.heroImageAlt")}
+                  priority
+                  style={{ height: "auto" }}
+                />
               </div>
             </div>
           </div>
@@ -60,7 +87,7 @@ export default function Home(): JSX.Element {
         <div className="container">
           <div className="row">
             <div className="col-lg-12 text-center mb-5">
-              <h2 className="section__title">Trending Products</h2>
+              <h2 className="section__title">{t("home.trendingProducts")}</h2>
             </div>
             <ProductsList data={trendingProducts} />
           </div>
@@ -71,7 +98,7 @@ export default function Home(): JSX.Element {
         <div className="container">
           <div className="row">
             <div className="col-lg-12 text-center mb-5">
-              <h2 className="section__title">Best Sales</h2>
+              <h2 className="section__title">{t("home.bestSales")}</h2>
             </div>
             <ProductsList data={bestSalesProducts} />
           </div>
@@ -83,15 +110,22 @@ export default function Home(): JSX.Element {
           <div className="row align-items-center">
             <div className="col-lg-6 col-md-12 counter__down-col">
               <div className="clock__top-content">
-                <h4 className="text-white fs-6 mb-2">Limited Offers</h4>
-                <h3 className="text-white fs-5 mb-3">Quality Armchair</h3>
+                <h4 className="text-white fs-6 mb-2">
+                  {t("home.limitedOffers")}
+                </h4>
+
+                <h3 className="text-white fs-5 mb-3">
+                  {t("home.qualityArmchair")}
+                </h3>
               </div>
+
               <Clock />
+
               <motion.div
                 whileTap={{ scale: 1.1 }}
                 className="buy__btn store__btn d-inline-block"
               >
-                <Link href="/shop">Visit Store</Link>
+                <Link href="/shop">{t("home.visitStore")}</Link>
               </motion.div>
             </div>
 
@@ -106,7 +140,7 @@ export default function Home(): JSX.Element {
         <div className="container">
           <div className="row">
             <div className="col-lg-12 text-center mb-5">
-              <h2 className="section__title">New Arrivals</h2>
+              <h2 className="section__title">{t("home.newArrivals")}</h2>
             </div>
             <ProductsList data={mobileProducts} />
             <ProductsList data={wirelessProducts} />
@@ -118,7 +152,7 @@ export default function Home(): JSX.Element {
         <div className="container">
           <div className="row">
             <div className="col-lg-12 text-center mb-5">
-              <h2 className="section__title">Popular in Category</h2>
+              <h2 className="section__title">{t("home.popularCategory")}</h2>
             </div>
             <ProductsList data={popularProducts} />
           </div>

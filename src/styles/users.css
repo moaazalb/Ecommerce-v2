@@ -1,55 +1,61 @@
 .users__section {
-  background-color: #f8fafc;
+  background-color: var(--body-bg);
   min-height: calc(100vh - 150px);
 }
 
 .users__title {
   font-size: 1.5rem;
   font-weight: 700;
-  color: var(--primary-color, #0a1b2a);
+  color: var(--heading-text-color);
   margin-bottom: 2px;
 }
 
 .users__subtitle {
   font-size: 0.875rem;
   margin-bottom: 0;
+  color: var(--small-text-color);
 }
 
 .users__count-badge {
-  background: #ffffff;
+  background: var(--surface-color);
   padding: 8px 16px;
   border-radius: 10px;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--border-color);
   font-size: 0.875rem;
-  color: #475569;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+  color: var(--text-color);
+  box-shadow: var(--shadow-sm);
 }
 
 .table__wrapper {
-  background: #ffffff;
+  background: var(--surface-color);
   border-radius: 16px;
-  border: 1px solid #e2e8f0;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-md);
   overflow: hidden;
 }
 
 .table__wrapper th {
-  background-color: #f8fafc !important;
-  color: #64748b !important;
+  background-color: var(--surface-secondary) !important;
+  color: var(--small-text-color) !important;
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   font-weight: 600;
   padding: 16px 20px !important;
-  border-bottom: 1px solid #e2e8f0 !important;
+  border-bottom: 1px solid var(--border-color) !important;
 }
 
 .table__wrapper td {
   padding: 16px 20px !important;
   vertical-align: middle !important;
-  color: #334155;
+  color: var(--text-color);
   font-size: 0.9rem;
-  border-bottom: 1px solid #f1f5f9 !important;
+  border-bottom: 1px solid var(--border-light) !important;
+  background: var(--surface-color);
+}
+
+.table__wrapper tbody tr:hover td {
+  background: var(--surface-secondary);
 }
 
 .user__avatar-box {
@@ -58,14 +64,18 @@
   height: 45px;
   border-radius: 50%;
   overflow: hidden;
-  background: #f1f5f9;
-  border: 1px solid #e2e8f0;
+  background: var(--surface-secondary);
+  border: 1px solid var(--border-color);
 }
 
 .delete__btn {
-  background-color: #fff1f2 !important;
-  color: #e11d48 !important;
-  border: 1px solid #fecdd3 !important;
+  background-color: color-mix(
+    in srgb,
+    var(--error-color) 10%,
+    var(--surface-color)
+  ) !important;
+  color: var(--error-color) !important;
+  border: 1px solid color-mix(in srgb, var(--error-color) 25%, transparent) !important;
   font-weight: 500;
   font-size: 0.8rem;
   padding: 6px 12px;
@@ -74,10 +84,12 @@
 }
 
 .delete__btn:hover:not(:disabled) {
-  background-color: #e11d48 !important;
+  background-color: var(--error-color) !important;
+  border-color: var(--error-color) !important;
   color: #ffffff !important;
 }
 
 .delete__btn:disabled {
   opacity: 0.6;
+  cursor: not-allowed;
 }
