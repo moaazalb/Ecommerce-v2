@@ -12,9 +12,9 @@
     "cancel": "Cancel",
     "delete": "Delete",
     "edit": "Edit",
-    "language": "Language"
+    "language": "Language",
+    "siteName": "Ecom-Nest"
   },
-  "siteName": "Ecom-Nest",
   "header": {
     "brand": "Ecom-Nest",
     "homeLabel": "Ecommerce home",

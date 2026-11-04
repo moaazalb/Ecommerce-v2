@@ -12,9 +12,9 @@
     "cancel": "إلغاء",
     "delete": "حذف",
     "edit": "تعديل",
-    "language": "اللغة"
+    "language": "اللغة",
+    "siteName": "إيكوم نيست"
   },
-  "siteName": "إيكوم نيست",
   "header": {
     "brand": "إيكوم نيست",
     "homeLabel": "الصفحة الرئيسية للمتجر",
